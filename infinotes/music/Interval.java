@@ -23,7 +23,7 @@ public class Interval{
 						throw new RuntimeException("Invalid interval");
 				}
 				break;
-			case MAJOR:	case MINOR:
+			case MAJOR: case MINOR:
 				switch(distance){
 					case 2:	case 3:	case 6:	case 7:
 						break;

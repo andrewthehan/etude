@@ -115,23 +115,25 @@ public class Infinotes{
 		
 			PhraseFactory phraseFactory = PhraseFactory.make(keySignature, timeSignature, v);
 			
-			nextChord:
-			while(chordFactory.hasNext()){
-				ChordProgression.Element chord = chordFactory.next();
-				switch(v.getStyle()){
-					case MELODY:
+			switch(v.getStyle()){
+				case MELODY:
+					chordFactory.forEachRemaining(c -> {
 						if(!phrases.isEmpty()){
+							// 1/8 chance of doing sequence
 							if(R.nextInt(8) == 0){
 								phrases.add(phrases.get(phrases.size() - 1).sequence(Interval.make(Ratio.MAJOR, 2)));
-								break;
 							}
 						}
-						phrases.add(phraseFactory.makePhrase(chord));
-						break;
-					case HARMONY:
-						phrases.add(phraseFactory.makePhrase(chord));
-						break;
-				}
+						else{
+							phrases.add(phraseFactory.makePhrase(c));
+						}
+					});
+					break;
+				case HARMONY:
+					chordFactory.forEachRemaining(c -> {
+						phrases.add(phraseFactory.makePhrase(c));
+					});
+					break;
 			}
 			
 			phrasesForVoice.add(phrases);

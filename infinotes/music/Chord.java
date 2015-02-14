@@ -60,15 +60,13 @@ public final class Chord implements Playable{
 	
 	@Override
 	public String playAs(Duration duration){
-		StringBuilder builder = new StringBuilder();
-		Arrays.asList(notes).forEach(n -> builder.append("+" + n));
-		return builder.toString().substring(1) + duration;
+		return toString() + duration;
 	}
 	
 	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
-		Arrays.asList(notes).forEach(i -> builder.append("+" + i));
+		Arrays.asList(notes).forEach(n -> builder.append("+" + n));
 		return builder.toString().substring(1);
 	}
 

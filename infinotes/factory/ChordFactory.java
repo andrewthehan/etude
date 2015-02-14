@@ -4,12 +4,13 @@ package infinotes.factory;
 import infinotes.music.ChordProgression;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import javafx.util.Pair;
 
-public class ChordFactory{
+public class ChordFactory implements Iterator<ChordProgression.Element>{
 	private Queue<ChordProgression.Element> chordsInQueue = new LinkedList<ChordProgression.Element>();
 	
 	private ChordFactory(){
