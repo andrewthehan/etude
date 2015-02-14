@@ -16,19 +16,13 @@ public class Interval{
 		}
 		switch(ratio){
 			case PERFECT:
-				switch(distance){
-					case 1:	case 4:	case 5:
-						break;
-					default:
-						throw new RuntimeException("Invalid interval");
+				if(!isPerfect(distance)){
+					throw new RuntimeException("Invalid interval");
 				}
 				break;
 			case MAJOR: case MINOR:
-				switch(distance){
-					case 2:	case 3:	case 6:	case 7:
-						break;
-					default:
-						throw new RuntimeException("Invalid interval");
+				if(isPerfect(distance)){
+					throw new RuntimeException("Invalid interval");
 				}
 				break;
 		}
@@ -44,20 +38,18 @@ public class Interval{
 				amount--;
 				break;
 			case DIMINISHED:
-				switch(distance){
-					case 1: case 4: case 5:
-						amount--;
-						break;
-					case 2: case 3: case 6: case 7:
-						amount -= 2;
-						break;
-				}
+				amount -= isPerfect(distance) ? 1 : 2;
 				break;
 			case AUGMENTED:
 				amount++;
 				break;
 		}
 		return amount;
+	}
+	
+	private static boolean isPerfect(int distance){
+		int mod = distance % 7;
+		return mod == 1 || mod == 4 ||  mod == 5;
 	}
 	
 	public Ratio getType(){

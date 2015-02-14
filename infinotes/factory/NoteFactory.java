@@ -5,12 +5,14 @@ import infinotes.music.Chord;
 import infinotes.music.ChordProgression;
 import infinotes.music.Degree;
 import infinotes.music.Duration;
+import infinotes.music.Interval;
 import infinotes.music.Inversion;
 import infinotes.music.Key;
 import infinotes.music.KeySignature;
 import infinotes.music.Note;
 import infinotes.music.Octave;
 import infinotes.music.Playable;
+import infinotes.music.Ratio;
 import infinotes.music.TimeSignature;
 import infinotes.music.Type;
 import infinotes.music.Voice;
@@ -45,6 +47,7 @@ public class NoteFactory{
 			case MELODY:
 				Arrays.asList(rhythm).forEach(d -> {
 					Note note;
+					// 1/6 chance to be rest
 					switch(R.nextInt(6)){
 						case 0: 
 							note = Note.REST;
@@ -58,12 +61,14 @@ public class NoteFactory{
 			case HARMONY:
 				Octave octave = (degree.getValue() > 2) ? Octave.THREE : Octave.FOUR;
 				
-				List<Integer> temp = new ArrayList<Integer>();
-				
 				Arrays.asList(rhythm).forEach(d -> {
 					Note[] chordNotes = Chord.make(Key.make(keySignature.getKey(), keySignature.getMode(), degree), type, inversion, octave).getNotes();
-					notes.add(chordNotes[temp.size()]);
-					temp.add(0);
+					
+					// if the number of notes desired is greater than the number of notes in the chord, loop back to beginning
+					Note note = (notes.size() < chordNotes.length)
+						? chordNotes[notes.size()]
+						: chordNotes[notes.size() % chordNotes.length].changeBy(Interval.make(Ratio.PERFECT, 8));
+					notes.add(note);
 				});
 				break;
 		}

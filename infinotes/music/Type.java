@@ -21,16 +21,16 @@ public enum Type{
 	private static final Map<Type, String> toStringMap = new HashMap<Type, String>();
 	
 	static{
-		patterns.put(MAJOR, new int[]{0, 4, 7, 12});
-		patterns.put(MINOR, new int[]{0, 3, 7, 12});
-		patterns.put(AUGMENTED, new int[]{0, 4, 8, 12});
-		patterns.put(DIMINISHED, new int[]{0, 3, 6, 12});
+		patterns.put(MAJOR, new int[]{0, 4, 7});
+		patterns.put(MINOR, new int[]{0, 3, 7});
+		patterns.put(AUGMENTED, new int[]{0, 4, 8});
+		patterns.put(DIMINISHED, new int[]{0, 3, 6});
 		patterns.put(MAJOR_SEVENTH, new int[]{0, 4, 7, 11});
 		patterns.put(MINOR_SEVENTH, new int[]{0, 3, 7, 10});
 		patterns.put(DOMINANT_SEVENTH, new int[]{0, 4, 7, 10});
 		patterns.put(DIMINISHED_SEVENTH, new int[]{0, 3, 6, 9});
-		patterns.put(SUSPENDED_SECOND, new int[]{0, 2, 7, 12});
-		patterns.put(SUSPENDED_FOURTH, new int[]{0, 5, 7, 12});
+		patterns.put(SUSPENDED_SECOND, new int[]{0, 2, 7});
+		patterns.put(SUSPENDED_FOURTH, new int[]{0, 5, 7});
 		
 		toStringMap.put(MAJOR, "maj");
 		toStringMap.put(MINOR, "min");
@@ -46,6 +46,10 @@ public enum Type{
 	
 	public int[] getPattern(){
 		return patterns.get(this);
+	}
+	
+	public int getNumberOfNotes(){
+		return patterns.get(this).length;
 	}
 	
 	@Override

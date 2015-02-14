@@ -37,15 +37,14 @@ public class Infinotes{
 	public static void main(String[] args){
 		ChordProgression progression1 = ChordProgression
 			.builder()
-			
 			.put(Degree.TONIC, Type.MAJOR)
 			.put(Degree.SUBDOMINANT, Type.MAJOR)
 			.put(Degree.DOMINANT, Type.MAJOR)
 			.put(Degree.TONIC, Type.MAJOR)
-			/* .put(Degree.SUBMEDIANT, Type.MINOR)
+			.put(Degree.SUBMEDIANT, Type.MINOR)
 			.put(Degree.SUBDOMINANT, Type.MAJOR)
 			.put(Degree.SUBDOMINANT, Type.MINOR, Inversion.FIRST)
-			.put(Degree.TONIC, Type.MAJOR) */
+			.put(Degree.TONIC, Type.MAJOR)
 			.build();
 			
 		ChordProgression progression2 = ChordProgression
@@ -80,8 +79,8 @@ public class Infinotes{
 			.addVoice(Instrument.STRING_ENSEMBLE_1, Style.HARMONY)
 			.addVoice(Instrument.PIANO, Style.HARMONY) */
 			//.register(progression1)
-			//.register(progression2)
-			.register(progression3)
+			.register(progression2)
+			//.register(progression3)
 			//.register(Cadence.AUTHENTIC)
 			.build();
 			
@@ -118,11 +117,9 @@ public class Infinotes{
 			switch(v.getStyle()){
 				case MELODY:
 					chordFactory.forEachRemaining(c -> {
-						if(!phrases.isEmpty()){
-							// 1/8 chance of doing sequence
-							if(R.nextInt(8) == 0){
-								phrases.add(phrases.get(phrases.size() - 1).sequence(Interval.make(Ratio.MAJOR, 2)));
-							}
+						// 1/8 chance of doing sequence
+						if(!phrases.isEmpty() && R.nextInt(8) == 0){
+							phrases.add(phrases.get(phrases.size() - 1).sequence(Interval.make(Ratio.MAJOR, 2)));
 						}
 						else{
 							phrases.add(phraseFactory.makePhrase(c));
