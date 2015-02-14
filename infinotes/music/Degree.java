@@ -1,6 +1,9 @@
 
 package infinotes.music;
 
+import infinotes.music.Key;
+import infinotes.music.KeySignature;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +24,22 @@ public enum Degree{
 			throw new RuntimeException("Invalid degree");
 		}
 		return VALUES.get(value - 1);
+	}
+	
+	public static Degree make(KeySignature keySignature, Key key){
+		Key root = keySignature.getKey();
+		int[] intervals = keySignature.getMode().getPattern();
+		for(int i = 0; i < intervals.length; i++){
+			if(Key.isEnharmonic(root.change(intervals[i]), key)){
+				return make(i + 1);
+			}
+		}
+		throw new RuntimeException("Invalid Degree");
+	}
+	
+	public Degree change(int value){
+		// values are between 1 and 7 inclusive
+		return make(Math.floorMod(getValue() + value - 1, VALUES.size()) + 1);
 	}
 	
 	public int getValue(){

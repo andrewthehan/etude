@@ -24,9 +24,9 @@ import java.util.Random;
 
 public class NoteFactory{
 	private static final Random R = new Random();
-	private KeySignature keySignature;
-	private TimeSignature timeSignature;
-	private Voice voice;
+	private final KeySignature keySignature;
+	private final TimeSignature timeSignature;
+	private final Voice voice;
 	
 	private NoteFactory(KeySignature keySignature, TimeSignature timeSignature, Voice voice){
 		this.keySignature = keySignature;
@@ -67,7 +67,7 @@ public class NoteFactory{
 					// if the number of notes desired is greater than the number of notes in the chord, loop back to beginning
 					Note note = (notes.size() < chordNotes.length)
 						? chordNotes[notes.size()]
-						: chordNotes[notes.size() % chordNotes.length].changeBy(Interval.make(Ratio.PERFECT, 8));
+						: chordNotes[notes.size() % chordNotes.length].change(Interval.make(Ratio.PERFECT, 8));
 					notes.add(note);
 				});
 				break;

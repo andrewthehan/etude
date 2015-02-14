@@ -51,8 +51,7 @@ public enum Key{
 	
 	public static Key make(Key key, Mode mode, Degree degree){
 		Key nextKey = key;
-		int amount = mode.getPattern()[(((degree.getValue() - 2) % Key.UNIQUE_LETTER_COUNT) + Key.UNIQUE_LETTER_COUNT) % Key.UNIQUE_LETTER_COUNT];
-		amount = (amount == 12) ? 0 : amount;
+		int amount = mode.getPattern()[Math.floorMod(degree.getValue() - 1, Key.UNIQUE_LETTER_COUNT)];
 		for(int i = 0; i < amount; i++){
 			nextKey = nextKey.makeSharp();
 		}

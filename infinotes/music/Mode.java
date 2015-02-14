@@ -32,16 +32,16 @@ public enum Mode{
 		PATTERNS.put(MAJOR, new int[]{2, 2, 1, 2, 2, 2, 1});
 		PATTERNS.put(NATURAL_MINOR, new int[]{2, 1, 2, 2, 1, 2, 2});
 		PATTERNS.put(HARMONIC_MINOR, new int[]{2, 1, 2, 2, 1, 3, 1}); */
-		PATTERNS.put(IONIAN, new int[]{2, 4, 5, 7, 9, 11, 12});
-		PATTERNS.put(DORIAN, new int[]{2, 3, 5, 7, 9, 10, 12});
-		PATTERNS.put(PHRYGIAN, new int[]{1, 3, 5, 7, 8, 10, 12});
-		PATTERNS.put(LYDIAN, new int[]{2, 4, 6, 7, 9, 11, 12});
-		PATTERNS.put(MIXOLYDIAN, new int[]{2, 4, 5, 7, 9, 10, 12});
-		PATTERNS.put(AEOLIAN, new int[]{2, 3, 5, 7, 8, 10, 12});
-		PATTERNS.put(LOCRIAN, new int[]{1, 3, 5, 6, 8, 10, 12});
-		PATTERNS.put(MAJOR, new int[]{2, 4, 5, 7, 9, 11, 12});
-		PATTERNS.put(NATURAL_MINOR, new int[]{2, 3, 5, 7, 8, 10, 12});
-		PATTERNS.put(HARMONIC_MINOR, new int[]{2, 3, 5, 7, 8, 11, 12});
+		PATTERNS.put(IONIAN, new int[]{0, 2, 4, 5, 7, 9, 11});
+		PATTERNS.put(DORIAN, new int[]{0, 2, 3, 5, 7, 9, 10});
+		PATTERNS.put(PHRYGIAN, new int[]{0, 1, 3, 5, 7, 8, 10});
+		PATTERNS.put(LYDIAN, new int[]{0, 2, 4, 6, 7, 9, 11});
+		PATTERNS.put(MIXOLYDIAN, new int[]{0, 2, 4, 5, 7, 9, 10});
+		PATTERNS.put(AEOLIAN, new int[]{0, 2, 3, 5, 7, 8, 10});
+		PATTERNS.put(LOCRIAN, new int[]{0, 1, 3, 5, 6, 8, 10});
+		PATTERNS.put(MAJOR, new int[]{0, 2, 4, 5, 7, 9, 11});
+		PATTERNS.put(NATURAL_MINOR, new int[]{0, 2, 3, 5, 7, 8, 10});
+		PATTERNS.put(HARMONIC_MINOR, new int[]{0, 2, 3, 5, 7, 8, 11});
 	}
 	
 	public int[] getPattern(){

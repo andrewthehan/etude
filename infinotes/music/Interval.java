@@ -30,7 +30,7 @@ public class Interval{
 	}
 	
 	public int getHalfStepAmount(){
-		int amount = Mode.IONIAN.getPattern()[(((distance - 2) % Key.UNIQUE_LETTER_COUNT) + Key.UNIQUE_LETTER_COUNT) % Key.UNIQUE_LETTER_COUNT];
+		int amount = Mode.IONIAN.getPattern()[Math.floorMod(distance - 1, Key.UNIQUE_LETTER_COUNT)];
 		switch(ratio){
 			case PERFECT: case MAJOR:
 				break;

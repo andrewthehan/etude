@@ -6,19 +6,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Phrase{
+	private final KeySignature keySignature;
 	private final Element[] elements;
 	
-	private Phrase(Element[] elements){
+	private Phrase(KeySignature keySignature, Element[] elements){
+		this.keySignature = keySignature;
 		this.elements = elements;
 	}
 	
 	public Phrase repetition(){
-		return new Phrase(elements);
+		return new Phrase(keySignature, elements);
 	}
 	
-	public Phrase sequence(Interval interval){
+	public Phrase sequence(int amount){
 		// to store the sequenced phrase
-		List<Element> copy = new ArrayList<Element>();
+		List<Element> sequenced = new ArrayList<Element>();
 		
 		// loop through all elements in this phrase
 		Arrays.asList(elements).forEach(e -> {
@@ -26,15 +28,26 @@ public class Phrase{
 			if(playable instanceof Chord){
 				Chord chord = (Chord) playable;
 				Chord.Builder builder = Chord.builder();
-				Arrays.asList(chord.getNotes()).forEach(n -> builder.add(n.changeBy(interval)));
-				copy.add(Element.make(builder.build(), e.getDuration()));
+				Arrays.asList(chord.getNotes()).forEach(n -> {
+					Degree newDegree = Degree.make(keySignature, n.getKey()).change(amount);
+					Key newKey = Key.make(keySignature.getKey(), keySignature.getMode(), newDegree);
+					builder.add(n.getNext(newKey));
+				});
+				sequenced.add(Element.make(builder.build(), e.getDuration()));
 			}
 			else if(playable instanceof Note){
 				Note note = (Note) playable;
-				copy.add(Element.make(note.changeBy(interval), e.getDuration()));
+				if(note == Note.REST){
+					sequenced.add(e);
+				}
+				else{
+					Degree newDegree = Degree.make(keySignature, note.getKey()).change(amount);
+					Key newKey = Key.make(keySignature.getKey(), keySignature.getMode(), newDegree);
+					sequenced.add(Element.make(note.getNext(newKey), e.getDuration()));
+				}
 			}
 		});
-		return new Phrase(copy.toArray(new Element[copy.size()]));
+		return new Phrase(keySignature, sequenced.toArray(new Element[sequenced.size()]));
 	}
 	
 	@Override
@@ -80,10 +93,16 @@ public class Phrase{
 	}
 	
 	public static class Builder{
+		private KeySignature keySignature;
 		private List<Element> elements;
 		
 		public Builder(){
 			elements = new ArrayList<Element>();
+		}
+		
+		public Builder setKeySignature(KeySignature keySignature){
+			this.keySignature = keySignature;
+			return this;
 		}
 		
 		public Builder add(Playable playable, Duration duration){
@@ -112,7 +131,10 @@ public class Phrase{
 		}
 		
 		public Phrase build(){
-			return new Phrase(elements.toArray(new Element[elements.size()]));
+			if(keySignature == null){
+				throw new RuntimeException("Insufficient information");
+			}
+			return new Phrase(keySignature, elements.toArray(new Element[elements.size()]));
 		}
 	}
 }

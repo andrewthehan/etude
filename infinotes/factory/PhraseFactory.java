@@ -18,22 +18,31 @@ import java.util.Random;
 
 public class PhraseFactory{
 	private static final Random R = new Random();
+	private final KeySignature keySignature;
+	private final TimeSignature timeSignature;
+	private final Voice voice;
 	private NoteFactory noteFactory;
 	private RhythmFactory rhythmFactory;
 	
-	private PhraseFactory(NoteFactory noteFactory, RhythmFactory rhythmFactory){
+	private PhraseFactory(KeySignature keySignature, TimeSignature timeSignature, Voice voice, NoteFactory noteFactory, RhythmFactory rhythmFactory){
+		this.keySignature = keySignature;
+		this.timeSignature = timeSignature;
+		this.voice = voice;
 		this.noteFactory = noteFactory;
 		this.rhythmFactory = rhythmFactory;
 	}
 	
 	public static PhraseFactory make(KeySignature keySignature, TimeSignature timeSignature, Voice voice){
-		return new PhraseFactory(NoteFactory.make(keySignature, timeSignature, voice), RhythmFactory.make(keySignature, timeSignature, voice));
+		return new PhraseFactory(keySignature, timeSignature, voice, 
+			NoteFactory.make(keySignature, timeSignature, voice), RhythmFactory.make(keySignature, timeSignature, voice));
 	}
 	
 	public Phrase makePhrase(ChordProgression.Element chord){
-		Phrase.Builder builder = Phrase.builder();
+		Phrase.Builder builder = Phrase
+			.builder()
+			.setKeySignature(keySignature);
 		
-		Duration[] rhythm = rhythmFactory.makeRhythm(1.0);
+		Duration[] rhythm = rhythmFactory.makeRhythm(timeSignature.getBeatCount() * timeSignature.getBeatValue().getValue());
 		Playable[] notes = noteFactory.makeNotes(chord, rhythm);
 		
 		for(int i = 0; i < rhythm.length && i < notes.length; i++){

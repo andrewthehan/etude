@@ -15,7 +15,7 @@ public class Note implements Playable{
 		return new Note(key, octave);
 	}
 	
-	public Note changeBy(int amount){
+	public Note change(int amount){
 		if(this == REST){
 			return REST;
 		}
@@ -26,8 +26,8 @@ public class Note implements Playable{
 		return getNext(nextKey);
 	}
 	
-	public Note changeBy(Interval interval){
-		return changeBy(interval.getHalfStepAmount());
+	public Note change(Interval interval){
+		return change(interval.getHalfStepAmount());
 	}
 	
 	public Note getNext(Key key){
@@ -60,7 +60,7 @@ public class Note implements Playable{
 		String keyString = key.toString();
 		char keyChar = keyString.charAt(0);
 		int distance = keyChar - 'C';
-		int keyValue = Mode.IONIAN.getPattern()[(((distance - 1) % Key.UNIQUE_LETTER_COUNT) + Key.UNIQUE_LETTER_COUNT) % Key.UNIQUE_LETTER_COUNT];
+		int keyValue = Mode.IONIAN.getPattern()[Math.floorMod(distance, Key.UNIQUE_LETTER_COUNT)];
 		int octaveValue = octave.getValue();
 		if(keyString.contains("#")){
 			keyValue++;
@@ -74,7 +74,7 @@ public class Note implements Playable{
 				octaveValue--;
 			}
 		}
-		keyValue = ((keyValue % Key.UNIQUE_KEY_COUNT) + Key.UNIQUE_KEY_COUNT) % Key.UNIQUE_KEY_COUNT;
+		keyValue = Math.floorMod(keyValue, Key.UNIQUE_KEY_COUNT);
 		return octaveValue * Key.UNIQUE_KEY_COUNT + keyValue;
 	}
 	

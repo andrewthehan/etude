@@ -74,13 +74,9 @@ public class Infinotes{
 			.setTempo(120)
 			.addVoice(Instrument.PIANO, Style.MELODY)
 			.addVoice(Instrument.PIANO, Style.HARMONY)
-			/* .addVoice(Instrument.VIOLIN, Style.MELODY)
-			.addVoice(Instrument.GUITAR, Style.MELODY)
-			.addVoice(Instrument.STRING_ENSEMBLE_1, Style.HARMONY)
-			.addVoice(Instrument.PIANO, Style.HARMONY) */
 			//.register(progression1)
-			.register(progression2)
-			//.register(progression3)
+			//.register(progression2)
+			.register(progression3)
 			//.register(Cadence.AUTHENTIC)
 			.build();
 			
@@ -97,12 +93,15 @@ public class Infinotes{
 	}
 	
 	public void play(){
-		/* scale
-		Note note = Note.make(Key.C, Octave.FIVE);
-		pattern.add(note.playAs(Duration.QUARTER));
+		/*scale
+		Pattern la = new Pattern();
+		infinotes.music.Note note = infinotes.music.Note.make(Key.C, infinotes.music.Octave.FIVE);
 		java.util.stream.IntStream.of(Mode.IONIAN.getPattern()).forEach(i -> {
-			pattern.add(note.getNext(note.getKey().change(i)).playAs(Duration.QUARTER));
-		}); */
+			la.add(note.getNext(note.getKey().change(i)).playAs(infinotes.music.Duration.QUARTER));
+		});
+		new Player().play(la);
+		*/		
+		
 		List<List<Phrase>> phrasesForVoice = new ArrayList<List<Phrase>>();
 		
 		ChordProgression chordProgression = chordProgressions.get(R.nextInt(chordProgressions.size()));
@@ -119,7 +118,8 @@ public class Infinotes{
 					chordFactory.forEachRemaining(c -> {
 						// 1/8 chance of doing sequence
 						if(!phrases.isEmpty() && R.nextInt(8) == 0){
-							phrases.add(phrases.get(phrases.size() - 1).sequence(Interval.make(Ratio.MAJOR, 2)));
+							Phrase previous = phrases.get(phrases.size() - 1);
+							phrases.add(previous.sequence(1));
 						}
 						else{
 							phrases.add(phraseFactory.makePhrase(c));
@@ -168,11 +168,9 @@ public class Infinotes{
 		
 		public Builder setKeySignature(KeySignature keySignature){
 			switch(keySignature.getMode()){
-				case IONIAN:
-				case MAJOR:
+				case IONIAN: case MAJOR:
 					break;
-				case AEOLIAN:
-				case NATURAL_MINOR:
+				case AEOLIAN: case NATURAL_MINOR:
 					break;
 				default:
 					throw new RuntimeException("Mode not supported");

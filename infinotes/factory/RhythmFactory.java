@@ -13,9 +13,9 @@ import java.util.Random;
 
 public class RhythmFactory{
 	private static final Random R = new Random();
-	private KeySignature keySignature;
-	private TimeSignature timeSignature;
-	private Voice voice;
+	private final KeySignature keySignature;
+	private final TimeSignature timeSignature;
+	private final Voice voice;
 	
 	private RhythmFactory(KeySignature keySignature, TimeSignature timeSignature, Voice voice){
 		this.keySignature = keySignature;
