@@ -31,8 +31,8 @@ public class RhythmFactory{
 		List<Duration> rhythm = new ArrayList<Duration>();
 		switch(voice.getStyle()){
 			case MELODY:
-				for(double soFar = 0; soFar < duration.getValue(); ){
-					Duration durationToAdd;
+				Duration durationToAdd;
+				for(double soFar = 0; soFar < duration.getValue(); soFar += durationToAdd.getValue()){
 					do{
 						switch(R.nextInt(3)){
 							case 0: 
@@ -49,7 +49,6 @@ public class RhythmFactory{
 						}
 					}while(soFar + durationToAdd.getValue() > duration.getValue());
 					rhythm.add(durationToAdd);
-					soFar += durationToAdd.getValue();
 				}
 				break;
 			case HARMONY:
