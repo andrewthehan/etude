@@ -1,5 +1,5 @@
 
-package infinotes.music;
+package infinotes.theory;
 
 public final class Cadence{
 	public static final ChordProgression AUTHENTIC;

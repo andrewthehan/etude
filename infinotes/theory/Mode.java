@@ -1,5 +1,5 @@
 
-package infinotes.music;
+package infinotes.theory;
 
 import java.util.Arrays;
 import java.util.HashMap;

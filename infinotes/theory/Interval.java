@@ -1,5 +1,5 @@
 
-package infinotes.music;
+package infinotes.theory;
 
 public class Interval{
 	private Ratio ratio;

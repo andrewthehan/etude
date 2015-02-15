@@ -1,10 +1,10 @@
 
 package infinotes.factory;
 
-import infinotes.music.Duration;
-import infinotes.music.KeySignature;
-import infinotes.music.TimeSignature;
-import infinotes.music.Voice;
+import infinotes.theory.Duration;
+import infinotes.theory.KeySignature;
+import infinotes.theory.TimeSignature;
+import infinotes.theory.Voice;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,13 +1,13 @@
 
 package infinotes.factory;
 
-import infinotes.music.ChordProgression;
-import infinotes.music.Duration;
-import infinotes.music.KeySignature;
-import infinotes.music.Phrase;
-import infinotes.music.Playable;
-import infinotes.music.TimeSignature;
-import infinotes.music.Voice;
+import infinotes.theory.ChordProgression;
+import infinotes.theory.Duration;
+import infinotes.theory.KeySignature;
+import infinotes.theory.Phrase;
+import infinotes.theory.Playable;
+import infinotes.theory.TimeSignature;
+import infinotes.theory.Voice;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,20 +1,20 @@
 
 package infinotes.factory;
 
-import infinotes.music.Chord;
-import infinotes.music.ChordProgression;
-import infinotes.music.Degree;
-import infinotes.music.Interval;
-import infinotes.music.Inversion;
-import infinotes.music.Key;
-import infinotes.music.KeySignature;
-import infinotes.music.Note;
-import infinotes.music.Octave;
-import infinotes.music.Playable;
-import infinotes.music.Ratio;
-import infinotes.music.TimeSignature;
-import infinotes.music.Type;
-import infinotes.music.Voice;
+import infinotes.theory.Chord;
+import infinotes.theory.ChordProgression;
+import infinotes.theory.Degree;
+import infinotes.theory.Interval;
+import infinotes.theory.Inversion;
+import infinotes.theory.Key;
+import infinotes.theory.KeySignature;
+import infinotes.theory.Note;
+import infinotes.theory.Octave;
+import infinotes.theory.Playable;
+import infinotes.theory.Ratio;
+import infinotes.theory.TimeSignature;
+import infinotes.theory.Type;
+import infinotes.theory.Voice;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,12 +1,12 @@
 
 package infinotes.factory;
 
-import infinotes.music.ChordProgression;
-import infinotes.music.Degree;
-import infinotes.music.Duration;
-import infinotes.music.KeySignature;
-import infinotes.music.TimeSignature;
-import infinotes.music.Type;
+import infinotes.theory.ChordProgression;
+import infinotes.theory.Degree;
+import infinotes.theory.Duration;
+import infinotes.theory.KeySignature;
+import infinotes.theory.TimeSignature;
+import infinotes.theory.Type;
 
 import java.util.Random;
 

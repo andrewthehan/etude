@@ -1,5 +1,5 @@
 
-package infinotes.music;
+package infinotes.theory;
 
 public class Note implements Playable{
 	public static final Note REST = Note.make(null, null);
