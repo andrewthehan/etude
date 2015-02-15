@@ -53,11 +53,9 @@ public class RhythmFactory{
 				}
 				break;
 			case HARMONY:
-				// assuming numberOfMeasures is always 1 and timeSignature = 4/4
-				rhythm.add(Duration.QUARTER);
-				rhythm.add(Duration.QUARTER);
-				rhythm.add(Duration.QUARTER);
-				rhythm.add(Duration.QUARTER);
+				for(int i = 0; i < timeSignature.getBeatCount(); i++){
+					rhythm.add(timeSignature.getBeatDuration());
+				}
 				break;
 		}
 		return rhythm.toArray(new Duration[rhythm.size()]);

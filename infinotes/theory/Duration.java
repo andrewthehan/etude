@@ -18,6 +18,8 @@ public enum Duration{
 	
 	private static final Map<Duration, String> TO_STRING_MAP = new HashMap<Duration, String>();
 	
+	//private boolean isDotted = false;
+	
 	static{
 		VALUES.put(WHOLE, 1.0);
 		VALUES.put(HALF, 0.5);
@@ -38,20 +40,24 @@ public enum Duration{
 		TO_STRING_MAP.put(HUNDRED_TWENTY_EIGHTH, "o");
 	}
 	
+	public static Duration make(double value){
+		return VALUES.entrySet().stream().filter(kv -> kv.getValue() == value).findFirst().get().getKey();
+	}
+	
+	/* public boolean isDotted(){
+		return isDotted;
+	}
+	
+	public void setDotted(boolean isDotted){
+		this.isDotted = isDotted;
+	} */
+	
 	public double getValue(){
-		return VALUES.get(this);
-	}
-	
-	public double getDottedValue(){
-		return (3 / 2) * getValue();
-	}
-	
-	public String dotted(){
-		return toString() + ".";
+		return VALUES.get(this);// * (isDotted ? 1.5 : 1);
 	}
 	
 	@Override
 	public String toString(){
-		return TO_STRING_MAP.get(this);
+		return TO_STRING_MAP.get(this);// + (isDotted ? "." : "");
 	}
 }

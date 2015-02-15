@@ -4,6 +4,7 @@ package infinotes;
 import infinotes.factory.ChordProgressionFactory;
 import infinotes.factory.PhraseFactory;
 import infinotes.theory.ChordProgression;
+import infinotes.theory.Duration;
 import infinotes.theory.Instrument;
 import infinotes.theory.Key;
 import infinotes.theory.KeySignature;

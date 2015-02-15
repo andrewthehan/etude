@@ -24,18 +24,20 @@ public class ChordProgressionFactory{
 		return new ChordProgressionFactory(keySignature, timeSignature);
 	}
 	
-	public ChordProgression makeChordProgression(double lengthOfChordProgression){
-		//TODO temp
-		return ChordProgression
-			.builder()
-			.put(Degree.SUBDOMINANT, Type.MAJOR_SEVENTH, Duration.WHOLE)
-			.put(Degree.DOMINANT, Type.MAJOR, Duration.WHOLE)
-			.put(Degree.MEDIANT, Type.MINOR_SEVENTH, Duration.WHOLE)
-			.put(Degree.SUBMEDIANT, Type.MINOR, Duration.WHOLE)
-			.put(Degree.SUPERTONIC, Type.MINOR_SEVENTH, Duration.WHOLE)
-			.put(Degree.DOMINANT, Type.MAJOR, Duration.WHOLE)
-			.put(Degree.TONIC, Type.MAJOR, Duration.WHOLE)
-			.put(Degree.TONIC, Type.MAJOR, Duration.WHOLE)
-			.build();
+	public ChordProgression makeChordProgression(int numberOfMeasures){
+		ChordProgression.Builder builder = ChordProgression.builder();
+		
+		Duration oneMeasure = Duration.make(timeSignature.getMeasureLength());
+		
+		builder.put(Degree.SUBDOMINANT, Type.MAJOR_SEVENTH, oneMeasure);
+		builder.put(Degree.DOMINANT, Type.MAJOR, oneMeasure);
+		builder.put(Degree.MEDIANT, Type.MINOR_SEVENTH, oneMeasure);
+		builder.put(Degree.SUBMEDIANT, Type.MINOR, oneMeasure);
+		builder.put(Degree.SUPERTONIC, Type.MINOR_SEVENTH, oneMeasure);
+		builder.put(Degree.DOMINANT, Type.MAJOR, oneMeasure);
+		builder.put(Degree.TONIC, Type.MAJOR, oneMeasure);
+		builder.put(Degree.TONIC, Type.MAJOR, oneMeasure);
+		
+		return builder.build();
 	}
 }
