@@ -1,8 +1,6 @@
 
 package infinotes.factory;
 
-import infinotes.factory.NoteFactory;
-import infinotes.factory.RhythmFactory;
 import infinotes.music.ChordProgression;
 import infinotes.music.Duration;
 import infinotes.music.KeySignature;
@@ -37,18 +35,34 @@ public class PhraseFactory{
 			NoteFactory.make(keySignature, timeSignature, voice), RhythmFactory.make(keySignature, timeSignature, voice));
 	}
 	
-	public Phrase makePhrase(ChordProgression.Element chord){
+	public Phrase makePhrase(ChordProgression chordProgression){
 		Phrase.Builder builder = Phrase
 			.builder()
 			.setKeySignature(keySignature);
+			
+		Phrase current = null;
 		
-		Duration[] rhythm = rhythmFactory.makeRhythm(timeSignature.getBeatCount() * timeSignature.getBeatValue().getValue());
-		Playable[] notes = noteFactory.makeNotes(chord, rhythm);
-		
-		for(int i = 0; i < rhythm.length && i < notes.length; i++){
-			builder.add(notes[i], rhythm[i]);
+		for(ChordProgression.Element chord : chordProgression.getChords()){			
+			// 1/8 chance of doing sequence
+			if(current != null && R.nextInt(8) == 0){
+				current = current.sequence(1);
+			}
+			else{
+				Phrase.Builder builderCurrent = Phrase
+					.builder()
+					.setKeySignature(keySignature);
+					
+				Duration[] rhythm = rhythmFactory.makeRhythm(chord.getDuration());
+				Playable[] notes = noteFactory.makeNotes(chord, rhythm.length);
+				
+				for(int i = 0; i < rhythm.length && i < notes.length; i++){
+					builderCurrent.add(notes[i], rhythm[i]);
+				}
+				current = builderCurrent.build();
+			}
+			builder.add(current);
 		}
-		
+			
 		return builder.build();
 	}
 }

@@ -1,9 +1,6 @@
 
 package infinotes.music;
 
-import infinotes.music.Degree;
-import infinotes.music.Type;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +19,17 @@ public class ChordProgression{
 		private Degree degree;
 		private Type type;
 		private Inversion inversion;
+		private Duration duration;
 		
-		private Element(Degree degree, Type type, Inversion inversion){
+		private Element(Degree degree, Type type, Inversion inversion, Duration duration){
 			this.degree = degree;
 			this.type = type;
 			this.inversion = inversion;
+			this.duration = duration;
 		}
 		
-		public static Element make(Degree degree, Type type, Inversion inversion){
-			return new Element(degree, type, inversion);
+		public static Element make(Degree degree, Type type, Inversion inversion, Duration duration){
+			return new Element(degree, type, inversion, duration);
 		}
 		
 		public Degree getDegree(){
@@ -43,6 +42,10 @@ public class ChordProgression{
 		
 		public Inversion getInversion(){
 			return inversion;
+		}
+		
+		public Duration getDuration(){
+			return duration;
 		}
 	}
 	
@@ -57,13 +60,13 @@ public class ChordProgression{
 			chords = new ArrayList<Element>();
 		}
 		
-		public Builder put(Degree degree, Type type){
-			chords.add(Element.make(degree, type, Inversion.ROOT));
+		public Builder put(Degree degree, Type type, Duration duration){
+			chords.add(Element.make(degree, type, Inversion.ROOT, duration));
 			return this;
 		}
 		
-		public Builder put(Degree degree, Type type, Inversion inversion){
-			chords.add(Element.make(degree, type, inversion));
+		public Builder put(Degree degree, Type type, Inversion inversion, Duration duration){
+			chords.add(Element.make(degree, type, inversion, duration));
 			return this;
 		}
 		

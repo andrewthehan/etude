@@ -18,6 +18,10 @@ public class TimeSignature{
 		return new TimeSignature(beatCount, beatValue);
 	}
 	
+	public double getMeasureLength(){
+		return beatCount * beatValue.getValue();
+	}
+	
 	public int getBeatCount(){
 		return beatCount;
 	}

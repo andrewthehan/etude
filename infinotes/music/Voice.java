@@ -21,4 +21,9 @@ public class Voice{
 	public Style getStyle(){
 		return style;
 	}
+	
+	@Override
+	public String toString(){
+		return "Instrument: " + instrument + " Style: " + style;
+	}
 }

@@ -27,33 +27,33 @@ public class RhythmFactory{
 		return new RhythmFactory(keySignature, timeSignature, voice);
 	}
 	
-	public Duration[] makeRhythm(double length){
+	public Duration[] makeRhythm(Duration duration){
 		List<Duration> rhythm = new ArrayList<Duration>();
 		switch(voice.getStyle()){
 			case MELODY:
-				for(double soFar = 0; soFar < length; ){
-					Duration duration;
+				for(double soFar = 0; soFar < duration.getValue(); ){
+					Duration durationToAdd;
 					do{
 						switch(R.nextInt(3)){
 							case 0: 
-								duration = Duration.HALF;
+								durationToAdd = Duration.HALF;
 								break;
 							case 1:
-								duration = Duration.QUARTER;
+								durationToAdd = Duration.QUARTER;
 								break;
 							case 2:
-								duration = Duration.EIGHTH;
+								durationToAdd = Duration.EIGHTH;
 								break;
 							default:
-								duration = null;
+								durationToAdd = null;
 						}
-					}while(soFar + duration.getValue() > length);
-					rhythm.add(duration);
-					soFar += duration.getValue();
+					}while(soFar + durationToAdd.getValue() > duration.getValue());
+					rhythm.add(durationToAdd);
+					soFar += durationToAdd.getValue();
 				}
 				break;
 			case HARMONY:
-				// assuming length is always whole note (1.0)
+				// assuming numberOfMeasures is always 1 and timeSignature = 4/4
 				rhythm.add(Duration.QUARTER);
 				rhythm.add(Duration.QUARTER);
 				rhythm.add(Duration.QUARTER);

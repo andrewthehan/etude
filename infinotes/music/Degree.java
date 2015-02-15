@@ -1,9 +1,6 @@
 
 package infinotes.music;
 
-import infinotes.music.Key;
-import infinotes.music.KeySignature;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
