@@ -84,6 +84,15 @@ public class Note implements Playable{
 	}
 	
 	@Override
+	public boolean equals(Object o){
+		if(!(o instanceof Note)){
+			return false;
+		}
+		Note note = (Note) o;
+		return getNoteValue() == note.getNoteValue();
+	}
+	
+	@Override
 	public String toString(){
 		if(this == REST){
 			return "R";

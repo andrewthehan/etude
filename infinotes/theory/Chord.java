@@ -31,6 +31,16 @@ public final class Chord implements Playable{
 		return new Chord(asNotes(key, type, inversion, octave));
 	}
 	
+	public static Chord make(KeySignature keySignature, ChordProgression.Element element){
+		return new Chord(asNotes(Key.make(keySignature.getKey(), keySignature.getMode(), element.getDegree()),
+			element.getType(), element.getInversion(), Octave.THREE));
+	}
+	
+	public static Chord make(KeySignature keySignature, ChordProgression.Element element, Octave octave){
+		return new Chord(asNotes(Key.make(keySignature.getKey(), keySignature.getMode(), element.getDegree()),
+			element.getType(), element.getInversion(), octave));
+	}
+	
 	public static Note[] asNotes(Key key, Type type, Inversion inversion, Octave octave){
 		// list of keys in root inversion
 		Queue<Key> keys = new LinkedList<Key>();

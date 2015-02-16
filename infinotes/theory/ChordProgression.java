@@ -28,6 +28,10 @@ public class ChordProgression{
 			this.duration = duration;
 		}
 		
+		public static Element make(Degree degree, Type type, Duration duration){
+			return new Element(degree, type, Inversion.ROOT, duration);
+		}
+		
 		public static Element make(Degree degree, Type type, Inversion inversion, Duration duration){
 			return new Element(degree, type, inversion, duration);
 		}
@@ -47,6 +51,16 @@ public class ChordProgression{
 		public Duration getDuration(){
 			return duration;
 		}
+		
+		@Override
+		public String toString(){
+			StringBuilder builder = new StringBuilder();
+			builder.append(degree);
+			builder.append(" " + type);
+			builder.append(" " + inversion);
+			builder.append(" " + duration);
+			return builder.toString();
+		}
 	}
 	
 	public static Builder builder(){
@@ -60,13 +74,23 @@ public class ChordProgression{
 			chords = new ArrayList<Element>();
 		}
 		
-		public Builder put(Degree degree, Type type, Duration duration){
-			chords.add(Element.make(degree, type, Inversion.ROOT, duration));
+		public Builder add(Element element){
+			chords.add(element);
 			return this;
 		}
 		
-		public Builder put(Degree degree, Type type, Inversion inversion, Duration duration){
+		public Builder add(Degree degree, Type type, Duration duration){
+			chords.add(Element.make(degree, type, duration));
+			return this;
+		}
+		
+		public Builder add(Degree degree, Type type, Inversion inversion, Duration duration){
 			chords.add(Element.make(degree, type, inversion, duration));
+			return this;
+		}
+		
+		public Builder add(ChordProgression chordProgression){
+			chords.addAll(chordProgression.getChords());
 			return this;
 		}
 		

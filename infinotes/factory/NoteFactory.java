@@ -63,7 +63,7 @@ public class NoteFactory{
 				for(int i = 0; i < numberOfNotes; i++){
 					Note[] chordNotes = Chord.make(Key.make(keySignature.getKey(), keySignature.getMode(), degree), type, inversion, octave).getNotes();
 					
-					// if the number of notes desired is greater than the number of notes in the chord, loop back to beginning
+					// if the number of notes desired is greater than the number of keys in the chord, loop back to beginning
 					Note note = (notes.size() < chordNotes.length)
 						? chordNotes[notes.size()]
 						: chordNotes[notes.size() % chordNotes.length].change(Interval.make(Ratio.PERFECT, 8));

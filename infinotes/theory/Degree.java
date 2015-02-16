@@ -26,11 +26,23 @@ public enum Degree{
 	public static Degree make(KeySignature keySignature, Key key){
 		Key root = keySignature.getKey();
 		int[] intervals = keySignature.getMode().getPattern();
+		
+		// check if key is a naturally occurring key in mode
 		for(int i = 0; i < intervals.length; i++){
 			if(Key.isEnharmonic(root.change(intervals[i]), key)){
 				return make(i + 1);
 			}
 		}
+		
+		// check for sharps and flat, lower degree has priority (ex. B/Cb/C#/Db are both tonic in C Major)
+		for(int i = 0; i < intervals.length; i++){
+			Key current = root.change(intervals[i]);
+			if(Key.isEnharmonic(current.makeFlat(), key)
+				|| Key.isEnharmonic(current.makeSharp(), key)){
+				return make(i + 1);
+			}
+		}
+		
 		throw new RuntimeException("Invalid Degree");
 	}
 	
@@ -41,10 +53,5 @@ public enum Degree{
 	
 	public int getValue(){
 		return VALUES.indexOf(this) + 1;
-	}
-	
-	@Override
-	public String toString(){
-		return String.valueOf(getValue());
 	}
 }
