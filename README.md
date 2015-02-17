@@ -1,5 +1,5 @@
 # infinotes
-Music Theory API.
+Music Theory API ([Documentation](http://htmlpreview.github.com/?https://github.com/andrewthehan/infinotes/blob/master/html/index.html))
 
 Work In Progress:
 Infinotes Program (infinotes.Infinotes): Generates random music.
