@@ -7,12 +7,10 @@ import infinotes.theory.ChordProgression;
 import infinotes.theory.Degree;
 import infinotes.theory.Duration;
 import infinotes.theory.Inversion;
-import infinotes.theory.Key;
 import infinotes.theory.KeySignature;
-import infinotes.theory.Mode;
-import infinotes.theory.Note;
 import infinotes.theory.TimeSignature;
 import infinotes.theory.Type;
+import infinotes.util.ChordChain;
 
 import java.util.Random;
 
@@ -20,14 +18,20 @@ public class ChordProgressionFactory{
 	private static final Random R = new Random();
 	private final KeySignature keySignature;
 	private final TimeSignature timeSignature;
+	private final ChordChain chain;
 	
-	private ChordProgressionFactory(KeySignature keySignature, TimeSignature timeSignature){
+	private ChordProgressionFactory(KeySignature keySignature, TimeSignature timeSignature, ChordChain chain){
 		this.keySignature = keySignature;
 		this.timeSignature = timeSignature;
+		this.chain = chain;
 	}
 	
 	public static ChordProgressionFactory make(KeySignature keySignature, TimeSignature timeSignature){
-		return new ChordProgressionFactory(keySignature, timeSignature);
+		return new ChordProgressionFactory(keySignature, timeSignature, ChordChain.make(.45, .35, .20));
+	}
+	
+	public static ChordProgressionFactory make(KeySignature keySignature, TimeSignature timeSignature, ChordChain chain){
+		return new ChordProgressionFactory(keySignature, timeSignature, chain);
 	}
 	
 	public ChordProgression makeChordProgression(int numberOfMeasures){
@@ -42,38 +46,11 @@ public class ChordProgressionFactory{
 		Duration oneMeasure = Duration.make(timeSignature.getMeasureLength());
 		
 		for(double soFar = 0; soFar < total; soFar += current.getDuration().getValue()){
-			ChordProgression.Element toAdd;
-			do{
-				Degree degree = Degree.make(R.nextInt(7) + 1);
-				Type type;
-				switch(R.nextInt(7)){
-					case 0: 
-						type = Type.MAJOR;
-						break;
-					case 1:
-						type = Type.MINOR;
-						break;
-					case 2:
-						type = Type.DIMINISHED;
-						break;
-					case 3:
-						type = Type.DOMINANT_SEVENTH;
-						break;
-					case 4:
-						type = Type.DIMINISHED_SEVENTH;
-						break;
-					case 5:
-						type = Type.SUSPENDED_SECOND;
-						break;
-					case 6:
-						type = Type.SUSPENDED_FOURTH;
-						break;
-					default:
-						type = null;
-				}
-				toAdd = ChordProgression.Element.make(degree, type, oneMeasure);
-			}while(current != null && !sharesNotes(current, toAdd));
-			current = toAdd;
+			ChordChain.Element toAdd = (current == null)
+				? chain.get(ChordChain.Element.make(Degree.TONIC, Type.MAJOR))
+				: chain.next(chain.convert(current));
+			Inversion inversion = Inversion.make(R.nextInt(4));
+			current = ChordProgression.Element.make(toAdd.getDegree(), toAdd.getType(), inversion, oneMeasure);
 			builder.add(current);
 			// TODO add resolving chord if currently added was a secondary dominant and appropriately increment soFar
 		}
@@ -95,20 +72,5 @@ public class ChordProgressionFactory{
 		builder.add(cadence.as(oneMeasure, oneMeasure));
 		
 		return builder.build();
-	}
-	
-	private static boolean sharesNotes(ChordProgression.Element e1, ChordProgression.Element e2){
-		// what key signature is chosen does not really matter, just that it's the same for both chords
-		KeySignature keySignature = KeySignature.make(Key.C, Mode.MAJOR);
-		Chord c1 = Chord.make(keySignature, e1);
-		Chord c2 = Chord.make(keySignature, e2);
-		for(Note n1 : c1.getNotes()){
-			for(Note n2 : c2.getNotes()){
-				if(Key.isEnharmonic(n1.getKey(), n2.getKey())){
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 }

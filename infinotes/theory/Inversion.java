@@ -24,6 +24,13 @@ public enum Inversion{
 		TO_STRING_MAP.put(THIRD, "^^^");
 	}
 	
+	public static Inversion make(int value){
+		if(value < 0 || value >= VALUES.size()){
+			throw new RuntimeException("Invalid inversion");
+		}
+		return VALUES.get(value);
+	}
+	
 	public int getValue(){
 		return VALUES.indexOf(this);
 	}
