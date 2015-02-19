@@ -1,5 +1,5 @@
 # infinotes
-Music Theory API in Java.
+Music Theory API for Java.
 
 Work In Progress:
  - Infinotes Program (infinotes.Infinotes): Generates random music.
