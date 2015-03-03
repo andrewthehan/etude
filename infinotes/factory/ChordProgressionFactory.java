@@ -49,12 +49,23 @@ public class ChordProgressionFactory{
 			ChordChain.Element toAdd = (current == null)
 				? chain.get(ChordChain.Element.make(Degree.TONIC, Type.MAJOR))
 				: chain.next(chain.convert(current));
-			Inversion inversion = Inversion.make(R.nextInt(4));
+			Inversion inversion = getRandomInversion();
 			current = ChordProgression.Element.make(toAdd.getDegree(), toAdd.getType(), inversion, oneMeasure);
 			builder.add(current);
 			// TODO add resolving chord if currently added was a secondary dominant and appropriately increment soFar
 		}
 		
+		Cadence cadence = getRandomCadence();
+		builder.add(cadence.as(oneMeasure, oneMeasure));
+		
+		return builder.build();
+	}
+	
+	private Inversion getRandomInversion(){
+		return Inversion.make(R.nextInt(4));
+	}
+	
+	private Cadence getRandomCadence(){
 		Cadence cadence;
 		switch(R.nextInt(3)){
 			case 0: 
@@ -69,8 +80,6 @@ public class ChordProgressionFactory{
 			default:
 				cadence = null;
 		}
-		builder.add(cadence.as(oneMeasure, oneMeasure));
-		
-		return builder.build();
+		return cadence;
 	}
 }

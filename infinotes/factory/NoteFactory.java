@@ -45,15 +45,7 @@ public class NoteFactory{
 		switch(voice.getStyle()){
 			case MELODY:
 				for(int i = 0; i < numberOfNotes; i++){
-					Note note;
-					// 1/6 chance to be rest
-					switch(R.nextInt(6)){
-						case 0: 
-							note = Note.REST;
-							break;
-						default:
-							note = Note.make(Key.make(keySignature.getKey(), keySignature.getMode(), Degree.make(R.nextInt(7) + 1)), Octave.FIVE);
-					}
+					Note note = shouldRest() ? Note.REST : getRandomNote();
 					notes.add(note);
 				}
 				break;
@@ -72,5 +64,13 @@ public class NoteFactory{
 				break;
 		}
 		return notes.toArray(new Playable[notes.size()]);
+	}
+	
+	private boolean shouldRest(){
+		return R.nextInt(6) == 0;
+	}
+	
+	private Note getRandomNote(){
+		return Note.make(Key.make(keySignature.getKey(), keySignature.getMode(), Degree.make(R.nextInt(7) + 1)), Octave.FIVE);
 	}
 }

@@ -34,19 +34,7 @@ public class RhythmFactory{
 				Duration durationToAdd;
 				for(double soFar = 0; soFar < duration.getValue(); soFar += durationToAdd.getValue()){
 					do{
-						switch(R.nextInt(3)){
-							case 0: 
-								durationToAdd = Duration.HALF;
-								break;
-							case 1:
-								durationToAdd = Duration.QUARTER;
-								break;
-							case 2:
-								durationToAdd = Duration.EIGHTH;
-								break;
-							default:
-								durationToAdd = null;
-						}
+						durationToAdd = getRandomDuration();
 					}while(soFar + durationToAdd.getValue() > duration.getValue());
 					rhythm.add(durationToAdd);
 				}
@@ -58,5 +46,23 @@ public class RhythmFactory{
 				break;
 		}
 		return rhythm.toArray(new Duration[rhythm.size()]);
+	}
+	
+	private Duration getRandomDuration(){
+		Duration duration;
+		switch(R.nextInt(3)){
+			case 0: 
+				duration = Duration.HALF;
+				break;
+			case 1:
+				duration = Duration.QUARTER;
+				break;
+			case 2:
+				duration = Duration.EIGHTH;
+				break;
+			default:
+				duration = null;
+		}
+		return duration;
 	}
 }

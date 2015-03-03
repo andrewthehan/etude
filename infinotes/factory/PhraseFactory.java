@@ -44,7 +44,7 @@ public class PhraseFactory{
 		
 		for(ChordProgression.Element chord : chordProgression.getChords()){			
 			// 1/8 chance of doing sequence
-			if(current != null && R.nextInt(8) == 0){
+			if(current != null && shouldSequence()){
 				current = current.sequence(1);
 			}
 			else{
@@ -64,5 +64,9 @@ public class PhraseFactory{
 		}
 			
 		return builder.build();
+	}
+	
+	private boolean shouldSequence(){
+		return R.nextInt(8) == 0;
 	}
 }
