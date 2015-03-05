@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+version = '1.0'
+jar {
+	manifest {
+		attributes 'Created-By': 'Andrew Han';
+	}
+}
+
+dependencies {
+	compile files('libs/jfugue-5.0_20141002_2257.jar')
+}
