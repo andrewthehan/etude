@@ -1,6 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'application'
 
+mainClassName = 'infinotes.Infinotes'
 version = '1.0'
+
 jar {
 	manifest {
 		attributes 'Created-By': 'Andrew Han';
@@ -9,4 +12,8 @@ jar {
 
 dependencies {
 	compile files('libs/jfugue-5.0_20141002_2257.jar')
+}
+
+task wrapper(type: Wrapper){
+	gradleVersion = '2.3'
 }
