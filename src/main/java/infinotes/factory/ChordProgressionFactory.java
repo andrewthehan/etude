@@ -27,7 +27,9 @@ public class ChordProgressionFactory{
 	}
 	
 	public static ChordProgressionFactory make(KeySignature keySignature, TimeSignature timeSignature){
-		return new ChordProgressionFactory(keySignature, timeSignature, ChordChain.make(.45, .35, .20));
+		// chances of 0, 1, 2, 3, 4 shared notes
+		ChordChain chain = ChordChain.make(.05, .30, .40, .15, .10);
+		return new ChordProgressionFactory(keySignature, timeSignature, chain);
 	}
 	
 	public static ChordProgressionFactory make(KeySignature keySignature, TimeSignature timeSignature, ChordChain chain){

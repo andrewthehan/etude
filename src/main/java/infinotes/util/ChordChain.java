@@ -25,17 +25,18 @@ public class ChordChain{
 		this.chords = chords;
 	}
 	
-	public static ChordChain make(double oneWeight, double twoWeight, double threeWeight){
-		double sum = oneWeight + twoWeight + threeWeight;
-		if(sum != 1.0){
-			throw new RuntimeException("Invalid Chord Chain values: "
-				+ oneWeight + " + " + twoWeight + " + " + threeWeight
-				+ " = " + sum + " != 1.0");
-		}
-		return new ChordChain(ChordChain.makeChain(oneWeight, twoWeight, threeWeight));
+	public static ChordChain make(double... weights){
+		return new ChordChain(ChordChain.makeChain(weights));
 	}
 	
-	private static Map<String, Element> makeChain(double oneWeight, double twoWeight, double threeWeight){
+	private static Map<String, Element> makeChain(double... weights){
+		double sum = 0;
+		for(double w : weights){
+			sum += w;
+		}
+		if(sum != 1.0){
+			throw new RuntimeException("Invalid Chord Chain values: " + sum + " != 1.0");
+		}
 		Map<String, Element> chords = new HashMap<String, Element>();
 		
 		// generate all possible chords
@@ -44,43 +45,32 @@ public class ChordChain{
 				chords.put(degree.toString() + type.toString(), Element.make(degree, type));
 			}
 		}
-		
-		// for all chords, create chain
+		// for each chord, create set of adjacency list
 		for(Map.Entry<String, Element> entry1 : chords.entrySet()){
 			Element e1 = entry1.getValue();
-			// number of shared notes
-			List<Element> one = new ArrayList<Element>();
-			List<Element> two = new ArrayList<Element>();
-			List<Element> three = new ArrayList<Element>();
+			// one adjacency list for each number of shared notes (1 shared note list, 2 shared note list, etc.)
+			Map<Integer, List<Element>> adjacencyList = new HashMap<Integer, List<Element>>();
 			for(Map.Entry<String, Element> entry2 : chords.entrySet()){
 				Element e2 = entry2.getValue();
 				// not the same chord
 				if(e1 != e2){
 					Key[] shared = getSharedKeys(e1, e2);
-					switch(shared.length){
-						case 0:
-							break;
-						case 1:
-							one.add(e2);
-							break;
-						case 2:
-							two.add(e2);
-							break;
-						case 3:
-							three.add(e2);
-							break;
-						default:
-							assert false;
+					List<Element> list = adjacencyList.get(shared.length);
+					// list doesn't exist already
+					if(list == null){
+						list = new ArrayList<Element>();
+						adjacencyList.put(shared.length, list);
 					}
+					list.add(e2);
 				}
 			}
-			// add elements w/ probabilities
-			double oneChance = oneWeight / one.size();
-			double twoChance = twoWeight / two.size();
-			double threeChance = threeWeight / three.size();
-			one.forEach(e -> e1.add(e, oneChance));
-			two.forEach(e -> e1.add(e, twoChance));
-			three.forEach(e -> e1.add(e, threeChance));
+			if(adjacencyList.size() != weights.length){
+				new RuntimeException("Invalid number of weights to create chord chain.");
+			}
+			adjacencyList.forEach((i, list) -> {
+				double weight = weights[i] / list.size();
+				list.forEach(e -> e1.add(e, weight));
+			});
 		}
 		return chords;
 	}
@@ -152,7 +142,7 @@ public class ChordChain{
 				}
 			}
 			// should never happen
-			throw new RuntimeException("Bug");
+			throw new RuntimeException("Bug: sum of events probabilities " + soFar + " != 1.0");
 		}
 		
 		public Degree getDegree(){

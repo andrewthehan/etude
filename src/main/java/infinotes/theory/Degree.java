@@ -34,7 +34,7 @@ public enum Degree{
 			}
 		}
 		
-		// check for sharps and flat, lower degree has priority (ex. B/Cb/C#/Db are both tonic in C Major)
+		// check for sharps and flats, lower degree has priority (ex. Cb and C#/Db are tonic in C Major)
 		for(int i = 0; i < intervals.length; i++){
 			Key current = root.change(intervals[i]);
 			if(Key.isEnharmonic(current.makeFlat(), key)
