@@ -1,3 +1,5 @@
+Personal Project (Started 2014 September)
+
 # infinotes
 Music Theory API for Java.
 
