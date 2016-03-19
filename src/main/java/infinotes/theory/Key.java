@@ -1,127 +1,205 @@
 
 package infinotes.theory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+/*
+ * Letter with the concept of accidentals
+ */
+public final class Key{
+  private final Letter letter;
+  private final Accidental accidental;
 
-public enum Key{
-	// do not change order
-	A_FLAT, A, A_SHARP,
-	B_FLAT, B, B_SHARP,
-	C_FLAT, C, C_SHARP,
-	D_FLAT, D, D_SHARP, 
-	E_FLAT, E, E_SHARP,
-	F_FLAT, F, F_SHARP,
-	G_FLAT, G, G_SHARP;
-	
-	public static final int UNIQUE_LETTER_COUNT = 7;
-	
-	public static final int UNIQUE_KEY_COUNT = 12;
-	
-	private static final List<Key> KEYS = new ArrayList<Key>(Arrays.asList(Key.values()));
-	
-	private static final Map<Key, String> TO_STRING_MAP = new HashMap<Key, String>();
-	
-	static{
-		TO_STRING_MAP.put(A_FLAT, "Ab");
-		TO_STRING_MAP.put(A, "A");
-		TO_STRING_MAP.put(A_SHARP, "A#");
-		TO_STRING_MAP.put(B_FLAT, "Bb");
-		TO_STRING_MAP.put(B, "B");
-		TO_STRING_MAP.put(B_SHARP, "B#");
-		TO_STRING_MAP.put(C_FLAT, "Cb");
-		TO_STRING_MAP.put(C, "C");
-		TO_STRING_MAP.put(C_SHARP, "C#");
-		TO_STRING_MAP.put(D_FLAT, "Db");
-		TO_STRING_MAP.put(D, "D");
-		TO_STRING_MAP.put(D_SHARP, "D#");
-		TO_STRING_MAP.put(E_FLAT, "Eb");
-		TO_STRING_MAP.put(E, "E");
-		TO_STRING_MAP.put(E_SHARP, "E#");
-		TO_STRING_MAP.put(F_FLAT, "Fb");
-		TO_STRING_MAP.put(F, "F");
-		TO_STRING_MAP.put(F_SHARP, "F#");
-		TO_STRING_MAP.put(G_FLAT, "Gb");
-		TO_STRING_MAP.put(G, "G");
-		TO_STRING_MAP.put(G_SHARP, "G#");
-	}
-	
-	public static Key make(Key key, Mode mode, Degree degree){
-		Key nextKey = key;
-		int amount = mode.getPattern()[Math.floorMod(degree.getValue() - 1, Key.UNIQUE_LETTER_COUNT)];
-		for(int i = 0; i < amount; i++){
-			nextKey = nextKey.makeSharp();
-		}
-		return nextKey;
-	}
-	
-	public Key makeSharp(){
-		int index = KEYS.indexOf(this);
-		Key toReturn;
-		if(toString().contains("#")){
-			index++;
-		}
-		do{
-			index = (index + 1) % KEYS.size();
-			toReturn = KEYS.get(index);
-		}while(Key.isEnharmonic(this, toReturn));
-		return toReturn;
-	}
-	
-	public Key makeFlat(){
-		int index = KEYS.indexOf(this);
-		Key toReturn;
-		if(toString().contains("b")){
-			index--;
-		}
-		do{
-			index = (index - 1) % KEYS.size();
-			toReturn = KEYS.get(index);
-		}while(Key.isEnharmonic(this, toReturn));
-		return toReturn;
-	}
-	
-	public Key change(int amount){
-		amount %= UNIQUE_KEY_COUNT;
-		Key toReturn;
-		for(toReturn = this; amount > 0; amount--){
-			toReturn = toReturn.makeSharp();
-		}
-		return toReturn;
-	}
-	
-	public static boolean isEnharmonic(Key keyA, Key keyB){
-		String a = keyA.toString();
-		String b = keyB.toString();
-		char letterA = a.charAt(0);
-		char letterB = b.charAt(0);
-		int charDifference = Math.abs(letterA - letterB);
-		boolean isSameLetter = charDifference == 0;
-		boolean isNextTo = charDifference == 1 || charDifference == 6;
-		boolean isSpecial = ((letterA == 'B' && letterB == 'C') || (letterA == 'C' && letterB == 'B')
-			|| (letterA == 'E' && letterB == 'F') || (letterA == 'F' && letterB == 'E'));
-		if(isSameLetter){
-			return a.equals(b);
-		}
-		else if(isNextTo){
-			if((a.contains("#") && b.contains("b")) || (a.contains("b") && b.contains("#"))){
-				return !isSpecial;
-			}
-			else if(a.matches(".[#b]") ^ b.matches(".[#b]")){
-				if((letterA < letterB && (a.contains("#") ^ b.contains("b")))
-					|| (letterA > letterB && (a.contains("b") ^ b.contains("#")))){
-					return isSpecial;
-				}
-			}
-		}
-		return false;
-	}
-	
-	@Override
-	public String toString(){
-		return TO_STRING_MAP.get(this);
-	}
+  public Key(Letter letter){
+    this(letter, Accidental.NONE);
+  }
+
+  public Key(Letter letter, Accidental accidental){
+    this.letter = letter;
+    this.accidental = accidental;
+  }
+
+  public final Key none(){
+    return new Key(letter, Accidental.NONE);
+  }
+
+  public final Key natural(){
+    return new Key(letter, Accidental.NATURAL);
+  }
+
+  public final Key sharp(){
+    return new Key(letter, Accidental.SHARP);
+  }
+
+  public final Key doubleSharp(){
+    return new Key(letter, Accidental.DOUBLE_SHARP);
+  }
+
+  public final Key flat(){
+    return new Key(letter, Accidental.FLAT);
+  }
+
+  public final Key doubleFlat(){
+    return new Key(letter, Accidental.DOUBLE_FLAT);
+  }
+
+  public final boolean isNone(){
+    return accidental == Accidental.NONE;
+  }
+
+  public final boolean isNatural(){
+    return accidental == Accidental.NATURAL;
+  }
+
+  public final boolean isSharp(){
+    return accidental == Accidental.SHARP;
+  }
+
+  public final boolean isDoubleSharp(){
+    return accidental == Accidental.DOUBLE_SHARP;
+  }
+
+  public final boolean isFlat(){
+    return accidental == Accidental.FLAT;
+  }
+
+  public final boolean isDoubleFlat(){
+    return accidental == Accidental.DOUBLE_FLAT;
+  }
+
+  public static final boolean isEnharmonic(Key a, Key b){
+    return Math.floorMod(a.getOffset(), MusicConstants.KEYS_IN_OCTAVE) == Math.floorMod(b.getOffset(), MusicConstants.KEYS_IN_OCTAVE);
+  }
+
+  public static final Key fromOffset(int offset){
+    return Key.fromOffset(offset, Accidental.Policy.PRIORITIZE_NATURAL);
+  }
+
+  public static final Key fromOffset(int offset, Accidental.Policy policy){
+    Letter letter = null;
+    Accidental accidental = Accidental.NONE;
+
+    switch(policy){
+      case MAINTAIN_LETTER:
+        throw new RuntimeException("Letter cannot be maintained when creating a Key from an offset");
+      case PRIORITIZE_SHARP:
+        // maintain order of cases for fall throughs to function correctly
+        switch(offset){
+          case 11:
+            letter = Letter.B;
+            break;
+          case 10:
+            accidental = Accidental.SHARP;
+            // fall through
+          case 9:
+            letter = Letter.A;
+            break;
+          case 8:
+            accidental = Accidental.SHARP;
+            // fall through
+          case 7:
+            letter = Letter.G;
+            break;
+          case 6:
+            accidental = Accidental.SHARP;
+            // fall through
+          case 5:
+            letter = Letter.F;
+            break;
+          case 4:
+            letter = Letter.E;
+            break;
+          case 3:
+            accidental = Accidental.SHARP;
+            // fall through
+          case 2:
+            letter = Letter.D;
+            break;
+          case 1:
+            accidental = Accidental.SHARP;
+            // fall through
+          case 0:
+            letter = Letter.C;
+            break;
+          default: throw new RuntimeException("Invalid offset: " + offset);
+        }
+        break;
+      /*
+       * PRIORITIZING_NATURAL prioritizies flats because
+       * sharps are more often added (harmonic minor scale)
+       * and a natural is preferred over a double sharp
+       * (flat + sharp = natural vs. sharp + sharp = double sharp)
+       */
+      case PRIORITIZE_NATURAL: case PRIORITIZE_FLAT:
+        // maintain order of cases for fall throughs to function correctly
+        switch(offset){
+          case 0:
+            letter = Letter.C;
+            break;
+          case 1:
+            accidental = Accidental.FLAT;
+            // fall through
+          case 2:
+            letter = Letter.D;
+            break;
+          case 3:
+            accidental = Accidental.FLAT;
+            // fall through
+          case 4:
+            letter = Letter.E;
+            break;
+          case 5:
+            letter = Letter.F;
+            break;
+          case 6:
+            accidental = Accidental.FLAT;
+            // fall through
+          case 7:
+            letter = Letter.G;
+            break;
+          case 8:
+            accidental = Accidental.FLAT;
+            // fall through
+          case 9:
+            letter = Letter.A;
+            break;
+          case 10:
+            accidental = Accidental.FLAT;
+            // fall through
+          case 11:
+            letter = Letter.B;
+            break;
+          default: throw new RuntimeException("Invalid offset: " + offset);
+        }
+        break;
+    }
+    return new Key(letter, accidental);
+  }
+
+  public final int getOffset(){
+    return letter.getOffset() + accidental.getOffset();
+  }
+
+  public static final Key fromString(String keyString){
+    if(keyString.length() == 0){
+      throw new RuntimeException("Invalid key string: " + keyString);
+    }
+    Letter letter = Letter.fromChar(keyString.charAt(0));
+    Accidental accidental = keyString.length() == 1 ? Accidental.NONE : Accidental.fromString(keyString.substring(1));
+    return new Key(letter, accidental);
+  }
+
+  @Override
+  public String toString(){
+    StringBuilder builder = new StringBuilder();
+    builder.append(letter);
+    builder.append(accidental);
+    return builder.toString();
+  }
+
+  public final Letter getLetter(){
+    return letter;
+  }
+
+  public final Accidental getAccidental(){
+    return accidental;
+  }
 }

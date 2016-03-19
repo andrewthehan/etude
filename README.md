@@ -1,9 +1,11 @@
 Personal Project (Started 2014 September)
 
+Restart from scratch (Started 2015 February)
+
+Refactor entire `theory` library (previously did not separate the concept of `accidental` from `key` which significantly limited the rest of the library) (Started 2016 March)
+
 # infinotes
-Music Theory API for Java.
+A Music Theory API for Java.
 
-Work In Progress:
- - Infinotes Program (infinotes.Infinotes): Generates random music.
-
-NOTE: Infinotes program has dependency on [JFugue] (http://www.jfugue.org/) which is included in the repository. The music theory API (infinotes.factory and infinotes.theory) does NOT have dependency on JFugue.
+End Goal:
+ - Random music generator.

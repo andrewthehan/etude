@@ -1,0 +1,98 @@
+
+package tests;
+
+import infinotes.theory.*;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class KeyTests{
+
+	@Test
+	public void testConstructor(){
+		Key key;
+
+		key = new Key(Letter.C);
+		assertEquals(key.toString(), "C");
+		key = new Key(Letter.G, Accidental.NONE);
+		assertEquals(key.toString(), "G");
+		key = new Key(Letter.D, Accidental.NATURAL);
+		assertEquals(key.toString(), "Dn");
+		key = new Key(Letter.A, Accidental.SHARP);
+		assertEquals(key.toString(), "A#");
+		key = new Key(Letter.E, Accidental.DOUBLE_SHARP);
+		assertEquals(key.toString(), "Ex");
+		key = new Key(Letter.B, Accidental.FLAT);
+		assertEquals(key.toString(), "Bb");
+		key = new Key(Letter.F, Accidental.DOUBLE_FLAT);
+		assertEquals(key.toString(), "Fbb");
+	}
+
+	@Test
+	public void testManipulations(){
+		Key key;
+
+		key = new Key(Letter.C);
+
+		key = key.none();
+		assertEquals(key.toString(), "C");
+		assert(key.isNone());
+		key = key.natural();
+		assertEquals(key.toString(), "Cn");
+		assert(key.isNatural());
+		key = key.sharp();
+		assertEquals(key.toString(), "C#");
+		assert(key.isSharp());
+		key = key.doubleSharp();
+		assertEquals(key.toString(), "Cx");
+		assert(key.isDoubleSharp());
+		key = key.flat();
+		assertEquals(key.toString(), "Cb");
+		assert(key.isFlat());
+		key = key.doubleFlat();
+		assertEquals(key.toString(), "Cbb");
+		assert(key.isDoubleFlat());
+	}
+
+	@Test
+	public void testEnharmonic(){
+			Key a, b;
+
+			String[] keysA = {"Cn", "C#", "Dn", "D#", "En", "Fn", "F#", "Gn", "G#", "An", "A#", "Bn"};
+			String[] keysB = {"Dbb", "Db", "Ebb", "Eb", "Fb", "Gbb", "Gb", "Abb", "Ab", "Bbb", "Bb", "Cb"};
+			for(int i = 0; i < keysA.length; ++i){
+				a = Key.fromString(keysA[i]);
+				b = Key.fromString(keysB[i]);
+				assert(Key.isEnharmonic(a, b));
+			}
+	}
+
+	@Test
+	public void testOffset(){
+		Key key;
+
+		String[] keysSharp = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+		for(int i = 0; i < keysSharp.length; ++i){
+			key = Key.fromOffset(i, Accidental.Policy.PRIORITIZE_SHARP);
+			assertEquals(key.getOffset(), i);
+			assertEquals(key.toString(), keysSharp[i]);
+		}
+		String[] keysFlat = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
+		for(int i = 0; i < keysFlat.length; ++i){
+			key = Key.fromOffset(i, Accidental.Policy.PRIORITIZE_FLAT);
+			assertEquals(key.getOffset(), i);
+			assertEquals(key.toString(), keysFlat[i]);
+		}
+	}
+
+	@Test
+	public void testString(){
+		Key key;
+
+		String[] keys = {"C", "Dn", "E#", "Fx", "Gb", "Abb"};
+		for(int i = 0; i < keys.length; ++i){
+			key = Key.fromString(keys[i]);
+			assertEquals(key.toString(), keys[i]);
+		}
+	}
+}
