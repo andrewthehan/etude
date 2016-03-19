@@ -56,15 +56,15 @@ public class KeyTests{
 
 	@Test
 	public void testEnharmonic(){
-			Key a, b;
+		Key a, b;
 
-			String[] keysA = {"Cn", "C#", "Dn", "D#", "En", "Fn", "F#", "Gn", "G#", "An", "A#", "Bn"};
-			String[] keysB = {"Dbb", "Db", "Ebb", "Eb", "Fb", "Gbb", "Gb", "Abb", "Ab", "Bbb", "Bb", "Cb"};
-			for(int i = 0; i < keysA.length; ++i){
-				a = Key.fromString(keysA[i]);
-				b = Key.fromString(keysB[i]);
-				assert(Key.isEnharmonic(a, b));
-			}
+		String[] keysA = {"Cn", "C#", "Dn", "D#", "En", "Fn", "F#", "Gn", "G#", "An", "A#", "Bn"};
+		String[] keysB = {"Dbb", "Db", "Ebb", "Eb", "Fb", "Gbb", "Gb", "Abb", "Ab", "Bbb", "Bb", "Cb"};
+		for(int i = 0; i < keysA.length; ++i){
+			a = Key.fromString(keysA[i]);
+			b = Key.fromString(keysB[i]);
+			assert(Key.isEnharmonic(a, b));
+		}
 	}
 
 	@Test

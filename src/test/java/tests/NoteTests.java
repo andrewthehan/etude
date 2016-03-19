@@ -10,14 +10,14 @@ public class NoteTests{
 
 	@Test
 	public void testConstructor(){
-    Note note;
+		Note note;
 
-    note = new Note(Key.fromString("C"), 4);
-    assertEquals(note.toString(), "C4(48)");
-    note = new Note(Key.fromString("C"), 0);
-    assertEquals(note.toString(), "C0(0)");
-    note = new Note(Key.fromString("G"), 10);
-    assertEquals(note.toString(), "G10(127)");
+		note = new Note(Key.fromString("C"), 4);
+		assertEquals(note.toString(), "C4(48)");
+		note = new Note(Key.fromString("C"), 0);
+		assertEquals(note.toString(), "C0(0)");
+		note = new Note(Key.fromString("G"), 10);
+		assertEquals(note.toString(), "G10(127)");
 	}
 
 	@Test
@@ -94,22 +94,22 @@ public class NoteTests{
 		}
 	}
 
-  @Test
-  public void testProgramNumber(){
-    Note note;
+	@Test
+	public void testProgramNumber(){
+		Note note;
 
-    note = Note.fromProgramNumber(48);
-    assertEquals(note.getProgramNumber(), 48);
-    assertEquals(note.getOctave(), 4);
-    assertEquals(note.toString(), "C4(48)");
-    note = Note.fromProgramNumber(0);
-    assertEquals(note.getProgramNumber(), 0);
-    assertEquals(note.getOctave(), 0);
-    assertEquals(note.toString(), "C0(0)");
-    note = Note.fromProgramNumber(127);
-    assertEquals(note.getProgramNumber(), 127);
-    assertEquals(note.getOctave(), 10);
-    assertEquals(note.toString(), "G10(127)");
+		note = Note.fromProgramNumber(48);
+		assertEquals(note.getProgramNumber(), 48);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "C4(48)");
+		note = Note.fromProgramNumber(0);
+		assertEquals(note.getProgramNumber(), 0);
+		assertEquals(note.getOctave(), 0);
+		assertEquals(note.toString(), "C0(0)");
+		note = Note.fromProgramNumber(127);
+		assertEquals(note.getProgramNumber(), 127);
+		assertEquals(note.getOctave(), 10);
+		assertEquals(note.toString(), "G10(127)");
 
 		try{
 			Note.fromProgramNumber(-1);
@@ -125,28 +125,28 @@ public class NoteTests{
 		catch(Exception e){
 			assertEquals(e.getMessage(), "Invalid program number: 128");
 		}
-  }
+	}
 
 	@Test
 	public void testString(){
-    Note note;
+		Note note;
 
-    note = Note.fromString("C4");
-    assertEquals(note.getProgramNumber(), 48);
-    assertEquals(note.getOctave(), 4);
-    assertEquals(note.toString(), "C4(48)");
-    note = Note.fromString("Cn4");
-    assertEquals(note.getProgramNumber(), 48);
-    assertEquals(note.getOctave(), 4);
-    assertEquals(note.toString(), "Cn4(48)");
-    note = Note.fromString("Cbb4");
-    assertEquals(note.getProgramNumber(), 46);
-    assertEquals(note.getOctave(), 4);
-    assertEquals(note.toString(), "Cbb4(46)");
-    note = Note.fromString("Cn4(48)");
-    assertEquals(note.getProgramNumber(), 48);
-    assertEquals(note.getOctave(), 4);
-    assertEquals(note.toString(), "Cn4(48)");
+		note = Note.fromString("C4");
+		assertEquals(note.getProgramNumber(), 48);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "C4(48)");
+		note = Note.fromString("Cn4");
+		assertEquals(note.getProgramNumber(), 48);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "Cn4(48)");
+		note = Note.fromString("Cbb4");
+		assertEquals(note.getProgramNumber(), 46);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "Cbb4(46)");
+		note = Note.fromString("Cn4(48)");
+		assertEquals(note.getProgramNumber(), 48);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "Cn4(48)");
 		try{
 			Note.fromString("A");
 			fail("Expected an exception.");
