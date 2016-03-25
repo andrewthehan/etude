@@ -6,6 +6,8 @@ import infinotes.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 public class NoteTests{
 
 	@Test
@@ -21,51 +23,86 @@ public class NoteTests{
 	}
 
 	@Test
+	public void testKeySignature(){
+		KeySignature ks;
+		Iterator<Letter> letters;
+		Note note;
+
+		ks = new KeySignature(Key.fromString("C"), Mode.MAJOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		note = new Note(ks.getKey(), 4);
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Cn5(60)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Dn4(50)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "En4(52)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Fn4(53)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Gn4(55)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "An4(57)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Bn4(59)");
+
+		ks = new KeySignature(Key.fromString("A"), Mode.NATURAL_MINOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		note = new Note(ks.getKey(), 4);
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "An5(69)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Bn4(59)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Cn5(60)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Dn5(62)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "En5(64)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Fn5(65)");
+		assertEquals(note.getHigherNote(new Key(letters.next())).apply(ks).toString(), "Gn5(67)");
+	}
+
+	@Test
 	public void testManipulations(){
 		Note note;
 
 		note = Note.fromProgramNumber(0);
 		for(int i = 0; i < 127; i++){
-			note = note.semitoneUp();
+			note = note.halfStepUp();
 		}
 		assertEquals(note.getProgramNumber(), 127);
 		assertEquals(note.toString(), "G10(127)");
 		for(int i = 0; i < 127; i++){
-			note = note.semitoneDown();
+			note = note.halfStepDown();
 		}
+		assertEquals(note.getProgramNumber(), 0);
+		assertEquals(note.toString(), "C0(0)");
+		note = note.step(127);
+		assertEquals(note.getProgramNumber(), 127);
+		assertEquals(note.toString(), "G10(127)");
+		note = note.step(-127);
 		assertEquals(note.getProgramNumber(), 0);
 		assertEquals(note.toString(), "C0(0)");
 
 		note = Note.fromString("Cbb4");
-		note = note.semitoneUp(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "Cb4(47)");
-		note = note.semitoneUp(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "Cn4(48)");
-		note = note.semitoneUp(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "C#4(49)");
-		note = note.semitoneUp(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "Cx4(50)");
 		try{
-			note = note.semitoneUp(Accidental.Policy.MAINTAIN_LETTER);
+			note = note.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 			fail("Expected an exception.");
 		}
 		catch(Exception e){
-			assertEquals(e.getMessage(), "Can't move note semitone up while maintaining letter: Cx4(50)");
+			assertEquals(e.getMessage(), "Can't move note half step up while maintaining letter: Cx4(50)");
 		}
-		note = note.semitoneDown(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "C#4(49)");
-		note = note.semitoneDown(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "Cn4(48)");
-		note = note.semitoneDown(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "Cb4(47)");
-		note = note.semitoneDown(Accidental.Policy.MAINTAIN_LETTER);
+		note = note.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(note.toString(), "Cbb4(46)");
 		try{
-			note = note.semitoneDown(Accidental.Policy.MAINTAIN_LETTER);
+			note = note.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 			fail("Expected an exception.");
 		}
 		catch(Exception e){
-			assertEquals(e.getMessage(), "Can't move note semitone down while maintaining letter: Cbb4(46)");
+			assertEquals(e.getMessage(), "Can't move note half step down while maintaining letter: Cbb4(46)");
 		}
 
 		String[] notesSharp = {"C4(48)", "C#4(49)", "D4(50)", "D#4(51)", "E4(52)", "F4(53)", "F#4(54)", "G4(55)", "G#4(56)", "A4(57)", "A#4(58)", "B4(59)", "C5(60)"};
@@ -73,25 +110,69 @@ public class NoteTests{
 
 		note = Note.fromProgramNumber(47);
 		for(int i = 0; i < notesSharp.length; ++i){
-			note = note.semitoneUp(Accidental.Policy.PRIORITIZE_SHARP);
+			note = note.halfStepUp(Accidental.Policy.PRIORITIZE_SHARP);
 			assertEquals(note.toString(), notesSharp[i]);
 		}
-		note = note.semitoneUp();
+		note = note.halfStepUp();
 		for(int i = notesSharp.length - 1; i >= 0; --i){
-			note = note.semitoneDown(Accidental.Policy.PRIORITIZE_SHARP);
+			note = note.halfStepDown(Accidental.Policy.PRIORITIZE_SHARP);
 			assertEquals(note.toString(), notesSharp[i]);
 		}
 
 		note = Note.fromProgramNumber(47);
 		for(int i = 0; i < notesFlat.length; ++i){
-			note = note.semitoneUp(Accidental.Policy.PRIORITIZE_FLAT);
+			note = note.halfStepUp(Accidental.Policy.PRIORITIZE_FLAT);
 			assertEquals(note.toString(), notesFlat[i]);
 		}
-		note = note.semitoneUp();
+		note = note.halfStepUp();
 		for(int i = notesFlat.length - 1; i >= 0; --i){
-			note = note.semitoneDown(Accidental.Policy.PRIORITIZE_FLAT);
+			note = note.halfStepDown(Accidental.Policy.PRIORITIZE_FLAT);
 			assertEquals(note.toString(), notesFlat[i]);
 		}
+	}
+
+	@Test
+	public void testHigherLower(){
+		Note note;
+
+		note = Note.fromString("C4");
+
+		assert(note.isHigherThan(Note.fromString("C3")));
+		assert(note.isHigherThan(Note.fromString("Cb4")));
+		assert(note.isHigherThan(Note.fromString("B3")));
+		assert(note.isLowerThan(Note.fromString("C5")));
+		assert(note.isLowerThan(Note.fromString("C#4")));
+		assert(note.isLowerThan(Note.fromString("Db4")));
+
+		assertEquals(note.getHigherNote(Key.fromString("D")).toString(), "D4(50)");
+		assertEquals(note.getLowerNote(Key.fromString("D")).toString(), "D3(38)");
+		assertEquals(note.getHigherNote(Key.fromString("C")).toString(), "C5(60)");
+		assertEquals(note.getLowerNote(Key.fromString("C")).toString(), "C3(36)");
+	}
+
+	@Test
+	public void testEnharmonic(){
+		Note a, b;
+
+		String[] notesA = {"Cn4", "C#4", "Dn4", "D#4", "En4", "Fn4", "F#4", "Gn4", "G#4", "An4", "A#4", "Bn4"};
+		String[] notesB = {"Dbb4", "Db4", "Ebb4", "Eb4", "Fb4", "Gbb4", "Gb4", "Abb4", "Ab4", "Bbb4", "Bb4", "Cb5"};
+		for(int i = 0; i < notesA.length; ++i){
+			a = Note.fromString(notesA[i]);
+			b = Note.fromString(notesB[i]);
+			assert(Note.isEnharmonic(a, b));
+		}
+
+		a = Note.fromString("C4");
+		b = Note.fromString("C4");
+		assert(Note.isEnharmonic(a, b));
+
+		a = Note.fromString("C4");
+		b = Note.fromString("C5");
+		assert(!Note.isEnharmonic(a, b));
+
+		a = Note.fromString("C#4");
+		b = Note.fromString("Db5");
+		assert(!Note.isEnharmonic(a, b));
 	}
 
 	@Test
@@ -139,6 +220,18 @@ public class NoteTests{
 		assertEquals(note.getProgramNumber(), 48);
 		assertEquals(note.getOctave(), 4);
 		assertEquals(note.toString(), "Cn4(48)");
+		note = Note.fromString("C#4");
+		assertEquals(note.getProgramNumber(), 49);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "C#4(49)");
+		note = Note.fromString("Cx4");
+		assertEquals(note.getProgramNumber(), 50);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "Cx4(50)");
+		note = Note.fromString("Cb4");
+		assertEquals(note.getProgramNumber(), 47);
+		assertEquals(note.getOctave(), 4);
+		assertEquals(note.toString(), "Cb4(47)");
 		note = Note.fromString("Cbb4");
 		assertEquals(note.getProgramNumber(), 46);
 		assertEquals(note.getOctave(), 4);

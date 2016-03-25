@@ -6,6 +6,8 @@ import infinotes.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 public class KeyTests{
 
 	@Test
@@ -26,6 +28,62 @@ public class KeyTests{
 		assertEquals(key.toString(), "Bb");
 		key = new Key(Letter.F, Accidental.DOUBLE_FLAT);
 		assertEquals(key.toString(), "Fbb");
+	}
+
+	@Test
+	public void testKeySignature(){
+		KeySignature ks;
+		Iterator<Letter> letters;
+
+		ks = new KeySignature(Key.fromString("C"), Mode.MAJOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Cn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Dn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "En");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Gn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "An");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
+
+		ks = new KeySignature(Key.fromString("E"), Mode.MAJOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "En");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "F#");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "G#");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "An");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "C#");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "D#");
+
+		ks = new KeySignature(Key.fromString("Gb"), Mode.MAJOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Gb");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Ab");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Bb");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Cb");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Db");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Eb");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
+
+		ks = new KeySignature(Key.fromString("A"), Mode.NATURAL_MINOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "An");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Cn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Dn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "En");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Gn");
+
+		ks = new KeySignature(Key.fromString("C"), Mode.HARMONIC_MINOR);
+		letters = Letter.iterator(ks.getKey().getLetter());
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Cn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Dn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Eb");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Gn");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Ab");
+		assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
 	}
 
 	@Test

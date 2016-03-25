@@ -15,32 +15,79 @@ public class Note{
 		this.octave = octave;
 	}
 
-	public Note semitoneUp(){
-		return semitoneUp(Accidental.Policy.PRIORITIZE_SHARP);
+	public Note apply(KeySignature keySignature){
+		return new Note(key.apply(keySignature), octave);
 	}
 
-	public final Note semitoneUp(Accidental.Policy policy){
+	public Note step(int amount){
+		return step(amount, Accidental.Policy.PRIORITIZE_NATURAL);
+	}
+
+	public Note step(int amount, Accidental.Policy policy){
+		if(Accidental.Policy.MAINTAIN_LETTER == policy){
+			int offset = key.getAccidental().getOffset();
+			if(offset + amount > Accidental.DOUBLE_SHARP.getOffset() || offset + amount < Accidental.DOUBLE_FLAT.getOffset()){
+				throw new RuntimeException("Can't move note " + amount + " step(s) up while maintaining letter: " + this);
+			}
+			return new Note(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + amount)), octave);
+		}
+		return Note.fromProgramNumber(getProgramNumber() + amount, policy);
+	}
+
+	public Note halfStepUp(){
+		return halfStepUp(Accidental.Policy.PRIORITIZE_SHARP);
+	}
+
+	public final Note halfStepUp(Accidental.Policy policy){
 		if(Accidental.Policy.MAINTAIN_LETTER == policy){
 			if(key.isDoubleSharp()){
-				throw new RuntimeException("Can't move note semitone up while maintaining letter: " + this);
+				throw new RuntimeException("Can't move note half step up while maintaining letter: " + this);
 			}
 			return new Note(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + 1)), octave);
 		}
 		return Note.fromProgramNumber(getProgramNumber() + 1, policy);
 	}
 
-	public Note semitoneDown(){
-		return semitoneDown(Accidental.Policy.PRIORITIZE_FLAT);
+	public Note halfStepDown(){
+		return halfStepDown(Accidental.Policy.PRIORITIZE_FLAT);
 	}
 
-	public final Note semitoneDown(Accidental.Policy policy){
+	public final Note halfStepDown(Accidental.Policy policy){
 		if(Accidental.Policy.MAINTAIN_LETTER == policy){
 			if(key.isDoubleFlat()){
-				throw new RuntimeException("Can't move note semitone down while maintaining letter: " + this);
+				throw new RuntimeException("Can't move note half step down while maintaining letter: " + this);
 			}
 			return new Note(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() - 1)), octave);
 		}
 		return Note.fromProgramNumber(getProgramNumber() - 1, policy);
+	}
+
+	public final Note getHigherNote(Key key){
+		Note note = new Note(key, octave);
+		if(!isLowerThan(note)){
+			note = new Note(key, octave + 1);
+		}
+		return note;
+	}
+
+	public final Note getLowerNote(Key key){
+		Note note = new Note(key, octave);
+		if(!isHigherThan(note)){
+			note = new Note(key, octave - 1);
+		}
+		return note;
+	}
+
+	public final boolean isHigherThan(Note note){
+		return getProgramNumber() > note.getProgramNumber();
+	}
+
+	public final boolean isLowerThan(Note note){
+		return getProgramNumber() < note.getProgramNumber();
+	}
+
+	public static final boolean isEnharmonic(Note a, Note b){
+		return a.getProgramNumber() == b.getProgramNumber();
 	}
 
 	public static final Note fromProgramNumber(int programNumber){
@@ -69,8 +116,8 @@ public class Note{
 	* exists and should be used instead.
 	*/
 	public static final Note fromString(String noteString){
-		// longest prefix that contains only letters
-		Key key = Key.fromString(RegEx.extract("^[a-zA-Z]{1,}", noteString));
+		// longest prefix that contains only letters or #
+		Key key = Key.fromString(RegEx.extract("^[a-zA-Z#]{1,}", noteString));
 		// first number of length greater than 1 thats followed by an open parentheses (if there is any)
 		String octaveString = RegEx.extract("\\d{1,}(?![^(]*\\))", noteString);
 		if(octaveString == null){

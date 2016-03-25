@@ -6,6 +6,8 @@ import infinotes.theory.*;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 public class LetterTests{
 
 	@Test
@@ -26,6 +28,33 @@ public class LetterTests{
 		assertEquals(letter.getOffset(), 5);
 		letter = Letter.G;
 		assertEquals(letter.getOffset(), 7);
+	}
+
+	@Test
+	public void testIterator(){
+		Iterator<Letter> it;
+
+		Letter[] letters = Letter.values();
+
+		it = Letter.iterator();
+		for(int i = 0; i < letters.length; ++i){
+			assertEquals(it.next(), letters[i]);
+		}
+
+		it = Letter.iterator(Letter.A);
+		for(int i = 0; i < letters.length; ++i){
+			assertEquals(it.next(), letters[i]);
+		}
+
+		it = Letter.iterator(Letter.C);
+		for(int i = 0; i < letters.length; ++i){
+			assertEquals(it.next(), letters[(i + 2) % letters.length]);
+		}
+
+		it = Letter.iterator(Letter.G);
+		for(int i = 0; i < letters.length; ++i){
+			assertEquals(it.next(), letters[(i + 6) % letters.length]);
+		}
 	}
 
 	@Test

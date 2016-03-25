@@ -1,6 +1,8 @@
 
 package infinotes.theory;
 
+import java.util.Iterator;
+
 /*
 * Letter with the concept of accidentals
 */
@@ -15,6 +17,30 @@ public final class Key{
 	public Key(Letter letter, Accidental accidental){
 		this.letter = letter;
 		this.accidental = accidental;
+	}
+
+	public final Key apply(KeySignature keySignature){
+		Accidental accidental = Accidental.NONE;
+
+		Key key = keySignature.getKey();
+		Iterator<Letter> letters =	Letter.iterator(key.getLetter());
+
+		int offset = key.getOffset();
+		for(int step : keySignature.getMode().getStepPattern()){
+			if(letter == letters.next()){
+				offset %= MusicConstants.KEYS_IN_OCTAVE;
+				if(offset - letter.getOffset() > Accidental.DOUBLE_SHARP.getOffset()){
+					offset -= MusicConstants.KEYS_IN_OCTAVE;
+				}
+				else if(offset - letter.getOffset() < Accidental.DOUBLE_FLAT.getOffset()){
+					offset += MusicConstants.KEYS_IN_OCTAVE;
+				}
+				accidental = Accidental.fromOffset(offset - letter.getOffset());
+				break;
+			}
+			offset += step;
+		}
+		return new Key(letter, accidental);
 	}
 
 	public final Key none(){

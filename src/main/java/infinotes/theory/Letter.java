@@ -1,6 +1,11 @@
 
 package infinotes.theory;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 public enum Letter{
 	/*
 	* Values derived from General MIDI's program numbers
@@ -20,6 +25,16 @@ public enum Letter{
 	private Letter(int offset){ this.offset = offset; }
 
 	public final int getOffset(){ return offset; }
+
+	public static final Iterator<Letter> iterator(){
+		return Letter.iterator(Letter.A);
+	}
+
+	public static final Iterator<Letter> iterator(Letter startingLetter){
+		List<Letter> list = Arrays.asList(Letter.values());
+		Collections.rotate(list, -list.indexOf(startingLetter));
+		return list.iterator();
+	}
 
 	public static final Letter fromChar(char letterChar){
 		switch(letterChar){
