@@ -61,7 +61,8 @@ public class Note{
 				break;
 		}
 
-		return new Note(new Key(letter, accidental), octave + (interval.getNumber() + key.getLetter().getOffset() - letter.getOffset()) / MusicConstants.UNIQUE_LETTER_COUNT);
+		int octaveOffset = (interval.getNumber() + key.getLetter().getOffset() - letter.getOffset()) / MusicConstants.UNIQUE_LETTER_COUNT;
+		return new Note(new Key(letter, accidental), octave + octaveOffset);
 	}
 
 	public Note halfStepUp(){
