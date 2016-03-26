@@ -23,7 +23,7 @@ public final class Key{
 		Accidental accidental = Accidental.NONE;
 
 		Key key = keySignature.getKey();
-		Iterator<Letter> letters =	Letter.iterator(key.getLetter());
+		Iterator<Letter> letters = Letter.iterator(key.getLetter());
 
 		int offset = key.getOffset();
 		for(int step : keySignature.getMode().getStepPattern()){

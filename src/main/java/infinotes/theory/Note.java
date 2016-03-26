@@ -3,6 +3,8 @@ package infinotes.theory;
 
 import infinotes.util.RegEx;
 
+import java.util.Iterator;
+
 /*
 * Key with the concept of octave
 */
@@ -32,6 +34,34 @@ public class Note{
 			return new Note(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + amount)), octave);
 		}
 		return Note.fromProgramNumber(getProgramNumber() + amount, policy);
+	}
+
+	public Note step(Interval interval){
+		// determine the letter
+		Iterator<Letter> it = Letter.iterator(key.getLetter());
+		Letter letter = key.getLetter();
+		for(int i = 0; i < interval.getNumber() % (MusicConstants.UNIQUE_LETTER_COUNT + 1); ++i){
+			letter = it.next();
+		}
+
+		// initialize accidental to be the accidental of the new letter in the key signature of this key
+		Accidental accidental = new Key(letter).apply(new KeySignature(key, Mode.MAJOR)).getAccidental();
+		// change accidental based on interval's quality
+		switch(interval.getQuality()){
+			case PERFECT: MAJOR:
+				break;
+			case MINOR:
+				accidental = Accidental.fromOffset(accidental.getOffset() - 1);
+				break;
+			case DIMINISHED:
+				accidental = Accidental.fromOffset(accidental.getOffset() - (Interval.isPerfect(interval.getNumber()) ? 1 : 2));
+				break;
+			case AUGMENTED:
+				accidental = Accidental.fromOffset(accidental.getOffset() + 1);
+				break;
+		}
+
+		return new Note(new Key(letter, accidental), octave + (interval.getNumber() + key.getLetter().getOffset() - letter.getOffset()) / MusicConstants.UNIQUE_LETTER_COUNT);
 	}
 
 	public Note halfStepUp(){

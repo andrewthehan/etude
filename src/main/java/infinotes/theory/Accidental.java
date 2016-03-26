@@ -2,16 +2,18 @@
 package infinotes.theory;
 
 public enum Accidental{
-	NONE(0), NATURAL(0), SHARP(1), DOUBLE_SHARP(2), FLAT(-1), DOUBLE_FLAT(-2);
+	NONE(0, ""), NATURAL(0, "n"), SHARP(1, "#"), DOUBLE_SHARP(2, "x"), FLAT(-1, "b"), DOUBLE_FLAT(-2, "bb");
 
 	public static enum Policy{
 		MAINTAIN_LETTER, PRIORITIZE_NATURAL, PRIORITIZE_SHARP, PRIORITIZE_FLAT
 	}
 
 	private final int offset;
+	private final String symbol;
 
-	private Accidental(int offset){
+	private Accidental(int offset, String symbol){
 		this.offset = offset;
+		this.symbol = symbol;
 	}
 
 	public static final Accidental fromOffset(int offset){
@@ -43,14 +45,6 @@ public enum Accidental{
 
 	@Override
 	public String toString(){
-		switch(this){
-			case NONE: return "";
-			case NATURAL: return "n";
-			case SHARP: return "#";
-			case DOUBLE_SHARP: return "x";
-			case FLAT: return "b";
-			case DOUBLE_FLAT: return "bb";
-			default: assert false; return null;
-		}
+		return symbol;
 	}
 }
