@@ -20,35 +20,45 @@ public class Infinotes{
 		infinotes.start();
 
 		// C Major scale, parsing from a string
-		Arrays.stream(Infinotes.parse("C4 D4 E4 F4 G4 A4 B4 C5")).forEach(n -> infinotes.play(500, n));
+		Arrays.stream(Infinotes.parse("C4 D4 E4 F4 G4 A4 B4 C5")).forEach(n -> infinotes.play(200, n));
 
 		// c natural minor scale, using key signature
 		KeySignature ks = new KeySignature(Key.fromString("C"), Mode.HARMONIC_MINOR);
 		Note scale = new Note(ks.getKey().flat(), 4);
 		Letter
 			.iterator(ks.getKey().getLetter())
-			.forEachRemaining(l -> infinotes.play(500, scale.getHigherNote(new Key(l)).apply(ks)));
+			.forEachRemaining(l -> infinotes.play(200, scale.getHigherNote(new Key(l)).apply(ks)));
 
 		// circle of fifths
 		Note note = Note.fromString("C2");
 		Interval circle = new Interval(Quality.PERFECT, 5);
 		do{
-			infinotes.play(500, note = note.step(circle));
+			infinotes.play(200, note = note.step(circle));
 		}while(!Key.isEnharmonic(note.getKey(), Key.fromString("C")));
 
 		// chromatic scale
 		note = Note.fromString("C4");
-		infinotes.play(500, note);
+		infinotes.play(200, note);
 		do{
-			infinotes.play(500, note = note.halfStepUp());
+			infinotes.play(200, note = note.halfStepUp());
 		}while(!Key.isEnharmonic(note.getKey(), Key.fromString("C")));
 
 		// C Major arpeggio and chord
-		infinotes.play(500, Note.fromString("C4"));
-		infinotes.play(500, Note.fromString("E4"));
-		infinotes.play(500, Note.fromString("G4"));
-		infinotes.play(500, Note.fromString("C5"));
-		infinotes.play(2000, Note.fromString("C4"), Note.fromString("E4"), Note.fromString("G4"), Note.fromString("C5"));
+		infinotes.play(200, Note.fromString("C4"));
+		infinotes.play(200, Note.fromString("E4"));
+		infinotes.play(200, Note.fromString("G4"));
+		infinotes.play(200, Note.fromString("C5"));
+		infinotes.play(800, Note.fromString("C4"), Note.fromString("E4"), Note.fromString("G4"), Note.fromString("C5"));
+
+		// c minor arpeggio using degrees
+		Key tonic = ks.keyOf(Degree.TONIC);
+		Key mediant = ks.keyOf(Degree.MEDIANT);
+		Key dominant = ks.keyOf(Degree.DOMINANT);
+		Note arpeggio;
+		infinotes.play(200, arpeggio = new Note(tonic, 4));
+		infinotes.play(200, arpeggio = arpeggio.getHigherNote(mediant));
+		infinotes.play(200, arpeggio = arpeggio.getHigherNote(dominant));
+		infinotes.play(200, arpeggio = arpeggio.getHigherNote(tonic));
 
 		infinotes.end();
 	}

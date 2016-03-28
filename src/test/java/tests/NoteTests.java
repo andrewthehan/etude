@@ -201,6 +201,15 @@ public class NoteTests{
 		assertEquals(note.step(interval).toString(), "Cn5(60)");
 		interval = new Interval(Quality.AUGMENTED, 8);
 		assertEquals(note.step(interval).toString(), "C#5(61)");
+
+		interval = new Interval(Quality.DIMINISHED, 9);
+		assertEquals(note.step(interval).toString(), "Dbb5(60)");
+		interval = new Interval(Quality.MINOR, 9);
+		assertEquals(note.step(interval).toString(), "Db5(61)");
+		interval = new Interval(Quality.MAJOR, 9);
+		assertEquals(note.step(interval).toString(), "Dn5(62)");
+		interval = new Interval(Quality.AUGMENTED, 9);
+		assertEquals(note.step(interval).toString(), "D#5(63)");
 	}
 
 	@Test

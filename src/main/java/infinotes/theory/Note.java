@@ -3,7 +3,7 @@ package infinotes.theory;
 
 import infinotes.util.RegEx;
 
-import java.util.Iterator;
+import java.util.List;
 
 /*
 * Key with the concept of octave
@@ -38,11 +38,8 @@ public class Note{
 
 	public Note step(Interval interval){
 		// determine the letter
-		Iterator<Letter> it = Letter.iterator(key.getLetter());
-		Letter letter = key.getLetter();
-		for(int i = 0; i < interval.getNumber() % (MusicConstants.UNIQUE_LETTER_COUNT + 1); ++i){
-			letter = it.next();
-		}
+		List<Letter> list = Letter.asList(key.getLetter());
+		Letter letter = list.get(Math.floorMod(interval.getNumber() - 1, MusicConstants.UNIQUE_LETTER_COUNT));
 
 		// initialize accidental to be the accidental of the new letter in the key signature of this key
 		Accidental accidental = new Key(letter).apply(new KeySignature(key, Mode.MAJOR)).getAccidental();

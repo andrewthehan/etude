@@ -31,9 +31,17 @@ public enum Letter{
 	}
 
 	public static final Iterator<Letter> iterator(Letter startingLetter){
+		return Letter.asList(startingLetter).iterator();
+	}
+
+	public static final List<Letter> asList(){
+		return Letter.asList(Letter.A);
+	}
+
+	public static final List<Letter> asList(Letter startingLetter){
 		List<Letter> list = Arrays.asList(Letter.values());
 		Collections.rotate(list, -list.indexOf(startingLetter));
-		return list.iterator();
+		return list;
 	}
 
 	public static final Letter fromChar(char letterChar){
