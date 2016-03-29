@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NoteTests{
 
@@ -229,6 +231,14 @@ public class NoteTests{
 		assertEquals(note.getLowerNote(Key.fromString("D")).toString(), "D3(38)");
 		assertEquals(note.getHigherNote(Key.fromString("C")).toString(), "C5(60)");
 		assertEquals(note.getLowerNote(Key.fromString("C")).toString(), "C3(36)");
+
+		String sorted = Stream
+			.of("C4", "G4", "D4", "A4", "E4", "B4", "F4")
+			.map(Note::fromString)
+			.sorted()
+			.map(Note::toString)
+			.collect(Collectors.joining(" "));
+		assertEquals(sorted, "C4(48) D4(50) E4(52) F4(53) G4(55) A4(57) B4(59)");
 	}
 
 	@Test
