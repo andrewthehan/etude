@@ -3,6 +3,21 @@ package infinotes.theory;
 
 
 public final class Interval{
+	public enum Quality{
+		PERFECT("P"), MAJOR("M"), MINOR("m"), DIMINISHED("d"), AUGMENTED("A");
+
+		private final String symbol;
+
+		private Quality(String symbol){
+			this.symbol = symbol;
+		}
+
+		@Override
+		public String toString(){
+			return symbol;
+		}
+	}
+
 	private final Quality quality;
 	private final int number;
 

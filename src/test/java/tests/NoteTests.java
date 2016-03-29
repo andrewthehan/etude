@@ -138,77 +138,77 @@ public class NoteTests{
 
 		note = Note.fromString("C4");
 
-		interval = new Interval(Quality.DIMINISHED, 1);
+		interval = new Interval(Interval.Quality.DIMINISHED, 1);
 		assertEquals(note.step(interval).toString(), "Cb4(47)");
-		interval = new Interval(Quality.PERFECT, 1);
+		interval = new Interval(Interval.Quality.PERFECT, 1);
 		assertEquals(note.step(interval).toString(), "Cn4(48)");
-		interval = new Interval(Quality.AUGMENTED, 1);
+		interval = new Interval(Interval.Quality.AUGMENTED, 1);
 		assertEquals(note.step(interval).toString(), "C#4(49)");
 
-		interval = new Interval(Quality.DIMINISHED, 2);
+		interval = new Interval(Interval.Quality.DIMINISHED, 2);
 		assertEquals(note.step(interval).toString(), "Dbb4(48)");
-		interval = new Interval(Quality.MINOR, 2);
+		interval = new Interval(Interval.Quality.MINOR, 2);
 		assertEquals(note.step(interval).toString(), "Db4(49)");
-		interval = new Interval(Quality.MAJOR, 2);
+		interval = new Interval(Interval.Quality.MAJOR, 2);
 		assertEquals(note.step(interval).toString(), "Dn4(50)");
-		interval = new Interval(Quality.AUGMENTED, 2);
+		interval = new Interval(Interval.Quality.AUGMENTED, 2);
 		assertEquals(note.step(interval).toString(), "D#4(51)");
 
-		interval = new Interval(Quality.DIMINISHED, 3);
+		interval = new Interval(Interval.Quality.DIMINISHED, 3);
 		assertEquals(note.step(interval).toString(), "Ebb4(50)");
-		interval = new Interval(Quality.MINOR, 3);
+		interval = new Interval(Interval.Quality.MINOR, 3);
 		assertEquals(note.step(interval).toString(), "Eb4(51)");
-		interval = new Interval(Quality.MAJOR, 3);
+		interval = new Interval(Interval.Quality.MAJOR, 3);
 		assertEquals(note.step(interval).toString(), "En4(52)");
-		interval = new Interval(Quality.AUGMENTED, 3);
+		interval = new Interval(Interval.Quality.AUGMENTED, 3);
 		assertEquals(note.step(interval).toString(), "E#4(53)");
 
-		interval = new Interval(Quality.DIMINISHED, 4);
+		interval = new Interval(Interval.Quality.DIMINISHED, 4);
 		assertEquals(note.step(interval).toString(), "Fb4(52)");
-		interval = new Interval(Quality.PERFECT, 4);
+		interval = new Interval(Interval.Quality.PERFECT, 4);
 		assertEquals(note.step(interval).toString(), "Fn4(53)");
-		interval = new Interval(Quality.AUGMENTED, 4);
+		interval = new Interval(Interval.Quality.AUGMENTED, 4);
 		assertEquals(note.step(interval).toString(), "F#4(54)");
 
-		interval = new Interval(Quality.DIMINISHED, 5);
+		interval = new Interval(Interval.Quality.DIMINISHED, 5);
 		assertEquals(note.step(interval).toString(), "Gb4(54)");
-		interval = new Interval(Quality.PERFECT, 5);
+		interval = new Interval(Interval.Quality.PERFECT, 5);
 		assertEquals(note.step(interval).toString(), "Gn4(55)");
-		interval = new Interval(Quality.AUGMENTED, 5);
+		interval = new Interval(Interval.Quality.AUGMENTED, 5);
 		assertEquals(note.step(interval).toString(), "G#4(56)");
 
-		interval = new Interval(Quality.DIMINISHED, 6);
+		interval = new Interval(Interval.Quality.DIMINISHED, 6);
 		assertEquals(note.step(interval).toString(), "Abb4(55)");
-		interval = new Interval(Quality.MINOR, 6);
+		interval = new Interval(Interval.Quality.MINOR, 6);
 		assertEquals(note.step(interval).toString(), "Ab4(56)");
-		interval = new Interval(Quality.MAJOR, 6);
+		interval = new Interval(Interval.Quality.MAJOR, 6);
 		assertEquals(note.step(interval).toString(), "An4(57)");
-		interval = new Interval(Quality.AUGMENTED, 6);
+		interval = new Interval(Interval.Quality.AUGMENTED, 6);
 		assertEquals(note.step(interval).toString(), "A#4(58)");
 
-		interval = new Interval(Quality.DIMINISHED, 7);
+		interval = new Interval(Interval.Quality.DIMINISHED, 7);
 		assertEquals(note.step(interval).toString(), "Bbb4(57)");
-		interval = new Interval(Quality.MINOR, 7);
+		interval = new Interval(Interval.Quality.MINOR, 7);
 		assertEquals(note.step(interval).toString(), "Bb4(58)");
-		interval = new Interval(Quality.MAJOR, 7);
+		interval = new Interval(Interval.Quality.MAJOR, 7);
 		assertEquals(note.step(interval).toString(), "Bn4(59)");
-		interval = new Interval(Quality.AUGMENTED, 7);
+		interval = new Interval(Interval.Quality.AUGMENTED, 7);
 		assertEquals(note.step(interval).toString(), "B#4(60)");
 
-		interval = new Interval(Quality.DIMINISHED, 8);
+		interval = new Interval(Interval.Quality.DIMINISHED, 8);
 		assertEquals(note.step(interval).toString(), "Cb5(59)");
-		interval = new Interval(Quality.PERFECT, 8);
+		interval = new Interval(Interval.Quality.PERFECT, 8);
 		assertEquals(note.step(interval).toString(), "Cn5(60)");
-		interval = new Interval(Quality.AUGMENTED, 8);
+		interval = new Interval(Interval.Quality.AUGMENTED, 8);
 		assertEquals(note.step(interval).toString(), "C#5(61)");
 
-		interval = new Interval(Quality.DIMINISHED, 9);
+		interval = new Interval(Interval.Quality.DIMINISHED, 9);
 		assertEquals(note.step(interval).toString(), "Dbb5(60)");
-		interval = new Interval(Quality.MINOR, 9);
+		interval = new Interval(Interval.Quality.MINOR, 9);
 		assertEquals(note.step(interval).toString(), "Db5(61)");
-		interval = new Interval(Quality.MAJOR, 9);
+		interval = new Interval(Interval.Quality.MAJOR, 9);
 		assertEquals(note.step(interval).toString(), "Dn5(62)");
-		interval = new Interval(Quality.AUGMENTED, 9);
+		interval = new Interval(Interval.Quality.AUGMENTED, 9);
 		assertEquals(note.step(interval).toString(), "D#5(63)");
 	}
 

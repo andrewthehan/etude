@@ -31,7 +31,7 @@ public class Infinotes{
 
 		// circle of fifths
 		Note note = Note.fromString("C2");
-		Interval circle = new Interval(Quality.PERFECT, 5);
+		Interval circle = new Interval(Interval.Quality.PERFECT, 5);
 		do{
 			infinotes.play(200, note = note.step(circle));
 		}while(!Key.isEnharmonic(note.getKey(), Key.fromString("C")));
@@ -43,13 +43,6 @@ public class Infinotes{
 			infinotes.play(200, note = note.halfStepUp());
 		}while(!Key.isEnharmonic(note.getKey(), Key.fromString("C")));
 
-		// C Major arpeggio and chord
-		infinotes.play(200, Note.fromString("C4"));
-		infinotes.play(200, Note.fromString("E4"));
-		infinotes.play(200, Note.fromString("G4"));
-		infinotes.play(200, Note.fromString("C5"));
-		infinotes.play(800, Note.fromString("C4"), Note.fromString("E4"), Note.fromString("G4"), Note.fromString("C5"));
-
 		// c minor arpeggio using degrees
 		Key tonic = ks.keyOf(Degree.TONIC);
 		Key mediant = ks.keyOf(Degree.MEDIANT);
@@ -59,6 +52,16 @@ public class Infinotes{
 		infinotes.play(200, arpeggio = arpeggio.getHigherNote(mediant));
 		infinotes.play(200, arpeggio = arpeggio.getHigherNote(dominant));
 		infinotes.play(200, arpeggio = arpeggio.getHigherNote(tonic));
+
+		// play all chords on C4
+		Note c4 = Note.fromString("C4");
+		infinotes.play(1000, new Chord(c4, Chord.Quality.MAJOR_SEVENTH));
+		infinotes.play(1000, new Chord(c4, Chord.Quality.MINOR_SEVENTH));
+		infinotes.play(1000, new Chord(c4, Chord.Quality.DOMINANT_SEVENTH));
+		infinotes.play(1000, new Chord(c4, Chord.Quality.DIMINISHED_SEVENTH));
+		infinotes.play(1000, new Chord(c4, Chord.Quality.HALF_DIMINISHED_SEVENTH));
+		infinotes.play(1000, new Chord(c4, Chord.Quality.MINOR_MAJOR_SEVENTH));
+		infinotes.play(1000, new Chord(c4, Chord.Quality.AUGMENTED_MAJOR_SEVENTH));
 
 		infinotes.end();
 	}
@@ -109,6 +112,10 @@ public class Infinotes{
 		for(Note n : notes){
 			channels[voice].noteOff(n.getProgramNumber());
 		}
+	}
+
+	public void play(int duration, Chord chord){
+		play(duration, chord.getNotes());
 	}
 
 	public static Note[] parse(String notes){

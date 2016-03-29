@@ -8,7 +8,7 @@ import java.util.List;
 /*
 * Key with the concept of octave
 */
-public class Note{
+public class Note implements Comparable<Note>{
 	private final Key key;
 	private final int octave;
 
@@ -17,7 +17,7 @@ public class Note{
 		this.octave = octave;
 	}
 
-	public Note apply(KeySignature keySignature){
+	public final Note apply(KeySignature keySignature){
 		return new Note(key.apply(keySignature), octave);
 	}
 
@@ -25,7 +25,7 @@ public class Note{
 		return step(amount, Accidental.Policy.PRIORITIZE_NATURAL);
 	}
 
-	public Note step(int amount, Accidental.Policy policy){
+	public final Note step(int amount, Accidental.Policy policy){
 		if(Accidental.Policy.MAINTAIN_LETTER == policy){
 			int offset = key.getAccidental().getOffset();
 			if(offset + amount > Accidental.DOUBLE_SHARP.getOffset() || offset + amount < Accidental.DOUBLE_FLAT.getOffset()){
@@ -36,7 +36,7 @@ public class Note{
 		return Note.fromProgramNumber(getProgramNumber() + amount, policy);
 	}
 
-	public Note step(Interval interval){
+	public final Note step(Interval interval){
 		// determine the letter
 		List<Letter> list = Letter.asList(key.getLetter());
 		Letter letter = list.get(Math.floorMod(interval.getNumber() - 1, MusicConstants.UNIQUE_LETTER_COUNT));
@@ -112,6 +112,11 @@ public class Note{
 
 	public final boolean isLowerThan(Note note){
 		return getProgramNumber() < note.getProgramNumber();
+	}
+
+	@Override
+	public int compareTo(Note n){
+		return Integer.compare(getProgramNumber(), n.getProgramNumber());
 	}
 
 	public static final boolean isEnharmonic(Note a, Note b){
