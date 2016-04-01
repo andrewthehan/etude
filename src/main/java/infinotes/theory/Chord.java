@@ -1,6 +1,8 @@
 
 package infinotes.theory;
 
+import infinotes.util.RegEx;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -89,46 +91,73 @@ public final class Chord{
 		}
 	}
 
-	private final Note[] notes;
+	private final Pitch[] pitches;
+	private final Value value;
 
-	public Chord(Note[] notes){
-		this.notes = notes;
+	public Chord(Pitch[] pitches, Value value){
+		this.pitches = pitches;
+		this.value = value;
 	}
 
-	public Chord(KeySignature ks, Degree degree, int octave, Quality quality){
-		this(ks, degree, octave, quality, Inversion.ROOT);
+	public Chord(Pitch pitch, Quality quality, Value value){
+		this(pitch, quality, Inversion.ROOT, value);
 	}
 
-	public Chord(KeySignature ks, Degree degree, int octave, Quality quality, Inversion inversion){
-		this(new Note(ks.keyOf(degree), octave), quality, inversion);
-	}
-
-	public Chord(Note note, Quality quality){
-		this(note, quality, Inversion.ROOT);
-	}
-
-	public Chord(Note note, Quality quality, Inversion inversion){
-		List<Note> notes = Arrays
+	public Chord(Pitch pitch, Quality quality, Inversion inversion, Value value){
+		List<Pitch> pitches = Arrays
 			.stream(quality.getIntervalPattern())
-			.map(note::step)
+			.map(pitch::step)
 			.collect(Collectors.toList());
-		if(Inversion.THIRD == inversion && quality.getIntervalPattern().length < Inversion.THIRD.getValue() + 1){
-			throw new RuntimeException("Invalid inversion: " + inversion + " (unable to invert chord with less than 4 notes to its third inversion)");
+		if(Inversion.THIRD == inversion && quality.getIntervalPattern().length <= Inversion.THIRD.getValue()){
+			throw new RuntimeException("Invalid inversion: " + inversion + " (unable to invert chord with less than 4 pitches to its third inversion)");
 		}
-		Collections.rotate(notes, -inversion.getValue());
-		this.notes = notes.toArray(new Note[notes.size()]);
+		Collections.rotate(pitches, -inversion.getValue());
+		this.pitches = pitches.toArray(new Pitch[pitches.size()]);
+		this.value = value;
 	}
 
-	public final Note[] getNotes(){
-		return notes;
+	public static final Chord fromString(String chordString){
+		if(chordString == null){
+			throw new RuntimeException("Invalid chord string: " + chordString);
+		}
+		else if(chordString.trim().isEmpty()){
+			throw new RuntimeException("Invalid chord string: " + chordString + " (blank)");
+		}
+
+		String pitchesString = RegEx.extract("(?<=\\{).*(?=\\})", chordString);
+		if(pitchesString == null){
+			throw new RuntimeException("Invalid chord string: " + chordString + " (missing curly braces that enclose pitches)");
+		}
+
+		Pitch[] pitches = Arrays.stream(pitchesString.split(",")).map(Pitch::fromString).toArray(Pitch[]::new);
+
+		String valueString = RegEx.extract("(?<=\\[).*(?=\\])", chordString);
+
+		Value value = Value.fromString(valueString);
+
+		if(!chordString.contains("}[") || !chordString.startsWith("{") || !chordString.endsWith("]")){
+			throw new RuntimeException("Invalid chord string: " + chordString + " (contains extra information)");
+		}
+
+		return new Chord(pitches, value);
 	}
 
 	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
-		builder.append("[");
-		builder.append(Arrays.stream(notes).map(Note::toString).collect(Collectors.joining(",")));
+		builder.append("{");
+		builder.append(Arrays.stream(pitches).map(Pitch::toString).collect(Collectors.joining(",")));
+		builder.append("}[");
+		builder.append(value);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	public final Pitch[] getPitches(){
+		return pitches;
+	}
+
+	public final Value getValue(){
+		return value;
 	}
 }

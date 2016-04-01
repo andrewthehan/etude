@@ -4,7 +4,7 @@ package infinotes.theory;
 import java.util.Iterator;
 
 /*
-* Letter with the concept of accidentals
+* Letter with the concept of accidental
 */
 public final class Key{
 	private final Letter letter;
@@ -205,8 +205,11 @@ public final class Key{
 	}
 
 	public static final Key fromString(String keyString){
-		if(keyString.length() == 0){
+		if(keyString == null){
 			throw new RuntimeException("Invalid key string: " + keyString);
+		}
+		else if(keyString.trim().isEmpty()){
+			throw new RuntimeException("Invalid key string: " + keyString + " (blank)");
 		}
 		Letter letter = Letter.fromChar(keyString.charAt(0));
 		Accidental accidental = keyString.length() == 1 ? Accidental.NONE : Accidental.fromString(keyString.substring(1));

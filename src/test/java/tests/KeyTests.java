@@ -152,5 +152,27 @@ public class KeyTests{
 			key = Key.fromString(keys[i]);
 			assertEquals(key.toString(), keys[i]);
 		}
+
+		try{
+			Key.fromString(null);
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid key string: null");
+		}
+		try{
+			Key.fromString("");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid key string:  (blank)");
+		}
+		try{
+			Key.fromString("  ");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid key string:    (blank)");
+		}
 	}
 }

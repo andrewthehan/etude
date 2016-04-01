@@ -20,48 +20,52 @@ public class Infinotes{
 		infinotes.start();
 
 		// C Major scale, parsing from a string
-		Arrays.stream(Infinotes.parse("C4 D4 E4 F4 G4 A4 B4 C5")).forEach(n -> infinotes.play(200, n));
+		Arrays.stream(Infinotes.parse("C4 D4 E4 F4 G4 A4 B4 C5")).forEach(p -> infinotes.play(new Note(p, Value.fromString(".25"))));
 
 		// c natural minor scale, using key signature
 		KeySignature ks = new KeySignature(Key.fromString("C"), Mode.HARMONIC_MINOR);
-		Note scale = new Note(ks.getKey().flat(), 4);
+		Pitch scale = new Pitch(ks.getKey().flat(), 4);
 		Letter
 			.iterator(ks.getKey().getLetter())
-			.forEachRemaining(l -> infinotes.play(200, scale.getHigherNote(new Key(l)).apply(ks)));
+			.forEachRemaining(l -> infinotes.play(new Note(scale.getHigherPitch(new Key(l)).apply(ks), Value.fromString(".25"))));
 
 		// circle of fifths
-		Note note = Note.fromString("C2");
+		Pitch pitch = Pitch.fromString("C2");
 		Interval circle = new Interval(Interval.Quality.PERFECT, 5);
 		do{
-			infinotes.play(200, note = note.step(circle));
-		}while(!Key.isEnharmonic(note.getKey(), Key.fromString("C")));
+			infinotes.play(new Note(pitch = pitch.step(circle), Value.fromString(".25")));
+		}while(!Key.isEnharmonic(pitch.getKey(), Key.fromString("C")));
 
 		// chromatic scale
-		note = Note.fromString("C4");
-		infinotes.play(200, note);
+		pitch = Pitch.fromString("C4");
+		infinotes.play(new Note(pitch, Value.fromString(".25")));
 		do{
-			infinotes.play(200, note = note.halfStepUp());
-		}while(!Key.isEnharmonic(note.getKey(), Key.fromString("C")));
+			infinotes.play(new Note(pitch = pitch.halfStepUp(), Value.fromString(".25")));
+		}while(!Key.isEnharmonic(pitch.getKey(), Key.fromString("C")));
 
 		// c minor arpeggio using degrees
 		Key tonic = ks.keyOf(Degree.TONIC);
 		Key mediant = ks.keyOf(Degree.MEDIANT);
 		Key dominant = ks.keyOf(Degree.DOMINANT);
-		Note arpeggio;
-		infinotes.play(200, arpeggio = new Note(tonic, 4));
-		infinotes.play(200, arpeggio = arpeggio.getHigherNote(mediant));
-		infinotes.play(200, arpeggio = arpeggio.getHigherNote(dominant));
-		infinotes.play(200, arpeggio = arpeggio.getHigherNote(tonic));
+		Pitch arpeggio;
+		infinotes.play(new Note(arpeggio = new Pitch(tonic, 4), Value.fromString(".25")));
+		infinotes.play(new Note(arpeggio = arpeggio.getHigherPitch(mediant), Value.fromString(".25")));
+		infinotes.play(new Note(arpeggio = arpeggio.getHigherPitch(dominant), Value.fromString(".25")));
+		infinotes.play(new Note(arpeggio = arpeggio.getHigherPitch(tonic), Value.fromString(".25")));
 
 		// play all chords on C4
-		Note c4 = Note.fromString("C4");
-		infinotes.play(1000, new Chord(c4, Chord.Quality.MAJOR_SEVENTH));
-		infinotes.play(1000, new Chord(c4, Chord.Quality.MINOR_SEVENTH));
-		infinotes.play(1000, new Chord(c4, Chord.Quality.DOMINANT_SEVENTH));
-		infinotes.play(1000, new Chord(c4, Chord.Quality.DIMINISHED_SEVENTH));
-		infinotes.play(1000, new Chord(c4, Chord.Quality.HALF_DIMINISHED_SEVENTH));
-		infinotes.play(1000, new Chord(c4, Chord.Quality.MINOR_MAJOR_SEVENTH));
-		infinotes.play(1000, new Chord(c4, Chord.Quality.AUGMENTED_MAJOR_SEVENTH));
+		Pitch c4 = Pitch.fromString("C4");
+		infinotes.play(new Chord(c4, Chord.Quality.MAJOR, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.MINOR, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.DIMINISHED, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.AUGMENTED, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.MAJOR_SEVENTH, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.MINOR_SEVENTH, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.DOMINANT_SEVENTH, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.DIMINISHED_SEVENTH, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.HALF_DIMINISHED_SEVENTH, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.MINOR_MAJOR_SEVENTH, Value.HALF));
+		infinotes.play(new Chord(c4, Chord.Quality.AUGMENTED_MAJOR_SEVENTH, Value.HALF));
 
 		infinotes.end();
 	}
@@ -95,32 +99,46 @@ public class Infinotes{
 		}
 	}
 
-	public void play(int duration, Note... notes){
+	public void play(Note note){
+		int bmp = 120;
 		int voice = 0;
 		int piano = 0;
 		int volume = 127;
 		channels[voice].programChange(piano);
-		for(Note n : notes){
-			channels[voice].noteOn(n.getProgramNumber(), volume);
-		}
+		channels[voice].noteOn(note.getPitch().getProgramNumber(), volume);
 		try{
-			Thread.sleep(duration);
+			Thread.sleep((int) (120000 / bmp * note.getValue().getDuration()));
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		for(Note n : notes){
-			channels[voice].noteOff(n.getProgramNumber());
+		channels[voice].noteOff(note.getPitch().getProgramNumber());
+	}
+
+	public void play(Chord chord){
+		int bmp = 120;
+		int voice = 0;
+		int piano = 0;
+		int volume = 127;
+		channels[voice].programChange(piano);
+
+		for(Pitch pitch : chord.getPitches()){
+			channels[voice].noteOn(pitch.getProgramNumber(), volume);
+		}
+		try{
+			Thread.sleep((int) (120000 / bmp * chord.getValue().getDuration()));
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		for(Pitch pitch : chord.getPitches()){
+			channels[voice].noteOff(pitch.getProgramNumber());
 		}
 	}
 
-	public void play(int duration, Chord chord){
-		play(duration, chord.getNotes());
-	}
-
-	public static Note[] parse(String notes){
-		return Arrays.stream(WHITESPACE.split(notes))
-			.map(Note::fromString)
-			.toArray(Note[]::new);
+	public static Pitch[] parse(String pitches){
+		return Arrays.stream(WHITESPACE.split(pitches))
+			.map(Pitch::fromString)
+			.toArray(Pitch[]::new);
 	}
 }
