@@ -6,6 +6,3 @@ Refactor entire `theory` library (previously did not separate the concept of `ac
 
 # infinotes
 A Music Theory API for Java.
-
-End Goal:
- - Random music generator.
