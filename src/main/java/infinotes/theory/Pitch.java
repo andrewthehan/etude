@@ -28,7 +28,7 @@ public class Pitch implements Comparable<Pitch>{
 	public final Pitch step(int amount, Accidental.Policy policy){
 		if(Accidental.Policy.MAINTAIN_LETTER == policy){
 			int offset = key.getAccidental().getOffset();
-			if(offset + amount > Accidental.DOUBLE_SHARP.getOffset() || offset + amount < Accidental.DOUBLE_FLAT.getOffset()){
+			if(offset + amount > Accidental.TRIPLE_SHARP.getOffset() || offset + amount < Accidental.TRIPLE_FLAT.getOffset()){
 				throw new RuntimeException("Can't move pitch " + amount + " step(s) up while maintaining letter: " + this);
 			}
 			return new Pitch(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + amount)), octave);
@@ -53,8 +53,14 @@ public class Pitch implements Comparable<Pitch>{
 			case DIMINISHED:
 				accidental = Accidental.fromOffset(accidental.getOffset() - (Interval.isPerfect(interval.getNumber()) ? 1 : 2));
 				break;
+			case DOUBLY_DIMINISHED:
+				accidental = Accidental.fromOffset(accidental.getOffset() - (Interval.isPerfect(interval.getNumber()) ? 2 : 3));
+				break;
 			case AUGMENTED:
 				accidental = Accidental.fromOffset(accidental.getOffset() + 1);
+				break;
+			case DOUBLY_AUGMENTED:
+				accidental = Accidental.fromOffset(accidental.getOffset() + 2);
 				break;
 		}
 
@@ -68,7 +74,7 @@ public class Pitch implements Comparable<Pitch>{
 
 	public final Pitch halfStepUp(Accidental.Policy policy){
 		if(Accidental.Policy.MAINTAIN_LETTER == policy){
-			if(key.isDoubleSharp()){
+			if(key.isTripleSharp()){
 				throw new RuntimeException("Can't move pitch half step up while maintaining letter: " + this);
 			}
 			return new Pitch(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + 1)), octave);
@@ -82,7 +88,7 @@ public class Pitch implements Comparable<Pitch>{
 
 	public final Pitch halfStepDown(Accidental.Policy policy){
 		if(Accidental.Policy.MAINTAIN_LETTER == policy){
-			if(key.isDoubleFlat()){
+			if(key.isTripleFlat()){
 				throw new RuntimeException("Can't move pitch half step down while maintaining letter: " + this);
 			}
 			return new Pitch(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() - 1)), octave);
@@ -156,7 +162,7 @@ public class Pitch implements Comparable<Pitch>{
 			throw new RuntimeException("Invalid pitch string: " + pitchString + " (blank)");
 		}
 		// longest prefix that contains only letters or #
-		String keyString = RegEx.extract("^[a-zA-Z#]{0,}", pitchString);
+		String keyString = RegEx.extract("^[a-zA-Z#]*", pitchString);
 		Key key = Key.fromString(keyString);
 		// first number of length greater than 1 thats followed by an open parentheses (if there is any)
 		String octaveString = RegEx.extract("\\d{1,}(?![^(]*\\))", pitchString);

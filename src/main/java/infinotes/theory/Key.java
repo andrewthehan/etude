@@ -29,10 +29,10 @@ public final class Key{
 		for(int step : keySignature.getMode().getStepPattern()){
 			if(letter == letters.next()){
 				offset %= MusicConstants.KEYS_IN_OCTAVE;
-				if(offset - letter.getOffset() > Accidental.DOUBLE_SHARP.getOffset()){
+				if(offset - letter.getOffset() > Accidental.TRIPLE_SHARP.getOffset()){
 					offset -= MusicConstants.KEYS_IN_OCTAVE;
 				}
-				else if(offset - letter.getOffset() < Accidental.DOUBLE_FLAT.getOffset()){
+				else if(offset - letter.getOffset() < Accidental.TRIPLE_FLAT.getOffset()){
 					offset += MusicConstants.KEYS_IN_OCTAVE;
 				}
 				accidental = Accidental.fromOffset(offset - letter.getOffset());
@@ -59,12 +59,20 @@ public final class Key{
 		return new Key(letter, Accidental.DOUBLE_SHARP);
 	}
 
+	public final Key tripleSharp(){
+		return new Key(letter, Accidental.TRIPLE_SHARP);
+	}
+
 	public final Key flat(){
 		return new Key(letter, Accidental.FLAT);
 	}
 
 	public final Key doubleFlat(){
 		return new Key(letter, Accidental.DOUBLE_FLAT);
+	}
+
+	public final Key tripleFlat(){
+		return new Key(letter, Accidental.TRIPLE_FLAT);
 	}
 
 	public final boolean isNone(){
@@ -83,12 +91,20 @@ public final class Key{
 		return accidental == Accidental.DOUBLE_SHARP;
 	}
 
+	public final boolean isTripleSharp(){
+		return accidental == Accidental.TRIPLE_SHARP;
+	}
+
 	public final boolean isFlat(){
 		return accidental == Accidental.FLAT;
 	}
 
 	public final boolean isDoubleFlat(){
 		return accidental == Accidental.DOUBLE_FLAT;
+	}
+
+	public final boolean isTripleFlat(){
+		return accidental == Accidental.TRIPLE_FLAT;
 	}
 
 	public static final boolean isEnharmonic(Key a, Key b){
@@ -145,7 +161,8 @@ public final class Key{
 					case 0:
 						letter = Letter.C;
 						break;
-					default: throw new RuntimeException("Invalid offset: " + offset);
+					default:
+						throw new RuntimeException("Invalid offset: " + offset);
 				}
 				break;
 			/*
@@ -193,7 +210,8 @@ public final class Key{
 					case 11:
 						letter = Letter.B;
 						break;
-					default: throw new RuntimeException("Invalid offset: " + offset);
+					default:
+						throw new RuntimeException("Invalid offset: " + offset);
 				}
 			break;
 		}

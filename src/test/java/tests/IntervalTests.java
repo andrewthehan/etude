@@ -22,12 +22,18 @@ public class IntervalTests{
 		assertEquals(interval.toString(), "M3");
 		interval = new Interval(Interval.Quality.MINOR, 3);
 		assertEquals(interval.toString(), "m3");
-		interval = new Interval(Interval.Quality.AUGMENTED, 4);
-		assertEquals(interval.toString(), "A4");
 		interval = new Interval(Interval.Quality.DIMINISHED, 3);
 		assertEquals(interval.toString(), "d3");
 		interval = new Interval(Interval.Quality.DIMINISHED, 5);
 		assertEquals(interval.toString(), "d5");
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 3);
+		assertEquals(interval.toString(), "dd3");
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 5);
+		assertEquals(interval.toString(), "dd5");
+		interval = new Interval(Interval.Quality.AUGMENTED, 4);
+		assertEquals(interval.toString(), "A4");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 4);
+		assertEquals(interval.toString(), "AA4");
 
 		try{
 			new Interval(Interval.Quality.PERFECT, -5);
@@ -60,6 +66,109 @@ public class IntervalTests{
 	}
 
 	@Test
+	public void testBetween(){
+		Interval interval;
+
+		Pitch a, b;
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("C4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "P1");
+		assertEquals(a.step(interval).toString(), "Cn4(48)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Cb4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "d1");
+		assertEquals(a.step(interval).toString(), "Cb4(47)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Cbb4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "dd1");
+		assertEquals(a.step(interval).toString(), "Cbb4(46)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("C#4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "A1");
+		assertEquals(a.step(interval).toString(), "C#4(49)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Cx4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "AA1");
+		assertEquals(a.step(interval).toString(), "Cx4(50)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("E4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "M3");
+		assertEquals(a.step(interval).toString(), "En4(52)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Eb4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "m3");
+		assertEquals(a.step(interval).toString(), "Eb4(51)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Ebb4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "d3");
+		assertEquals(a.step(interval).toString(), "Ebb4(50)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Ebbb4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "dd3");
+		assertEquals(a.step(interval).toString(), "Ebbb4(49)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("E#4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "A3");
+		assertEquals(a.step(interval).toString(), "E#4(53)");
+
+		a = Pitch.fromString("C4");
+		b = Pitch.fromString("Ex4");
+		interval = Interval.between(a, b);
+		assertEquals(interval.toString(), "AA3");
+		assertEquals(a.step(interval).toString(), "Ex4(54)");
+
+		try{
+			a = Pitch.fromString("C4");
+			b = Pitch.fromString("Cbbb4");
+			Interval.between(a, b);
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Cannot create interval for pitches: C4(48) -> Cbbb4(45)");
+		}
+
+		try{
+			a = Pitch.fromString("C4");
+			b = Pitch.fromString("C#x4");
+			Interval.between(a, b);
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Cannot create interval for pitches: C4(48) -> C#x4(51)");
+		}
+
+		try{
+			a = Pitch.fromString("C4");
+			b = Pitch.fromString("E#x4");
+			Interval.between(a, b);
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Cannot create interval for pitches: C4(48) -> E#x4(55)");
+		}
+	}
+
+	@Test
 	public void testOffset(){
 		Interval interval;
 
@@ -73,12 +182,18 @@ public class IntervalTests{
 		assertEquals(interval.getOffset(), 4);
 		interval = new Interval(Interval.Quality.MINOR, 3);
 		assertEquals(interval.getOffset(), 3);
-		interval = new Interval(Interval.Quality.AUGMENTED, 4);
-		assertEquals(interval.getOffset(), 6);
 		interval = new Interval(Interval.Quality.DIMINISHED, 3);
 		assertEquals(interval.getOffset(), 2);
 		interval = new Interval(Interval.Quality.DIMINISHED, 5);
 		assertEquals(interval.getOffset(), 6);
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 3);
+		assertEquals(interval.getOffset(), 1);
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 5);
+		assertEquals(interval.getOffset(), 5);
+		interval = new Interval(Interval.Quality.AUGMENTED, 4);
+		assertEquals(interval.getOffset(), 6);
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 4);
+		assertEquals(interval.getOffset(), 7);
 
 		interval = new Interval(Interval.Quality.MAJOR, 10);
 		assertEquals(interval.getOffset(), 16);

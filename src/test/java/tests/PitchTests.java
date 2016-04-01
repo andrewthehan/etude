@@ -75,7 +75,9 @@ public class PitchTests{
 		assertEquals(pitch.getProgramNumber(), 0);
 		assertEquals(pitch.toString(), "C0(0)");
 
-		pitch = Pitch.fromString("Cbb4");
+		pitch = Pitch.fromString("Cbbb4");
+		pitch = pitch.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
+		assertEquals(pitch.toString(), "Cbb4(46)");
 		pitch = pitch.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(pitch.toString(), "Cb4(47)");
 		pitch = pitch.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
@@ -84,13 +86,17 @@ public class PitchTests{
 		assertEquals(pitch.toString(), "C#4(49)");
 		pitch = pitch.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(pitch.toString(), "Cx4(50)");
+		pitch = pitch.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
+		assertEquals(pitch.toString(), "C#x4(51)");
 		try{
 			pitch = pitch.halfStepUp(Accidental.Policy.MAINTAIN_LETTER);
 			fail("Expected an exception.");
 		}
 		catch(Exception e){
-			assertEquals(e.getMessage(), "Can't move pitch half step up while maintaining letter: Cx4(50)");
+			assertEquals(e.getMessage(), "Can't move pitch half step up while maintaining letter: C#x4(51)");
 		}
+		pitch = pitch.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
+		assertEquals(pitch.toString(), "Cx4(50)");
 		pitch = pitch.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(pitch.toString(), "C#4(49)");
 		pitch = pitch.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
@@ -99,12 +105,14 @@ public class PitchTests{
 		assertEquals(pitch.toString(), "Cb4(47)");
 		pitch = pitch.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 		assertEquals(pitch.toString(), "Cbb4(46)");
+		pitch = pitch.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
+		assertEquals(pitch.toString(), "Cbbb4(45)");
 		try{
 			pitch = pitch.halfStepDown(Accidental.Policy.MAINTAIN_LETTER);
 			fail("Expected an exception.");
 		}
 		catch(Exception e){
-			assertEquals(e.getMessage(), "Can't move pitch half step down while maintaining letter: Cbb4(46)");
+			assertEquals(e.getMessage(), "Can't move pitch half step down while maintaining letter: Cbbb4(45)");
 		}
 
 		String[] pitchesSharp = {"C4(48)", "C#4(49)", "D4(50)", "D#4(51)", "E4(52)", "F4(53)", "F#4(54)", "G4(55)", "G#4(56)", "A4(57)", "A#4(58)", "B4(59)", "C5(60)"};
@@ -140,13 +148,19 @@ public class PitchTests{
 
 		pitch = Pitch.fromString("C4");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 1);
+		assertEquals(pitch.step(interval).toString(), "Cbb4(46)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 1);
 		assertEquals(pitch.step(interval).toString(), "Cb4(47)");
 		interval = new Interval(Interval.Quality.PERFECT, 1);
 		assertEquals(pitch.step(interval).toString(), "Cn4(48)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 1);
 		assertEquals(pitch.step(interval).toString(), "C#4(49)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 1);
+		assertEquals(pitch.step(interval).toString(), "Cx4(50)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 2);
+		assertEquals(pitch.step(interval).toString(), "Dbbb4(47)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 2);
 		assertEquals(pitch.step(interval).toString(), "Dbb4(48)");
 		interval = new Interval(Interval.Quality.MINOR, 2);
@@ -155,7 +169,11 @@ public class PitchTests{
 		assertEquals(pitch.step(interval).toString(), "Dn4(50)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 2);
 		assertEquals(pitch.step(interval).toString(), "D#4(51)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 2);
+		assertEquals(pitch.step(interval).toString(), "Dx4(52)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 3);
+		assertEquals(pitch.step(interval).toString(), "Ebbb4(49)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 3);
 		assertEquals(pitch.step(interval).toString(), "Ebb4(50)");
 		interval = new Interval(Interval.Quality.MINOR, 3);
@@ -164,21 +182,33 @@ public class PitchTests{
 		assertEquals(pitch.step(interval).toString(), "En4(52)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 3);
 		assertEquals(pitch.step(interval).toString(), "E#4(53)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 3);
+		assertEquals(pitch.step(interval).toString(), "Ex4(54)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 4);
+		assertEquals(pitch.step(interval).toString(), "Fbb4(51)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 4);
 		assertEquals(pitch.step(interval).toString(), "Fb4(52)");
 		interval = new Interval(Interval.Quality.PERFECT, 4);
 		assertEquals(pitch.step(interval).toString(), "Fn4(53)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 4);
 		assertEquals(pitch.step(interval).toString(), "F#4(54)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 4);
+		assertEquals(pitch.step(interval).toString(), "Fx4(55)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 5);
+		assertEquals(pitch.step(interval).toString(), "Gbb4(53)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 5);
 		assertEquals(pitch.step(interval).toString(), "Gb4(54)");
 		interval = new Interval(Interval.Quality.PERFECT, 5);
 		assertEquals(pitch.step(interval).toString(), "Gn4(55)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 5);
 		assertEquals(pitch.step(interval).toString(), "G#4(56)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 5);
+		assertEquals(pitch.step(interval).toString(), "Gx4(57)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 6);
+		assertEquals(pitch.step(interval).toString(), "Abbb4(54)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 6);
 		assertEquals(pitch.step(interval).toString(), "Abb4(55)");
 		interval = new Interval(Interval.Quality.MINOR, 6);
@@ -187,7 +217,11 @@ public class PitchTests{
 		assertEquals(pitch.step(interval).toString(), "An4(57)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 6);
 		assertEquals(pitch.step(interval).toString(), "A#4(58)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 6);
+		assertEquals(pitch.step(interval).toString(), "Ax4(59)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 7);
+		assertEquals(pitch.step(interval).toString(), "Bbbb4(56)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 7);
 		assertEquals(pitch.step(interval).toString(), "Bbb4(57)");
 		interval = new Interval(Interval.Quality.MINOR, 7);
@@ -196,14 +230,22 @@ public class PitchTests{
 		assertEquals(pitch.step(interval).toString(), "Bn4(59)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 7);
 		assertEquals(pitch.step(interval).toString(), "B#4(60)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 7);
+		assertEquals(pitch.step(interval).toString(), "Bx4(61)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 8);
+		assertEquals(pitch.step(interval).toString(), "Cbb5(58)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 8);
 		assertEquals(pitch.step(interval).toString(), "Cb5(59)");
 		interval = new Interval(Interval.Quality.PERFECT, 8);
 		assertEquals(pitch.step(interval).toString(), "Cn5(60)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 8);
 		assertEquals(pitch.step(interval).toString(), "C#5(61)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 8);
+		assertEquals(pitch.step(interval).toString(), "Cx5(62)");
 
+		interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 9);
+		assertEquals(pitch.step(interval).toString(), "Dbbb5(59)");
 		interval = new Interval(Interval.Quality.DIMINISHED, 9);
 		assertEquals(pitch.step(interval).toString(), "Dbb5(60)");
 		interval = new Interval(Interval.Quality.MINOR, 9);
@@ -212,6 +254,8 @@ public class PitchTests{
 		assertEquals(pitch.step(interval).toString(), "Dn5(62)");
 		interval = new Interval(Interval.Quality.AUGMENTED, 9);
 		assertEquals(pitch.step(interval).toString(), "D#5(63)");
+		interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 9);
+		assertEquals(pitch.step(interval).toString(), "Dx5(64)");
 	}
 
 	@Test
@@ -319,6 +363,10 @@ public class PitchTests{
 		assertEquals(pitch.getProgramNumber(), 50);
 		assertEquals(pitch.getOctave(), 4);
 		assertEquals(pitch.toString(), "Cx4(50)");
+		pitch = Pitch.fromString("C#x4");
+		assertEquals(pitch.getProgramNumber(), 51);
+		assertEquals(pitch.getOctave(), 4);
+		assertEquals(pitch.toString(), "C#x4(51)");
 		pitch = Pitch.fromString("Cb4");
 		assertEquals(pitch.getProgramNumber(), 47);
 		assertEquals(pitch.getOctave(), 4);
@@ -327,6 +375,10 @@ public class PitchTests{
 		assertEquals(pitch.getProgramNumber(), 46);
 		assertEquals(pitch.getOctave(), 4);
 		assertEquals(pitch.toString(), "Cbb4(46)");
+		pitch = Pitch.fromString("Cbbb4");
+		assertEquals(pitch.getProgramNumber(), 45);
+		assertEquals(pitch.getOctave(), 4);
+		assertEquals(pitch.toString(), "Cbbb4(45)");
 		pitch = Pitch.fromString("Cn4(48)");
 		assertEquals(pitch.getProgramNumber(), 48);
 		assertEquals(pitch.getOctave(), 4);
@@ -346,11 +398,11 @@ public class PitchTests{
 			assertEquals(e.getMessage(), "Invalid pitch string: C(48) (missing octave)");
 		}
 		try{
-			Pitch.fromString("Abbb4");
+			Pitch.fromString("Abbbb4");
 			fail("Expected an exception.");
 		}
 		catch(Exception e){
-			assertEquals(e.getMessage(), "Invalid accidental string: bbb");
+			assertEquals(e.getMessage(), "Invalid accidental string: bbbb");
 		}
 		try{
 			Pitch.fromString("C4(49)");

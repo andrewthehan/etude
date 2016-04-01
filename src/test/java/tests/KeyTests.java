@@ -24,10 +24,14 @@ public class KeyTests{
 		assertEquals(key.toString(), "A#");
 		key = new Key(Letter.E, Accidental.DOUBLE_SHARP);
 		assertEquals(key.toString(), "Ex");
-		key = new Key(Letter.B, Accidental.FLAT);
-		assertEquals(key.toString(), "Bb");
-		key = new Key(Letter.F, Accidental.DOUBLE_FLAT);
-		assertEquals(key.toString(), "Fbb");
+		key = new Key(Letter.B, Accidental.TRIPLE_SHARP);
+		assertEquals(key.toString(), "B#x");
+		key = new Key(Letter.F, Accidental.FLAT);
+		assertEquals(key.toString(), "Fb");
+		key = new Key(Letter.C, Accidental.DOUBLE_FLAT);
+		assertEquals(key.toString(), "Cbb");
+		key = new Key(Letter.G, Accidental.TRIPLE_FLAT);
+		assertEquals(key.toString(), "Gbbb");
 	}
 
 	@Test
@@ -104,12 +108,18 @@ public class KeyTests{
 		key = key.doubleSharp();
 		assertEquals(key.toString(), "Cx");
 		assert(key.isDoubleSharp());
+		key = key.tripleSharp();
+		assertEquals(key.toString(), "C#x");
+		assert(key.isTripleSharp());
 		key = key.flat();
 		assertEquals(key.toString(), "Cb");
 		assert(key.isFlat());
 		key = key.doubleFlat();
 		assertEquals(key.toString(), "Cbb");
 		assert(key.isDoubleFlat());
+		key = key.tripleFlat();
+		assertEquals(key.toString(), "Cbbb");
+		assert(key.isTripleFlat());
 	}
 
 	@Test
@@ -147,7 +157,7 @@ public class KeyTests{
 	public void testString(){
 		Key key;
 
-		String[] keys = {"C", "Dn", "E#", "Fx", "Gb", "Abb"};
+		String[] keys = {"C", "Dn", "E#", "Fx", "G#x", "Ab", "Bbb", "Cbbb"};
 		for(int i = 0; i < keys.length; ++i){
 			key = Key.fromString(keys[i]);
 			assertEquals(key.toString(), keys[i]);

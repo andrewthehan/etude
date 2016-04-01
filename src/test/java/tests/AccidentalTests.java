@@ -24,12 +24,18 @@ public class AccidentalTests{
 		accidental = Accidental.fromOffset(2);
 		assertEquals(accidental.getOffset(), 2);
 		assertEquals(accidental, Accidental.DOUBLE_SHARP);
+		accidental = Accidental.fromOffset(3);
+		assertEquals(accidental.getOffset(), 3);
+		assertEquals(accidental, Accidental.TRIPLE_SHARP);
 		accidental = Accidental.fromOffset(-1);
 		assertEquals(accidental.getOffset(), -1);
 		assertEquals(accidental, Accidental.FLAT);
 		accidental = Accidental.fromOffset(-2);
 		assertEquals(accidental.getOffset(), -2);
 		assertEquals(accidental, Accidental.DOUBLE_FLAT);
+		accidental = Accidental.fromOffset(-3);
+		assertEquals(accidental.getOffset(), -3);
+		assertEquals(accidental, Accidental.TRIPLE_FLAT);
 	}
 
 	@Test
@@ -52,6 +58,10 @@ public class AccidentalTests{
 		assertEquals(accidental, Accidental.DOUBLE_SHARP);
 		assertEquals(accidental.toString(), "x");
 
+		accidental = Accidental.fromString("#x");
+		assertEquals(accidental, Accidental.TRIPLE_SHARP);
+		assertEquals(accidental.toString(), "#x");
+
 		accidental = Accidental.fromString("b");
 		assertEquals(accidental, Accidental.FLAT);
 		assertEquals(accidental.toString(), "b");
@@ -59,5 +69,9 @@ public class AccidentalTests{
 		accidental = Accidental.fromString("bb");
 		assertEquals(accidental, Accidental.DOUBLE_FLAT);
 		assertEquals(accidental.toString(), "bb");
+
+		accidental = Accidental.fromString("bbb");
+		assertEquals(accidental, Accidental.TRIPLE_FLAT);
+		assertEquals(accidental.toString(), "bbb");
 	}
 }
