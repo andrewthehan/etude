@@ -58,5 +58,84 @@ public class ChordTests{
 
 	@Test
 	public void testString(){
+		Chord chord;
+
+		chord = Chord.fromString("{C4}[1]");
+		assertEquals(chord.toString(), "{C4(48)}[1.0]");
+
+		chord = Chord.fromString("{C4,E4,G4}[1]");
+		assertEquals(chord.toString(), "{C4(48),E4(52),G4(55)}[1.0]");
+
+		try{
+			Chord.fromString("C4[1]");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: C4[1] (missing curly braces that enclose pitches)");
+		}
+
+		try{
+			Chord.fromString("{C4[1]");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: {C4[1] (missing curly braces that enclose pitches)");
+		}
+
+		try{
+			Chord.fromString("C4}[1]");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: C4}[1] (missing curly braces that enclose pitches)");
+		}
+
+		try{
+			Chord.fromString("{C4}1");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: {C4}1 (missing brackets that enclose value)");
+		}
+
+		try{
+			Chord.fromString("{C4}[1");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: {C4}[1 (missing brackets that enclose value)");
+		}
+
+		try{
+			Chord.fromString("{C4}1]");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: {C4}1] (missing brackets that enclose value)");
+		}
+
+		try{
+			Chord.fromString("{C4}a[1]");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: {C4}a[1] (contains extra information)");
+		}
+
+		try{
+			Chord.fromString("a{C4}[1]");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: a{C4}[1] (contains extra information)");
+		}
+
+		try{
+			Chord.fromString("{C4}[1]a");
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "Invalid chord string: {C4}[1]a (contains extra information)");
+		}
 	}
 }

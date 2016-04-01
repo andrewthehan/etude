@@ -133,6 +133,10 @@ public final class Chord{
 
 		String valueString = RegEx.extract("(?<=\\[).*(?=\\])", chordString);
 
+		if(valueString == null){
+			throw new RuntimeException("Invalid chord string: " + chordString + " (missing brackets that enclose value)");
+		}
+
 		Value value = Value.fromString(valueString);
 
 		if(!chordString.contains("}[") || !chordString.startsWith("{") || !chordString.endsWith("]")){
