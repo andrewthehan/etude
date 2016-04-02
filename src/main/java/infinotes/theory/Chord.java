@@ -91,12 +91,10 @@ public final class Chord{
 		}
 	}
 
-	private final Pitch[] pitches;
-	private final Value value;
+	private final Note[] notes;
 
-	public Chord(Pitch[] pitches, Value value){
-		this.pitches = pitches;
-		this.value = value;
+	public Chord(Note[] notes){
+		this.notes = notes;
 	}
 
 	public Chord(Pitch pitch, Quality quality, Value value){
@@ -112,8 +110,7 @@ public final class Chord{
 			throw new RuntimeException("Invalid inversion: " + inversion + " (unable to invert chord with less than 4 pitches to its third inversion)");
 		}
 		Collections.rotate(pitches, -inversion.getValue());
-		this.pitches = pitches.toArray(new Pitch[pitches.size()]);
-		this.value = value;
+		this.notes = pitches.stream().map(p -> new Note(p, value)).toArray(Note[]::new);
 	}
 
 	public static final Chord fromString(String chordString){
@@ -124,13 +121,6 @@ public final class Chord{
 			throw new RuntimeException("Invalid chord string: " + chordString + " (blank)");
 		}
 
-		String pitchesString = RegEx.extract("(?<=\\{).*(?=\\})", chordString);
-		if(pitchesString == null){
-			throw new RuntimeException("Invalid chord string: " + chordString + " (missing curly braces that enclose pitches)");
-		}
-
-		Pitch[] pitches = Arrays.stream(pitchesString.split(",")).map(Pitch::fromString).toArray(Pitch[]::new);
-
 		String valueString = RegEx.extract("(?<=\\[).*(?=\\])", chordString);
 
 		if(valueString == null){
@@ -139,29 +129,40 @@ public final class Chord{
 
 		Value value = Value.fromString(valueString);
 
+		String pitchesString = RegEx.extract("(?<=\\{).*(?=\\})", chordString);
+		if(pitchesString == null){
+			throw new RuntimeException("Invalid chord string: " + chordString + " (missing curly braces that enclose pitches)");
+		}
+
 		if(!chordString.contains("}[") || !chordString.startsWith("{") || !chordString.endsWith("]")){
 			throw new RuntimeException("Invalid chord string: " + chordString + " (contains extra information)");
 		}
 
-		return new Chord(pitches, value);
+		Note[] notes = Arrays.stream(pitchesString.split(",")).map(s -> new Note(Pitch.fromString(s), value)).toArray(Note[]::new);
+
+		return new Chord(notes);
 	}
 
 	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
 		builder.append("{");
-		builder.append(Arrays.stream(pitches).map(Pitch::toString).collect(Collectors.joining(",")));
+		builder.append(Arrays.stream(getPitches()).map(Pitch::toString).collect(Collectors.joining(",")));
 		builder.append("}[");
-		builder.append(value);
+		builder.append(getValue());
 		builder.append("]");
 		return builder.toString();
 	}
 
+	public final Note[] getNotes(){
+		return notes;
+	}
+
 	public final Pitch[] getPitches(){
-		return pitches;
+		return Arrays.stream(notes).map(Note::getPitch).toArray(Pitch[]::new);
 	}
 
 	public final Value getValue(){
-		return value;
+		return notes[0].getValue();
 	}
 }
