@@ -1,6 +1,5 @@
 
-package infinotes.theory;
-
+package jmtapi.theory;
 
 public final class Interval{
 	public enum Quality{

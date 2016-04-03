@@ -1,5 +1,5 @@
 
-package infinotes.theory;
+package jmtapi.theory;
 
 public final class MusicConstants{
 	public static final int UNIQUE_LETTER_COUNT = 7;

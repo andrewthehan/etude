@@ -1,7 +1,7 @@
 
-package infinotes.theory;
+package jmtapi.theory;
 
-import infinotes.util.RegEx;
+import jmtapi.util.RegEx;
 
 import java.util.Arrays;
 import java.util.Collections;

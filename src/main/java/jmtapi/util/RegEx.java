@@ -1,4 +1,5 @@
-package infinotes.util;
+
+package jmtapi.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

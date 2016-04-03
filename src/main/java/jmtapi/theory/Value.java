@@ -1,7 +1,7 @@
 
-package infinotes.theory;
+package jmtapi.theory;
 
-import infinotes.util.RegEx;
+import jmtapi.util.RegEx;
 
 public enum Value{
 	DOUBLE_WHOLE(2.0),

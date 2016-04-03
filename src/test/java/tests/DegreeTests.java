@@ -1,7 +1,7 @@
 
 package tests;
 
-import infinotes.theory.*;
+import jmtapi.theory.*;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

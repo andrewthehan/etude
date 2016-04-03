@@ -1,5 +1,5 @@
 
-package infinotes.theory;
+package jmtapi.theory;
 
 import java.util.Arrays;
 import java.util.Collections;
