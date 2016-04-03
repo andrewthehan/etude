@@ -19,6 +19,16 @@ public class Infinotes{
 		Infinotes infinotes = new Infinotes();
 		infinotes.start();
 
+		Measure measure = Measure
+			.builder()
+			.setTimeSignature(TimeSignature.COMMON_TIME)
+			.add(Note.fromString("C4[.25]"))
+			.add(Note.fromString("E4[.25]"))
+			.add(Note.fromString("G4[.25]"))
+			.add(new Chord(Pitch.fromString("C4"), Chord.Quality.MAJOR, Value.QUARTER))
+			.build();
+		Arrays.stream(measure.getChords()).forEach(infinotes::play);
+
 		// C Major scale, parsing from a string
 		Arrays.stream(Infinotes.parse("C4 D4 E4 F4 G4 A4 B4 C5")).forEach(p -> infinotes.play(new Note(p, Value.fromString(".25"))));
 
@@ -100,22 +110,11 @@ public class Infinotes{
 	}
 
 	public void play(Note note){
-		int bmp = 120;
-		int voice = 0;
-		int piano = 0;
-		int volume = 127;
-		channels[voice].programChange(piano);
-		channels[voice].noteOn(note.getPitch().getProgramNumber(), volume);
-		try{
-			Thread.sleep((int) (120000 / bmp * note.getValue().getDuration()));
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		channels[voice].noteOff(note.getPitch().getProgramNumber());
+		play(new Chord(new Note[]{note}));
 	}
 
 	public void play(Chord chord){
+		System.err.println(chord);
 		int bmp = 120;
 		int voice = 0;
 		int piano = 0;
