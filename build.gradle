@@ -4,16 +4,10 @@ apply plugin: 'application'
 mainClassName = 'jmtapi.Main'
 version = '1.0'
 
-jar {
-	manifest {
-		attributes 'Created-By': 'Andrew Han';
-	}
-}
-
 repositories {
-  mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-  testCompile 'junit:junit:4.12'
+	testCompile 'junit:junit:4.12'
 }
