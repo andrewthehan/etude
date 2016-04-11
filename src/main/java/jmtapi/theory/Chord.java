@@ -94,6 +94,9 @@ public final class Chord{
 	private final Note[] notes;
 
 	public Chord(Note[] notes){
+		if(Arrays.stream(notes).map(Note::getValue).distinct().limit(2).count() != 1){
+			throw new RuntimeException("All notes in a chord should have the same value.");
+		}
 		this.notes = notes;
 	}
 
@@ -110,7 +113,10 @@ public final class Chord{
 			throw new RuntimeException("Invalid inversion: " + inversion + " (unable to invert chord with less than 4 pitches to its third inversion)");
 		}
 		Collections.rotate(pitches, -inversion.getValue());
-		this.notes = pitches.stream().map(p -> new Note(p, value)).toArray(Note[]::new);
+		this.notes = pitches
+			.stream()
+			.map(p -> new Note(p, value))
+			.toArray(Note[]::new);
 	}
 
 	public static final Chord fromString(String chordString){

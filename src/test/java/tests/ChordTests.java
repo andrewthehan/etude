@@ -12,6 +12,21 @@ public class ChordTests{
 	public void testConstructor(){
 		Chord chord;
 
+		Note[] notes;
+
+		notes = new Note[]{Note.fromString("C4[1.0]"), Note.fromString("E4[1.0]"), Note.fromString("G4[1.0]")};
+		chord = new Chord(notes);
+		assertEquals(chord.toString(), "{C4(48),E4(52),G4(55)}[1.0]");
+
+		try{
+			notes = new Note[]{Note.fromString("C4[0.25]"), Note.fromString("E4[1.0]"), Note.fromString("G4[1.0]")};
+			chord = new Chord(notes);
+			fail("Expected an exception.");
+		}
+		catch(Exception e){
+			assertEquals(e.getMessage(), "All notes in a chord should have the same value.");
+		}
+
 		Pitch pitch = Pitch.fromString("C4");
 
 		chord = new Chord(pitch, Chord.Quality.MAJOR, Value.WHOLE);

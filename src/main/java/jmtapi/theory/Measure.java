@@ -4,6 +4,7 @@ package jmtapi.theory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Measure{
 	private final TimeSignature timeSignature;
@@ -33,6 +34,15 @@ public final class Measure{
 
 	public final Chord[] getChords(){
 		return chords;
+	}
+
+	@Override
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		builder.append("| ");
+		builder.append(Arrays.stream(chords).map(Chord::toString).collect(Collectors.joining(" ")));
+		builder.append(" |");
+		return builder.toString();
 	}
 
 	public static final class Builder{
