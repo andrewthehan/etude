@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.Iterator;
 
-public class KeyTests{
+public class KeyTest{
 
 	@Test
 	public void testConstructor(){

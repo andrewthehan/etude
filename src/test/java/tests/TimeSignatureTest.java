@@ -6,7 +6,7 @@ import jmtapi.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class TimeSignatureTests{
+public class TimeSignatureTest{
 
 	@Test
 	public void testConstructor(){

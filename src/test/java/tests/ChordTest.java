@@ -6,7 +6,7 @@ import jmtapi.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class ChordTests{
+public class ChordTest{
 
 	@Test
 	public void testConstructor(){

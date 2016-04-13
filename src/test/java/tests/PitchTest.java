@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PitchTests{
+public class PitchTest{
 
 	@Test
 	public void testConstructor(){

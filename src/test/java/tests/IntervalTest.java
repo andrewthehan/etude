@@ -6,7 +6,7 @@ import jmtapi.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class IntervalTests{
+public class IntervalTest{
 
 	@Test
 	public void testConstructor(){

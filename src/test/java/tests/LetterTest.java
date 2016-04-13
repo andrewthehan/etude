@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.Iterator;
 
-public class LetterTests{
+public class LetterTest{
 
 	@Test
 	public void testOffset(){

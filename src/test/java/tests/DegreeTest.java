@@ -6,7 +6,7 @@ import jmtapi.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class DegreeTests{
+public class DegreeTest{
 
 	@Test
 	public void testValue(){

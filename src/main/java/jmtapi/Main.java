@@ -115,7 +115,7 @@ public class Main{
 
 	public void play(Chord chord){
 		System.err.println(chord);
-		int bmp = 120;
+		int bmp = Tempo.MODERATO.getBPM();
 		int voice = 0;
 		int piano = 0;
 		int volume = 127;
