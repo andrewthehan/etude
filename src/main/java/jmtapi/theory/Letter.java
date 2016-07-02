@@ -1,6 +1,8 @@
 
 package jmtapi.theory;
 
+import com.google.common.collect.Iterables;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -31,7 +33,7 @@ public enum Letter{
   }
 
   public static final Iterator<Letter> iterator(Letter startingLetter){
-    return Letter.asList(startingLetter).iterator();
+    return Iterables.cycle(Letter.asList(startingLetter)).iterator();
   }
 
   public static final List<Letter> asList(){

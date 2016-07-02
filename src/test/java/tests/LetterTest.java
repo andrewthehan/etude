@@ -37,22 +37,22 @@ public class LetterTest{
     Letter[] letters = Letter.values();
 
     it = Letter.iterator();
-    for(int i = 0; i < letters.length; ++i){
-      assertEquals(it.next(), letters[i]);
+    for(int i = 0; i < letters.length * 2 ; ++i){
+      assertEquals(it.next(), letters[i % letters.length]);
     }
 
     it = Letter.iterator(Letter.A);
-    for(int i = 0; i < letters.length; ++i){
-      assertEquals(it.next(), letters[i]);
+    for(int i = 0; i < letters.length * 2; ++i){
+      assertEquals(it.next(), letters[i % letters.length]);
     }
 
     it = Letter.iterator(Letter.C);
-    for(int i = 0; i < letters.length; ++i){
+    for(int i = 0; i < letters.length * 2; ++i){
       assertEquals(it.next(), letters[(i + 2) % letters.length]);
     }
 
     it = Letter.iterator(Letter.G);
-    for(int i = 0; i < letters.length; ++i){
+    for(int i = 0; i < letters.length * 2; ++i){
       assertEquals(it.next(), letters[(i + 6) % letters.length]);
     }
   }
