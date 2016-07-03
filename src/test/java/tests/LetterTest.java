@@ -6,6 +6,7 @@ import jmtapi.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.stream.Collectors;
 import java.util.Iterator;
 
 public class LetterTest{
@@ -28,6 +29,39 @@ public class LetterTest{
     assertEquals(letter.getOffset(), 5);
     letter = Letter.G;
     assertEquals(letter.getOffset(), 7);
+  }
+
+  @Test
+  public void testStream(){
+    String letters;
+
+    letters = Letter
+      .stream()
+      .limit(8)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals(letters, "ABCDEFGA");
+
+    letters = Letter
+      .stream()
+      .limit(5)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals(letters, "ABCDE");
+
+    letters = Letter
+      .stream()
+      .limit(16)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals(letters, "ABCDEFGABCDEFGAB");
+
+    letters = Letter
+      .stream(Letter.C)
+      .limit(10)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals(letters, "CDEFGABCDE");
   }
 
   @Test

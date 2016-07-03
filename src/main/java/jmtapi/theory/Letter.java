@@ -3,6 +3,8 @@ package jmtapi.theory;
 
 import com.google.common.collect.Iterables;
 
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -27,6 +29,14 @@ public enum Letter{
   private Letter(int offset){ this.offset = offset; }
 
   public final int getOffset(){ return offset; }
+
+  public static final Stream<Letter> stream(){
+    return Letter.stream(Letter.A);
+  }
+
+  public static final Stream<Letter> stream(Letter startingLetter){
+    return StreamSupport.stream(Iterables.cycle(Letter.asList(startingLetter)).spliterator(), false);
+  }
 
   public static final Iterator<Letter> iterator(){
     return Letter.iterator(Letter.A);
