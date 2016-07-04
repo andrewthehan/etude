@@ -56,16 +56,16 @@ public enum Letter{
     return list;
   }
 
+  private static final boolean isValid(char letterChar){
+    return (letterChar >= 'A' && letterChar <= 'G') || (letterChar >= 'a' && letterChar <= 'g'); 
+  }
+
   public static final Letter fromChar(char letterChar){
-    switch(letterChar){
-      case 'A': case 'a': return A;
-      case 'B': case 'b': return B;
-      case 'C': case 'c': return C;
-      case 'D': case 'd': return D;
-      case 'E': case 'e': return E;
-      case 'F': case 'f': return F;
-      case 'G': case 'g': return G;
-      default: throw new RuntimeException("Invalid letter character: " + letterChar);
+    if(Letter.isValid(letterChar)){
+       return Letter.values()[Character.toUpperCase(letterChar) - 'A'];
+    }
+    else{
+      throw new RuntimeException("Invalid letter character: " + letterChar);
     }
   }
 }

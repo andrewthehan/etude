@@ -98,29 +98,66 @@ public class LetterTest{
     letter = Letter.fromChar('A');
     assertEquals(letter, Letter.A);
     assertEquals(letter.toString(), "A");
+    letter = Letter.fromChar('a');
+    assertEquals(letter, Letter.A);
+    assertEquals(letter.toString(), "A");
 
     letter = Letter.fromChar('B');
+    assertEquals(letter, Letter.B);
+    assertEquals(letter.toString(), "B");
+    letter = Letter.fromChar('b');
     assertEquals(letter, Letter.B);
     assertEquals(letter.toString(), "B");
 
     letter = Letter.fromChar('C');
     assertEquals(letter, Letter.C);
     assertEquals(letter.toString(), "C");
+    letter = Letter.fromChar('c');
+    assertEquals(letter, Letter.C);
+    assertEquals(letter.toString(), "C");
 
     letter = Letter.fromChar('D');
+    assertEquals(letter, Letter.D);
+    assertEquals(letter.toString(), "D");
+    letter = Letter.fromChar('d');
     assertEquals(letter, Letter.D);
     assertEquals(letter.toString(), "D");
 
     letter = Letter.fromChar('E');
     assertEquals(letter, Letter.E);
     assertEquals(letter.toString(), "E");
+    letter = Letter.fromChar('e');
+    assertEquals(letter, Letter.E);
+    assertEquals(letter.toString(), "E");
 
     letter = Letter.fromChar('F');
+    assertEquals(letter, Letter.F);
+    assertEquals(letter.toString(), "F");
+    letter = Letter.fromChar('f');
     assertEquals(letter, Letter.F);
     assertEquals(letter.toString(), "F");
 
     letter = Letter.fromChar('G');
     assertEquals(letter, Letter.G);
     assertEquals(letter.toString(), "G");
+    letter = Letter.fromChar('g');
+    assertEquals(letter, Letter.G);
+    assertEquals(letter.toString(), "G");
+
+    try{
+      Letter.fromChar('H');
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid letter character: H");
+    }
+
+    try{
+      Letter.fromChar('1');
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid letter character: 1");
+    }
   }
 }
