@@ -61,11 +61,9 @@ public enum Letter{
   }
 
   public static final Letter fromChar(char letterChar){
-    if(Letter.isValid(letterChar)){
-       return Letter.values()[Character.toUpperCase(letterChar) - 'A'];
-    }
-    else{
+    if(!Letter.isValid(letterChar)){
       throw new RuntimeException("Invalid letter character: " + letterChar);
     }
+    return Letter.values()[Character.toUpperCase(letterChar) - 'A'];
   }
 }
