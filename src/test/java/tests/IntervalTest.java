@@ -213,4 +213,89 @@ public class IntervalTest{
     assert(Interval.isPerfect(8));
     assert(!Interval.isPerfect(9));
   }
+
+  @Test
+  public void testString(){
+    Interval interval;
+
+    interval = Interval.fromString("P1");
+    assertEquals(interval.toString(), "P1");
+
+    interval = Interval.fromString("M3");
+    assertEquals(interval.toString(), "M3");
+
+    interval = Interval.fromString("m3");
+    assertEquals(interval.toString(), "m3");
+
+    interval = Interval.fromString("dd4");
+    assertEquals(interval.toString(), "dd4");
+
+    interval = Interval.fromString("AA6");
+    assertEquals(interval.toString(), "AA6");
+
+    interval = Interval.fromString("P8");
+    assertEquals(interval.toString(), "P8");
+
+    interval = Interval.fromString("M9");
+    assertEquals(interval.toString(), "M9");
+
+    interval = Interval.fromString("M13");
+    assertEquals(interval.toString(), "M13");
+
+    try{
+      Interval.fromString("B4");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid quality string: B");
+    }
+
+    try{
+      Interval.fromString("p4");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid quality string: p");
+    }
+
+    try{
+      Interval.fromString("MM4");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid quality string: MM");
+    }
+
+    try{
+      Interval.fromString("1");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid interval string: 1 (missing information)");
+    }
+
+    try{
+      Interval.fromString("M");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid interval string: M (missing information)");
+    }
+
+    try{
+      Interval.fromString("M3M");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid interval string: M3M (contains extra information)");
+    }
+
+    try{
+      Interval.fromString("3M3");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid interval string: 3M3 (contains extra information)");
+    }
+  }
 }

@@ -144,7 +144,7 @@ public class ChordTest{
       .builder()
       .setRoot(Pitch.fromString("Ab4"))
       .add(Chord.Quality.MINOR)
-      .add(new Interval(Interval.Quality.MAJOR, 6))
+      .add(Interval.fromString("M6"))
       .build();
     assertEquals(chord.toString(), "{Ab4(56),Cb5(59),Eb5(63),Fn5(65)}");
 
@@ -183,7 +183,7 @@ public class ChordTest{
       .builder()
       .setRoot(Pitch.fromString("C4"))
       .add(Chord.Quality.MAJOR)
-      .add(new Interval(Interval.Quality.PERFECT, 4))
+      .add(Interval.fromString("P4"))
       .setBottomDegree(Degree.SUBDOMINANT)
       .build();
     assertEquals(chord.toString(), "{Fn4(53),Gn4(55),Cn5(60),En5(64)}");
@@ -192,9 +192,9 @@ public class ChordTest{
       Chord
         .builder()
         .setRoot(Pitch.fromString("C4"))
-        .add(new Interval(Interval.Quality.PERFECT, 1))
-        .add(new Interval(Interval.Quality.PERFECT, 4))
-        .add(new Interval(Interval.Quality.PERFECT, 5))
+        .add(Interval.fromString("P1"))
+        .add(Interval.fromString("P4"))
+        .add(Interval.fromString("P5"))
         .setInversion(Inversion.FIRST);
     }
     catch(Exception e){

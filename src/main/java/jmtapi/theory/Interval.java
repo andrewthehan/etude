@@ -1,4 +1,4 @@
-  
+
 package jmtapi.theory;
 
 public final class Interval{
@@ -9,6 +9,19 @@ public final class Interval{
 
     private Quality(String symbol){
       this.symbol = symbol;
+    }
+
+    public static final Quality fromString(String qualityString){
+      switch(qualityString){
+        case "P": return PERFECT;
+        case "M": return MAJOR;
+        case "m": return MINOR;
+        case "d": return DIMINISHED;
+        case "dd": return DOUBLY_DIMINISHED;
+        case "A": return AUGMENTED;
+        case "AA": return DOUBLY_AUGMENTED;
+        default: throw new RuntimeException("Invalid quality string: " + qualityString);
+      }
     }
 
     @Override
@@ -122,6 +135,31 @@ public final class Interval{
   public static final boolean isPerfect(int number){
     int normalized = number % 7;
     return normalized == 1 || normalized == 4 || normalized == 5;
+  }
+
+  public static final Interval fromString(String intervalString){
+    if(intervalString == null){
+      throw new RuntimeException("Invalid key string: " + intervalString);
+    }
+    else if(intervalString.trim().isEmpty()){
+      throw new RuntimeException("Invalid key string: " + intervalString + " (blank)");
+    }
+
+    // has a non-digit / digit before it and a digit / non-digit after it 
+    String[] split = intervalString.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+
+    if(split.length < 2 || split[0].trim().isEmpty() || split[1].trim().isEmpty()){
+      throw new RuntimeException("Invalid interval string: " + intervalString + " (missing information)");
+    }
+    else if(split.length > 2){
+      throw new RuntimeException("Invalid interval string: " + intervalString + " (contains extra information)");
+    }
+
+    Quality quality = Quality.fromString(split[0]);
+
+    int number = Integer.parseInt(split[1]);
+
+    return new Interval(quality, number);
   }
 
   @Override
