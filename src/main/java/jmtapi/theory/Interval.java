@@ -1,4 +1,4 @@
-
+  
 package jmtapi.theory;
 
 public final class Interval{

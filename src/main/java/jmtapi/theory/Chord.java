@@ -1,12 +1,13 @@
 
 package jmtapi.theory;
 
-import jmtapi.util.RegEx;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 public final class Chord{
   public enum Quality{
@@ -102,20 +103,13 @@ public final class Chord{
   }
 
   public Chord(Pitch pitch, Quality quality, Inversion inversion){
-    List<Pitch> pitches = Arrays
-      .stream(quality.getIntervalPattern())
-      .map(pitch::step)
-      .collect(Collectors.toList());
-
-    if(Inversion.THIRD == inversion && quality.getIntervalPattern().length <= Inversion.THIRD.getValue()){
-      throw new RuntimeException("Invalid inversion: " + inversion + " (unable to invert chord with less than 4 pitches to its third inversion)");
-    }
-
-    Collections.rotate(pitches, -inversion.getValue());
-
-    this.pitches = pitches
-      .stream()
-      .toArray(Pitch[]::new);
+    pitches = Chord
+      .builder()
+      .setRoot(pitch)
+      .add(quality)
+      .setInversion(inversion)
+      .build()
+      .pitches;
   }
 
   public static final Chord fromString(String chordString){
@@ -148,6 +142,10 @@ public final class Chord{
     return new Chord(pitches);
   }
 
+  public static RequiresRoot builder(){
+    return new Builder();
+  }
+
   @Override
   public String toString(){
     StringBuilder builder = new StringBuilder();
@@ -159,5 +157,97 @@ public final class Chord{
 
   public final Pitch[] getPitches(){
     return pitches;
+  }
+
+  public interface Base {
+    Chord build();
+  }
+
+  public interface RequiresRoot {
+    Manipulate setRoot(Pitch root);
+  }
+
+  public interface Manipulate extends Base {
+    Manipulate add(Interval interval);
+
+    default Manipulate add(Quality quality){
+      Arrays
+        .stream(quality.getIntervalPattern())
+        .forEach(this::add);
+      return this;
+    }
+
+    End setInversion(Inversion inversion);
+
+    End setBottomDegree(Degree degree);
+  }
+
+  public interface End extends Base {
+  }
+
+  private static class Builder implements Base, RequiresRoot, Manipulate, End {
+    private Set<Pitch> pitches;
+    private Pitch root;
+    private Degree bottomDegree;
+
+    public Builder(){
+      pitches = new TreeSet<Pitch>();
+      bottomDegree = Degree.TONIC;
+    }
+
+    @Override
+    public Manipulate setRoot(Pitch root){
+      this.root = root;
+      return this;
+    }
+
+    @Override
+    public Manipulate add(Interval interval){
+      pitches.add(root.step(interval));
+      return this;
+    }
+
+    @Override
+    public End setInversion(Inversion inversion){
+      switch(inversion){
+        case ROOT: return setBottomDegree(Degree.TONIC);
+        case FIRST: return setBottomDegree(Degree.MEDIANT);
+        case SECOND: return setBottomDegree(Degree.DOMINANT);
+        case THIRD: return setBottomDegree(Degree.LEADING_TONE);
+        default: return null;
+      }
+    }
+
+    @Override
+    public End setBottomDegree(Degree bottomDegree){
+      this.bottomDegree = bottomDegree;
+      return this;
+    }
+
+    @Override
+    public Chord build(){
+      Deque<Pitch> deque = new ArrayDeque<Pitch>(pitches);
+
+      KeySignature ks = new KeySignature(root.getKey(), Mode.MAJOR);
+      Letter letter = ks.keyOf(bottomDegree).getLetter();
+      Optional<Pitch> optional = deque
+        .stream()
+        .filter(p -> p.getKey().getLetter() == letter)
+        .findFirst();
+
+      if(!optional.isPresent()){
+        throw new RuntimeException("Unable to invert chord: missing " + bottomDegree + " pitch");
+      } 
+
+      Pitch lowestPitch = optional.get();
+
+      while(lowestPitch != deque.peekFirst()){
+        deque.offerLast(lowestPitch.getHigherPitch(deque.pollFirst().getKey()));
+      }
+
+      Pitch[] array = deque.toArray(new Pitch[0]);
+
+      return new Chord(array);
+    }
   }
 }
