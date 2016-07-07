@@ -267,9 +267,11 @@ public class PitchTest{
     assert(pitch.isHigherThan(Pitch.fromString("C3")));
     assert(pitch.isHigherThan(Pitch.fromString("Cb4")));
     assert(pitch.isHigherThan(Pitch.fromString("B3")));
+    assert(pitch.isHigherThan(Pitch.fromString("Dbbb4")));
     assert(pitch.isLowerThan(Pitch.fromString("C5")));
     assert(pitch.isLowerThan(Pitch.fromString("C#4")));
     assert(pitch.isLowerThan(Pitch.fromString("Db4")));
+    assert(pitch.isLowerThan(Pitch.fromString("B#x3")));
 
     assertEquals(pitch.getHigherPitch(Key.fromString("D")).toString(), "D4(50)");
     assertEquals(pitch.getLowerPitch(Key.fromString("D")).toString(), "D3(38)");

@@ -102,10 +102,10 @@ public final class Interval{
 
   public final int getOffset(){
     // initialize offset to take into account octave
-    int offset = (number - 1) / MusicConstants.UNIQUE_LETTER_COUNT * MusicConstants.KEYS_IN_OCTAVE;
+    int offset = (number - 1) / Letter.values().length * MusicConstants.KEYS_IN_OCTAVE;
 
     // take into account normalized number (within the range of an octave)
-    for(int i = 0; i < (number - 1) % MusicConstants.UNIQUE_LETTER_COUNT; ++i){
+    for(int i = 0; i < (number - 1) % Letter.values().length; ++i){
       offset += Mode.MAJOR.getStepPattern()[i];
     }
 
