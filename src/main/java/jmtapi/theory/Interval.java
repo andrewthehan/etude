@@ -63,7 +63,7 @@ public final class Interval{
       throw new RuntimeException("Cannot create interval with negative number");
     }
 
-    int number = 1 + Letter.asList(letterA).indexOf(letterB);
+    int number = 1 + Math.floorMod(letterB.ordinal() - letterA.ordinal(), Letter.values().length);
 
     int offset = b.getProgramNumber() - a.getProgramNumber();
     for(int i = 0; i < number - 1; ++i){

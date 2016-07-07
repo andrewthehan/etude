@@ -1,14 +1,14 @@
 
 package jmtapi.theory;
 
-import com.google.common.collect.Iterables;
-
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 public enum Letter{
   /*
@@ -35,7 +35,12 @@ public enum Letter{
   }
 
   public static final Stream<Letter> stream(Letter startingLetter){
-    return StreamSupport.stream(Iterables.cycle(Letter.asList(startingLetter)).spliterator(), false);
+    return StreamSupport.stream(
+      Spliterators.spliteratorUnknownSize(
+        Letter.iterator(startingLetter),
+        Spliterator.ORDERED
+      ),
+    false);
   }
 
   public static final Iterator<Letter> iterator(){
@@ -43,7 +48,27 @@ public enum Letter{
   }
 
   public static final Iterator<Letter> iterator(Letter startingLetter){
-    return Iterables.cycle(Letter.asList(startingLetter)).iterator();
+    Iterator<Letter> it = new Iterator<Letter>(){
+      private final Letter[] values = Letter.values();
+      private int i = startingLetter.ordinal() - 1;
+      
+      @Override
+      public boolean hasNext(){
+        return true;
+      }
+
+      @Override
+      public Letter next(){
+        i = (i + 1) % values.length;
+        return values[i];
+      }
+
+      @Override
+      public void remove(){
+        throw new UnsupportedOperationException();
+      }
+    };
+    return it;
   }
 
   public static final List<Letter> asList(){
@@ -52,7 +77,7 @@ public enum Letter{
 
   public static final List<Letter> asList(Letter startingLetter){
     List<Letter> list = Arrays.asList(Letter.values());
-    Collections.rotate(list, -list.indexOf(startingLetter));
+    Collections.rotate(list, -startingLetter.ordinal());
     return list;
   }
 

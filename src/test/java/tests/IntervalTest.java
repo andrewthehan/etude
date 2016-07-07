@@ -71,6 +71,12 @@ public class IntervalTest{
 
     Pitch a, b;
 
+    a = Pitch.fromString("G4");
+    b = Pitch.fromString("A4");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "M2");
+    assertEquals(a.step(interval).toString(), "An4(57)");
+
     a = Pitch.fromString("C4");
     b = Pitch.fromString("C4");
     interval = Interval.between(a, b);

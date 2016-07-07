@@ -14,6 +14,6 @@ public enum Degree{
   }
 
   public final int getValue(){
-    return Arrays.asList(Degree.values()).indexOf(this) + 1;
+    return ordinal() + 1;
   }
 }

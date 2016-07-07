@@ -13,9 +13,8 @@ public final class KeySignature{
   }
 
   public final Degree degreeOf(Key key){
-    List<Letter> list = Letter.asList(this.key.getLetter());
-    int index = list.indexOf(key.getLetter());
-    return Degree.fromValue(index + 1);
+    int difference = Math.floorMod(key.getLetter().ordinal() - this.key.getLetter().ordinal(), Letter.values().length);
+    return Degree.fromValue(difference + 1);
   }
 
   public final Key keyOf(Degree degree){
