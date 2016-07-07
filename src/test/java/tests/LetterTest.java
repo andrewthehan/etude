@@ -62,6 +62,14 @@ public class LetterTest{
       .map(Letter::toString)
       .collect(Collectors.joining(""));
     assertEquals(letters, "CDEFGABCDE");
+
+    letters = Letter
+      .stream()
+      .filter(l -> l == Letter.A)
+      .limit(10)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals(letters, "AAAAAAAAAA");
   }
 
   @Test
