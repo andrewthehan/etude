@@ -12,16 +12,16 @@ import java.util.Spliterators;
 
 public enum Letter{
   /*
-  * Values derived from General MIDI's program numbers
-  * (https://en.wikipedia.org/wiki/General_MIDI)
-  * and the octave convention for scientific pitch notation
-  * (https://en.wikipedia.org/wiki/Scientific_pitch_notation)
-  * Ex. The E (E4) above middle C (C4):
-  *   - new octaves start on C
-  *   - the program number for the C in octave 4 is 48
-  *   - increment that value by Key.E's offset value (4)
-  *   - E4: 48 + 4 = 52
-  */
+   * Values derived from General MIDI's program numbers
+   * (https://en.wikipedia.org/wiki/General_MIDI)
+   * and the octave convention for scientific pitch notation
+   * (https://en.wikipedia.org/wiki/Scientific_pitch_notation)
+   * Ex. The E (E4) above middle C (C4):
+   *   - new octaves start on C
+   *   - the program number for the C in octave 4 is 48
+   *   - increment that value by Key.E's offset value (4)
+   *   - E4: 48 + 4 = 52
+   */
   A(9), B(11), C(0), D(2), E(4), F(5), G(7);
 
   private final int offset;
@@ -81,7 +81,7 @@ public enum Letter{
     return list;
   }
 
-  private static final boolean isValid(char letterChar){
+  public static final boolean isValid(char letterChar){
     return (letterChar >= 'A' && letterChar <= 'G') || (letterChar >= 'a' && letterChar <= 'g'); 
   }
 

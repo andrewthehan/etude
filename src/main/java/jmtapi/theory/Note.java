@@ -2,8 +2,8 @@
 package jmtapi.theory;
 
 /*
-* Pitch with the concept of value
-*/
+ * Pitch with the concept of value
+ */
 public final class Note{
   private final Pitch pitch;
   private final Value value;

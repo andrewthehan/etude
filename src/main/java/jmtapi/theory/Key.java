@@ -4,8 +4,8 @@ package jmtapi.theory;
 import java.util.Iterator;
 
 /*
-* Letter with the concept of accidental
-*/
+ * Letter with the concept of accidental
+ */
 public final class Key{
   private final Letter letter;
   private final Accidental accidental;

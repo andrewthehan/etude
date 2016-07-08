@@ -6,8 +6,8 @@ import jmtapi.util.RegEx;
 import java.util.List;
 
 /*
-* Key with the concept of octave
-*/
+ * Key with the concept of octave
+ */
 public class Pitch implements Comparable<Pitch>{
   private final Key key;
   private final int octave;

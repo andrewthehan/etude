@@ -289,6 +289,14 @@ public class IntervalTest{
     }
 
     try{
+      Interval.fromString("3M");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid quality string: 3");
+    }
+
+    try{
       Interval.fromString("M3M");
       fail("Expected an exception.");
     }

@@ -101,11 +101,13 @@ public final class Interval{
   }
 
   public final int getOffset(){
+    int letterCount = Letter.values().length;
+
     // initialize offset to take into account octave
-    int offset = (number - 1) / Letter.values().length * MusicConstants.KEYS_IN_OCTAVE;
+    int offset = (number - 1) / letterCount * MusicConstants.KEYS_IN_OCTAVE;
 
     // take into account normalized number (within the range of an octave)
-    for(int i = 0; i < (number - 1) % Letter.values().length; ++i){
+    for(int i = 0; i < (number - 1) % letterCount; ++i){
       offset += Mode.MAJOR.getStepPattern()[i];
     }
 
@@ -145,7 +147,12 @@ public final class Interval{
       throw new RuntimeException("Invalid key string: " + intervalString + " (blank)");
     }
 
-    // has a non-digit / digit before it and a digit / non-digit after it 
+    /*
+     * has a non-digit / digit before it and a digit / non-digit after it;
+     * a valid intervalString doesn't require this regex (only needs to detect
+     * non-digit then digit) but in order to provide proper exception messages
+     * for invalid intervalStrings, the current regex is required
+     */
     String[] split = intervalString.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
     if(split.length < 2 || split[0].trim().isEmpty() || split[1].trim().isEmpty()){
