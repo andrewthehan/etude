@@ -1,6 +1,6 @@
 # Java Music Theory API (JMTAPI)
 
-Work in progress (working but may make API-breaking changes)
+Work in progress (functional but may make build-breaking changes)
 
 For temporary usage examples, check the [tests](src/test/java/tests).
 
