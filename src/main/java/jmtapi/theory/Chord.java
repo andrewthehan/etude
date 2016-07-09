@@ -214,7 +214,7 @@ public final class Chord{
         case FIRST: return setBottomDegree(Degree.MEDIANT);
         case SECOND: return setBottomDegree(Degree.DOMINANT);
         case THIRD: return setBottomDegree(Degree.LEADING_TONE);
-        default: return null;
+        default: throw new AssertionError();
       }
     }
 
