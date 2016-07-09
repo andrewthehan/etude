@@ -44,8 +44,8 @@ public enum Value{
     }
 
     double duration = 0;
-    if(valueString.matches("\\d{1,}\\/\\d{1,}")){
-      String[] durationStrings = RegEx.extract("\\d{1,}\\/\\d{1,}", valueString).split("/");
+    if(valueString.matches("\\d+\\/\\d+")){
+      String[] durationStrings = RegEx.extract("\\d+\\/\\d+", valueString).split("/");
       duration = Double.parseDouble(durationStrings[0]) / Double.parseDouble(durationStrings[1]);
     }
     else{

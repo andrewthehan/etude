@@ -165,7 +165,7 @@ public class Pitch implements Comparable<Pitch>{
     String keyString = RegEx.extract("^[a-zA-Z#]*", pitchString);
     Key key = Key.fromString(keyString);
     // first number of length greater than 1 thats followed by an open parentheses (if there is any)
-    String octaveString = RegEx.extract("\\d{1,}(?![^(]*\\))", pitchString);
+    String octaveString = RegEx.extract("\\d+(?![^(]*\\))", pitchString);
     if(octaveString == null){
       throw new RuntimeException("Invalid pitch string: " + pitchString + " (missing octave)");
     }
@@ -173,7 +173,7 @@ public class Pitch implements Comparable<Pitch>{
     Pitch pitch = new Pitch(key, octave);
 
     // a number that has an open parentheses somewhere before it
-    String programNumber = RegEx.extract("(?<=\\()\\d{1,}", pitchString);
+    String programNumber = RegEx.extract("(?<=\\()\\d+", pitchString);
     if(programNumber != null){
       if(pitch.getProgramNumber() != Integer.parseInt(programNumber)){
         throw new RuntimeException("Invalid pitch string: " + pitchString + " (program number doesn't match key and octave)");

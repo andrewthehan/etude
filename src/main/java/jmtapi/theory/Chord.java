@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 public final class Chord{
   public enum Quality{
+    // Obtained from https://en.wikipedia.org/wiki/Seventh_chord#Tertian
     MAJOR(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
@@ -60,19 +61,19 @@ public final class Chord{
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.DIMINISHED, 5),
       new Interval(Interval.Quality.MINOR, 7)
-    }, "mMaj7"),
+    }, "m7(b5)"),
     MINOR_MAJOR_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.PERFECT, 5),
       new Interval(Interval.Quality.MAJOR, 7)
-    }, "min7"),
+    }, "mMaj7"),
     AUGMENTED_MAJOR_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
       new Interval(Interval.Quality.AUGMENTED, 5),
       new Interval(Interval.Quality.MAJOR, 7)
-    }, "min7");
+    }, "maj7(#5)");
 
     private final Interval[] intervalPattern;
     private final String symbol;
@@ -109,7 +110,8 @@ public final class Chord{
       .add(quality)
       .setInversion(inversion)
       .build()
-      .pitches;
+      .pitches
+      .clone();
   }
 
   public static final Chord fromString(String chordString){
@@ -142,10 +144,6 @@ public final class Chord{
     return new Chord(pitches);
   }
 
-  public static RequiresRoot builder(){
-    return new Builder();
-  }
-
   @Override
   public String toString(){
     StringBuilder builder = new StringBuilder();
@@ -157,6 +155,11 @@ public final class Chord{
 
   public final Pitch[] getPitches(){
     return pitches;
+  }
+  
+
+  public static RequiresRoot builder(){
+    return new Builder();
   }
 
   public interface Base {

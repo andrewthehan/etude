@@ -1,6 +1,8 @@
 
 package jmtapi.theory;
 
+import java.util.Arrays;
+
 public final class Interval{
   public enum Quality{
     PERFECT("P"), MAJOR("M"), MINOR("m"), DIMINISHED("d"), DOUBLY_DIMINISHED("dd"), AUGMENTED("A"), DOUBLY_AUGMENTED("AA");
@@ -66,9 +68,10 @@ public final class Interval{
     int number = 1 + Math.floorMod(letterB.ordinal() - letterA.ordinal(), Letter.values().length);
 
     int offset = b.getProgramNumber() - a.getProgramNumber();
-    for(int i = 0; i < number - 1; ++i){
-      offset -= Mode.MAJOR.getStepPattern()[i];
-    }
+    offset -= Arrays
+      .stream(Mode.MAJOR.getStepPattern())
+      .limit(number - 1)
+      .sum();
 
     Quality quality;
     switch(offset){
@@ -107,9 +110,10 @@ public final class Interval{
     int offset = (number - 1) / letterCount * MusicConstants.KEYS_IN_OCTAVE;
 
     // take into account normalized number (within the range of an octave)
-    for(int i = 0; i < (number - 1) % letterCount; ++i){
-      offset += Mode.MAJOR.getStepPattern()[i];
-    }
+    offset += Arrays
+      .stream(Mode.MAJOR.getStepPattern())
+      .limit((number - 1) % letterCount)
+      .sum();
 
     // take into account quality
     switch(quality){
