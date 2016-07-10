@@ -231,8 +231,8 @@ public final class Chord{
     public Chord build(){
       Deque<Pitch> deque = new ArrayDeque<Pitch>(pitches);
 
-      KeySignature ks = new KeySignature(root.getKey(), Mode.MAJOR);
-      Letter letter = ks.keyOf(bottomDegree).getLetter();
+      KeySignature keySignature = new KeySignature(root.getKey(), Mode.MAJOR);
+      Letter letter = keySignature.keyOf(bottomDegree).getLetter();
       Optional<Pitch> optional = deque
         .stream()
         .filter(p -> p.getKey().getLetter() == letter)

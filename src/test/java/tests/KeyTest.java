@@ -157,10 +157,16 @@ public class KeyTest{
   public void testString(){
     Key key;
 
-    String[] keys = {"C", "Dn", "E#", "Fx", "G#x", "Ab", "Bbb", "Cbbb"};
-    for(int i = 0; i < keys.length; ++i){
-      key = Key.fromString(keys[i]);
-      assertEquals(key.toString(), keys[i]);
+    String[] keysUppercase = {"C", "Dn", "E#", "Fx", "G#x", "Ab", "Bbb", "Cbbb"};
+    for(int i = 0; i < keysUppercase.length; ++i){
+      key = Key.fromString(keysUppercase[i]);
+      assertEquals(key.toString(), keysUppercase[i]);
+    }
+
+    String[] keysLowercase = {"c", "dn", "e#", "fx", "g#x", "ab", "bbb", "cbbb"};
+    for(int i = 0; i < keysLowercase.length; ++i){
+      key = Key.fromString(keysLowercase[i]);
+      assertEquals(key.toString(), keysUppercase[i]);
     }
 
     try{
