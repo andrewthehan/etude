@@ -1,7 +1,7 @@
 
 package jmtapi.theory;
 
-import java.util.Iterator;
+import java.util.Arrays;
 
 /*
  * Letter with the concept of accidental
@@ -20,26 +20,32 @@ public final class Key{
   }
 
   public final Key apply(KeySignature keySignature){
-    Accidental accidental = Accidental.NONE;
-
     Key key = keySignature.getKey();
-    Iterator<Letter> letters = Letter.iterator(key.getLetter());
 
     int offset = key.getOffset();
-    for(int step : keySignature.getMode().getStepPattern()){
-      if(letter == letters.next()){
-        offset %= MusicConstants.KEYS_IN_OCTAVE;
-        if(offset - letter.getOffset() > Accidental.TRIPLE_SHARP.getOffset()){
-          offset -= MusicConstants.KEYS_IN_OCTAVE;
-        }
-        else if(offset - letter.getOffset() < Accidental.TRIPLE_FLAT.getOffset()){
-          offset += MusicConstants.KEYS_IN_OCTAVE;
-        }
-        accidental = Accidental.fromOffset(offset - letter.getOffset());
-        break;
-      }
-      offset += step;
+    offset += Arrays
+      .stream(keySignature
+        .getMode()
+        .getStepPattern()
+      )
+      .limit(
+        Math.floorMod(
+          letter.ordinal() - key.getLetter().ordinal(),
+          Letter.values().length
+        )
+      )
+      .sum();
+
+    offset %= MusicConstants.KEYS_IN_OCTAVE;
+    if(offset - letter.getOffset() > Accidental.TRIPLE_SHARP.getOffset()){
+      offset -= MusicConstants.KEYS_IN_OCTAVE;
     }
+    else if(offset - letter.getOffset() < Accidental.TRIPLE_FLAT.getOffset()){
+      offset += MusicConstants.KEYS_IN_OCTAVE;
+    }
+    
+    Accidental accidental = Accidental.fromOffset(offset - letter.getOffset());
+
     return new Key(letter, accidental);
   }
 
