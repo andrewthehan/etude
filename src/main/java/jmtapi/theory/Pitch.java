@@ -216,6 +216,24 @@ public class Pitch implements Comparable<Pitch>{
     return builder.toString();
   }
 
+  @Override
+  public int hashCode(){
+    return key.hashCode() ^ octave;
+  }
+
+  @Override
+  public boolean equals(Object other){
+    if(!(other instanceof Pitch)){
+      return false;
+    }
+    if(other == this){
+      return true;
+    }
+
+    Pitch otherPitch = (Pitch) other;
+    return key.equals(otherPitch.getKey()) && octave == otherPitch.getOctave();
+  }
+
   public final Key getKey(){
     return key;
   }

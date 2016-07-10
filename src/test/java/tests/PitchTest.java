@@ -456,4 +456,34 @@ public class PitchTest{
       assertEquals(e.getMessage(), "Invalid pitch string:    (blank)");
     }
   }
+
+  @Test
+  public void testHashCodeAndEquals(){
+    Pitch a, b;
+
+    a = Pitch.fromString("C4");
+    b = Pitch.fromString("C4");
+    assert(a.equals(b));
+    assert(a.hashCode() == b.hashCode());
+
+    a = Pitch.fromString("C4");
+    b = Pitch.fromString("D4");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Pitch.fromString("C#4");
+    b = Pitch.fromString("Db4");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Pitch.fromString("C4");
+    b = Pitch.fromString("C5");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Pitch.fromString("C4");
+    b = a.step(1).step(-1);
+    assert(a.equals(b));
+    assert(b.hashCode() == b.hashCode());
+  }
 }

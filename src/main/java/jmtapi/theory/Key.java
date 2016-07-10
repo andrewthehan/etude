@@ -242,6 +242,24 @@ public final class Key{
     return builder.toString();
   }
 
+  @Override
+  public int hashCode(){
+    return letter.hashCode() ^ accidental.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object other){
+    if(!(other instanceof Key)){
+      return false;
+    }
+    if(other == this){
+      return true;
+    }
+
+    Key otherKey = (Key) other;
+    return letter == otherKey.letter && accidental == otherKey.accidental;
+  }
+
   public final Letter getLetter(){
     return letter;
   }

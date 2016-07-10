@@ -52,6 +52,24 @@ public final class Note{
     return builder.toString();
   }
 
+  @Override
+  public int hashCode(){
+    return pitch.hashCode() ^ value.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object other){
+    if(!(other instanceof Note)){
+      return false;
+    }
+    if(other == this){
+      return true;
+    }
+
+    Note otherNote = (Note) other;
+    return pitch.equals(otherNote.getPitch()) && value == otherNote.getValue();
+  }
+
   public final Pitch getPitch(){
     return pitch;
   }

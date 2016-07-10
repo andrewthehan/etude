@@ -185,4 +185,44 @@ public class KeyTest{
       assertEquals(e.getMessage(), "Invalid key string:    (blank)");
     }
   }
+
+  @Test
+  public void testHashCodeAndEquals(){
+    Key a, b;
+    
+    a = Key.fromString("C");
+    b = Key.fromString("C");
+    assert(a.equals(b));
+    assert(a.hashCode() == b.hashCode());
+
+    a = Key.fromString("C");
+    b = Key.fromString("C#");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Key.fromString("C#");
+    b = Key.fromString("Db");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Key.fromString("C");
+    b = Key.fromString("Dbb");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Key.fromString("C");
+    b = a.none();
+    assert(a.equals(b));
+    assert(a.hashCode() == b.hashCode());
+
+    a = Key.fromString("Cx");
+    b = a.doubleSharp();
+    assert(a.equals(b));
+    assert(a.hashCode() == b.hashCode());
+
+    a = Key.fromString("C");
+    b = a.flat();
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+  }
 }

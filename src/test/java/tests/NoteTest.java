@@ -85,4 +85,39 @@ public class NoteTest{
       assertEquals(e.getMessage(), "Invalid note string: C4[1]1 (contains extra information)");
     }
   }
+
+  @Test
+  public void testHashCodeAndEquals(){
+    Note a, b;
+
+    a = Note.fromString("C4[1]");
+    b = Note.fromString("C4[1]");
+    assert(a.equals(b));
+    assert(a.hashCode() == b.hashCode());
+
+    a = Note.fromString("C4[1]");
+    b = Note.fromString("C4[1.0]");
+    assert(a.equals(b));
+    assert(a.hashCode() == b.hashCode());
+
+    a = Note.fromString("C#4[1]");
+    b = Note.fromString("Db4[1]");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Note.fromString("C4[1]");
+    b = Note.fromString("C4[0.5]");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Note.fromString("C4[1]");
+    b = Note.fromString("D4[1]");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+
+    a = Note.fromString("C4[1]");
+    b = Note.fromString("C5[1]");
+    assert(!a.equals(b));
+    assert(a.hashCode() != b.hashCode());
+  }
 }
