@@ -1,6 +1,8 @@
 
 package jmtapi.theory;
 
+import java.util.Arrays;
+
 public final class Scale{
   private final KeySignature keySignature;
 
@@ -8,8 +10,11 @@ public final class Scale{
     this.keySignature = keySignature;
   }
 
-  public final Pitch[] getPitches(){
-    return null;
+  public final Key[] getKeys(){
+    return Arrays
+      .stream(Degree.values())
+      .map(keySignature::keyOf)
+      .toArray(Key[]::new);
   }
 
   @Override
