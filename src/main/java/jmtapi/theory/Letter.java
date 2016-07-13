@@ -1,14 +1,14 @@
 
 package jmtapi.theory;
 
+import jmtapi.util.CircularIterator;
+import jmtapi.util.Streams;
+
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.Spliterators;
 
 public enum Letter{
   /*
@@ -35,12 +35,7 @@ public enum Letter{
   }
 
   public static final Stream<Letter> stream(Letter startingLetter){
-    return StreamSupport.stream(
-      Spliterators.spliteratorUnknownSize(
-        Letter.iterator(startingLetter),
-        Spliterator.ORDERED
-      ),
-    false);
+    return Streams.fromIterator(Letter.iterator(startingLetter));
   }
 
   public static final Iterator<Letter> iterator(){
@@ -48,27 +43,7 @@ public enum Letter{
   }
 
   public static final Iterator<Letter> iterator(Letter startingLetter){
-    Iterator<Letter> it = new Iterator<Letter>(){
-      private final Letter[] values = Letter.values();
-      private int i = startingLetter.ordinal() - 1;
-      
-      @Override
-      public boolean hasNext(){
-        return true;
-      }
-
-      @Override
-      public Letter next(){
-        i = (i + 1) % values.length;
-        return values[i];
-      }
-
-      @Override
-      public void remove(){
-        throw new UnsupportedOperationException();
-      }
-    };
-    return it;
+    return new CircularIterator<Letter>(Letter.values(), startingLetter);
   }
 
   public static final List<Letter> asList(){
