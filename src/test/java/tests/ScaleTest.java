@@ -34,6 +34,61 @@ public class ScaleTest{
       .collect(Collectors.joining(","));
     assertEquals(keys, "Gn,An,Bn,Cn,Dn,En,F#");
 
+    ks = new KeySignature(Key.fromString("C"), Mode.IONIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Dn,En,Fn,Gn,An,Bn");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.DORIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Dn,Eb,Fn,Gn,An,Bb");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.PHRYGIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Db,Eb,Fn,Gn,Ab,Bb");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.LYDIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Dn,En,F#,Gn,An,Bn");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.MIXOLYDIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Dn,En,Fn,Gn,An,Bb");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.AEOLIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Dn,Eb,Fn,Gn,Ab,Bb");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.LOCRIAN);
+    scale = new Scale(ks);
+    keys = Arrays
+      .stream(scale.getKeys())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Cn,Db,Eb,Fn,Gb,Ab,Bb");
   }
 
   @Test
