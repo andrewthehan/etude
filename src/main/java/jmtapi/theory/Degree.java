@@ -10,7 +10,7 @@ public enum Degree{
     if(value < 1 || value > Degree.values().length){
       throw new RuntimeException("Invalid value: " + value);
     }
-    return Arrays.asList(Degree.values()).get(value - 1);
+    return Degree.values()[value - 1];
   }
 
   public final int getValue(){
