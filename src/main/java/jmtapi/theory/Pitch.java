@@ -121,8 +121,8 @@ public class Pitch implements Comparable<Pitch>{
   }
 
   @Override
-  public int compareTo(Pitch n){
-    return Integer.compare(getProgramNumber(), n.getProgramNumber());
+  public int compareTo(Pitch other){
+    return Integer.compare(getProgramNumber(), other.getProgramNumber());
   }
 
   public static final boolean isEnharmonic(Pitch a, Pitch b){

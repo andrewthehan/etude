@@ -17,6 +17,22 @@ public enum Dynamic{
   	this.symbol = symbol;
   }
 
+  public Dynamic crescendo(){
+    int index = ordinal() + 1;
+    if(index >= Dynamic.values().length){
+      throw new RuntimeException("Unable to apply crescendo on " + this);
+    }
+    return Dynamic.values()[index];
+  }
+
+  public Dynamic diminuendo(){
+    int index = ordinal() - 1;
+    if(index < 0){
+      throw new RuntimeException("Unable to apply diminuendo on " + this);
+    }
+    return Dynamic.values()[index];
+  }
+
   @Override
   public String toString(){
   	return symbol;
