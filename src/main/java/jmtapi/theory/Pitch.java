@@ -164,7 +164,7 @@ public class Pitch implements Comparable<Pitch>{
     // longest prefix that contains only letters or #
     String keyString = RegEx.extract("^[a-zA-Z#]*", pitchString);
     Key key = Key.fromString(keyString);
-    // first number of length greater than 1 thats followed by an open parentheses (if there is any)
+    // first number of length greater than 0 thats followed by an open parentheses (if there is any)
     String octaveString = RegEx.extract("\\d+(?![^(]*\\))", pitchString);
     if(octaveString == null){
       throw new RuntimeException("Invalid pitch string: " + pitchString + " (missing octave)");
