@@ -172,7 +172,7 @@ public final class Key{
         }
         break;
       /*
-      * PRIORITIZING_NATURAL prioritizies flats because
+      * PRIORITIZE_NATURAL prioritizies flats because
       * sharps are more often added (harmonic minor scale)
       * and a natural is preferred over a double sharp
       * (flat + sharp = natural vs. sharp + sharp = double sharp)

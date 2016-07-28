@@ -138,7 +138,7 @@ public class Pitch implements Comparable<Pitch>{
       throw new RuntimeException("Invalid program number: " + programNumber);
     }
     Key key = Key.fromOffset(Math.floorMod(programNumber, MusicConstants.KEYS_IN_OCTAVE), policy);
-    int octave = (int) Math.floor((double) programNumber / MusicConstants.KEYS_IN_OCTAVE);
+    int octave = programNumber / MusicConstants.KEYS_IN_OCTAVE;
     return new Pitch(key, octave);
   }
 
