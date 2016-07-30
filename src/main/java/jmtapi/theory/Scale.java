@@ -1,8 +1,8 @@
 
-package jmtapi.theory;
+package etude.theory;
 
-import jmtapi.util.CircularIterator;
-import jmtapi.util.Streams;
+import etude.util.CircularIterator;
+import etude.util.Streams;
 
 import java.util.stream.Stream;
 import java.util.Arrays;

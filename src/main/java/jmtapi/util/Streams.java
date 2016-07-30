@@ -1,5 +1,5 @@
 
-package jmtapi.util;
+package etude.util;
 
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;

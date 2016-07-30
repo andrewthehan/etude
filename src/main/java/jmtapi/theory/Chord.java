@@ -1,5 +1,5 @@
 
-package jmtapi.theory;
+package etude.theory;
 
 import java.util.stream.Collectors;
 import java.util.ArrayDeque;

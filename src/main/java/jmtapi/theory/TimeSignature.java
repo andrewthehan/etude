@@ -1,5 +1,5 @@
 
-package jmtapi.theory;
+package etude.theory;
 
 public final class TimeSignature{
   public static final TimeSignature COMMON_TIME = new TimeSignature(4, Value.QUARTER);

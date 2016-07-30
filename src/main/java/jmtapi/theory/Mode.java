@@ -1,5 +1,5 @@
 
-package jmtapi.theory;
+package etude.theory;
 
 public enum Mode{
   IONIAN(new int[]{2, 2, 1, 2, 2, 2, 1}),

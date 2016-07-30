@@ -1,7 +1,7 @@
 
 package tests;
 
-import jmtapi.theory.*;
+import etude.theory.*;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

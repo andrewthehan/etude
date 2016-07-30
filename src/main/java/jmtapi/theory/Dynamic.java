@@ -1,5 +1,5 @@
 
-package jmtapi.theory;
+package etude.theory;
 
 public enum Dynamic{
   PIANISSISSIMO("ppp"),

@@ -1,7 +1,7 @@
 
-package jmtapi.theory;
+package etude.theory;
 
-import jmtapi.util.RegEx;
+import etude.util.RegEx;
 
 public enum Value{
   DOUBLE_WHOLE(2.0),

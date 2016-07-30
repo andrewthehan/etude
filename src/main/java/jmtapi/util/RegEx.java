@@ -1,5 +1,5 @@
 
-package jmtapi.util;
+package etude.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

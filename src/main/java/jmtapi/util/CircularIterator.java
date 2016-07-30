@@ -1,5 +1,5 @@
 
-package jmtapi.util;
+package etude.util;
 
 import java.util.Arrays;
 import java.util.Iterator;

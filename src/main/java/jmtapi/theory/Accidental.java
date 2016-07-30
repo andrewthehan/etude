@@ -1,5 +1,5 @@
 
-package jmtapi.theory;
+package etude.theory;
 
 public enum Accidental{
   TRIPLE_FLAT(-3, "bbb"),
