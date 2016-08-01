@@ -195,7 +195,9 @@ public class ChordTest{
         .add(Interval.fromString("P1"))
         .add(Interval.fromString("P4"))
         .add(Interval.fromString("P5"))
-        .setInversion(Inversion.FIRST);
+        .setInversion(Inversion.FIRST)
+        .build();
+      fail("Expected an exception.");
     }
     catch(Exception e){
       assertEquals(e.getMessage(), "Unable to invert chord: missing MEDIANT pitch");
@@ -206,7 +208,9 @@ public class ChordTest{
         .builder()
         .setRoot(Pitch.fromString("C4"))
         .add(Chord.Quality.MAJOR)
-        .setInversion(Inversion.THIRD);
+        .setInversion(Inversion.THIRD)
+        .build();
+      fail("Expected an exception.");
     }
     catch(Exception e){
       assertEquals(e.getMessage(), "Unable to invert chord: missing LEADING_TONE pitch");
@@ -217,7 +221,9 @@ public class ChordTest{
         .builder()
         .setRoot(Pitch.fromString("C4"))
         .add(Chord.Quality.MAJOR)
-        .setBottomDegree(Degree.SUBDOMINANT);
+        .setBottomDegree(Degree.SUBDOMINANT)
+        .build();
+      fail("Expected an expection.");
     }
     catch(Exception e){
       assertEquals(e.getMessage(), "Unable to invert chord: missing SUBDOMINANT pitch");
