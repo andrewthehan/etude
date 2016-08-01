@@ -3,6 +3,8 @@
 
 Work in progress (functional but may make build-breaking changes)
 
+JavaScript port [here](https://github.com/andrewthehan/etude.js).
+
 Download the jar [here](https://github.com/andrewthehan/etude/raw/master/etude-0.0.0.jar).
 
 For temporary usage examples, check the [tests](src/test/java/tests).
