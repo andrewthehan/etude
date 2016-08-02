@@ -143,6 +143,60 @@ public class IntervalTest{
     assertEquals(interval.toString(), "AA3");
     assertEquals(a.step(interval).toString(), "Ex4(54)");
 
+    a = Pitch.fromString("C4");
+    b = Pitch.fromString("C5");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P8");
+    assertEquals(a.step(interval).toString(), "Cn5(60)");
+
+    a = Pitch.fromString("C4");
+    b = Pitch.fromString("G5");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P12");
+    assertEquals(a.step(interval).toString(), "Gn5(67)");
+
+    a = Pitch.fromString("C4");
+    b = Pitch.fromString("G6");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P19");
+    assertEquals(a.step(interval).toString(), "Gn6(79)");
+
+    a = Pitch.fromString("A4");
+    b = Pitch.fromString("A5");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P8");
+    assertEquals(a.step(interval).toString(), "An5(69)");
+
+    a = Pitch.fromString("A4");
+    b = Pitch.fromString("C5");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "m3");
+    assertEquals(a.step(interval).toString(), "Cn5(60)");
+
+    a = Pitch.fromString("A4");
+    b = Pitch.fromString("C6");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "m10");
+    assertEquals(a.step(interval).toString(), "Cn6(72)");
+
+    a = Pitch.fromString("G4");
+    b = Pitch.fromString("G5");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P8");
+    assertEquals(a.step(interval).toString(), "Gn5(67)");
+
+    a = Pitch.fromString("G4");
+    b = Pitch.fromString("C5");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P4");
+    assertEquals(a.step(interval).toString(), "Cn5(60)");
+
+    a = Pitch.fromString("G4");
+    b = Pitch.fromString("C6");
+    interval = Interval.between(a, b);
+    assertEquals(interval.toString(), "P11");
+    assertEquals(a.step(interval).toString(), "Cn6(72)");
+
     try{
       a = Pitch.fromString("C4");
       b = Pitch.fromString("Cbbb4");

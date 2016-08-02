@@ -42,9 +42,10 @@ public class Pitch implements Comparable<Pitch>{
   }
 
   public final Pitch step(Interval interval){
+    int letterCount = Letter.values().length;
     // determine the letter
     List<Letter> list = Letter.asList(key.getLetter());
-    Letter letter = list.get(Math.floorMod(interval.getNumber() - 1, Letter.values().length));
+    Letter letter = list.get(Math.floorMod(interval.getNumber() - 1, letterCount));
 
     // initialize accidental to be the accidental of the new letter in the key signature of this key
     Accidental accidental = new Key(letter).apply(new KeySignature(key, Mode.MAJOR)).getAccidental();
@@ -69,7 +70,12 @@ public class Pitch implements Comparable<Pitch>{
         break;
     }
 
-    int octaveOffset = (interval.getNumber() + key.getLetter().getOffset() - letter.getOffset()) / Letter.values().length;
+    // refer to Interval.between for how this equation was derived
+    int octaveOffset = (interval.getNumber()
+      - 1
+      + (Math.floorMod(this.getKey().getLetter().ordinal() - 2, letterCount) - Math.floorMod(letter.ordinal() - 2, letterCount))
+    ) / letterCount;
+
     return new Pitch(new Key(letter, accidental), octave + octaveOffset);
   }
 

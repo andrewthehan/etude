@@ -65,12 +65,21 @@ public final class Interval{
       throw new RuntimeException("Cannot create interval with negative number");
     }
 
-    int number = 1 + Math.floorMod(letterB.ordinal() - letterA.ordinal(), Letter.values().length);
+    int letterCount = Letter.values().length;
+    
+    /**
+     * 1 (because no distance == 1)
+     * + letterDistance (subtracted 2 because C is the start of the octave)
+     * + octaveDistance
+     */
+    int number = 1
+      + (Math.floorMod(letterB.ordinal() - 2, letterCount) - Math.floorMod(letterA.ordinal() - 2, letterCount))
+      + (b.getOctave() - a.getOctave()) * letterCount;
 
-    int offset = b.getProgramNumber() - a.getProgramNumber();
+    int offset = (b.getProgramNumber() - a.getProgramNumber()) % MusicConstants.KEYS_IN_OCTAVE;
     offset -= Arrays
       .stream(Mode.MAJOR.getStepPattern())
-      .limit(number - 1)
+      .limit((number - 1) % letterCount)
       .sum();
 
     Quality quality;
