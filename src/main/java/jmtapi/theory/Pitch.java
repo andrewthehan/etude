@@ -15,6 +15,11 @@ public class Pitch implements Comparable<Pitch>{
   public Pitch(Key key, int octave){
     this.key = key;
     this.octave = octave;
+
+    int programNumber = getProgramNumber();
+    if(programNumber < MusicConstants.SMALLEST_PROGRAM_NUMBER || programNumber > MusicConstants.LARGEST_PROGRAM_NUMBER){
+      throw new RuntimeException("Invalid program number: " + programNumber);
+    }
   }
 
   public final Pitch apply(KeySignature keySignature){

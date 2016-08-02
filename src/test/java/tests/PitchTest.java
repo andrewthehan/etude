@@ -22,6 +22,22 @@ public class PitchTest{
     assertEquals(pitch.toString(), "C0(0)");
     pitch = new Pitch(Key.fromString("G"), 10);
     assertEquals(pitch.toString(), "G10(127)");
+
+    try{
+      pitch = new Pitch(Key.fromString("G#"), 10);
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid program number: 128");
+    }
+
+    try{
+      pitch = new Pitch(Key.fromString("Cb"), 0);
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals(e.getMessage(), "Invalid program number: -1");
+    }
   }
 
   @Test
