@@ -6,6 +6,9 @@ import etude.theory.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.stream.Collectors;
+import java.util.Arrays;
+
 public class KeySignatureTest{
 
   @Test
@@ -44,5 +47,123 @@ public class KeySignatureTest{
     assertEquals(ks.degreeOf(key), Degree.SUBMEDIANT);
     key = Key.fromString("D");
     assertEquals(ks.degreeOf(key), Degree.LEADING_TONE);
+  }
+
+  @Test
+  public void testAccidentals(){
+    KeySignature ks;
+    String keys;
+
+    ks = new KeySignature(Key.fromString("C"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 0);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "");
+
+    ks = new KeySignature(Key.fromString("G"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 1);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "F#");
+
+    ks = new KeySignature(Key.fromString("A"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 3);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "F#,C#,G#");
+
+    ks = new KeySignature(Key.fromString("C#"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 7);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "F#,C#,G#,D#,A#,E#,B#");
+
+    ks = new KeySignature(Key.fromString("F"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 1);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Bb");
+
+    ks = new KeySignature(Key.fromString("Eb"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 3);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Bb,Eb,Ab");
+
+    ks = new KeySignature(Key.fromString("Cb"), Mode.MAJOR);
+    assertEquals(ks.getAccidentalCount(), 7);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Bb,Eb,Ab,Db,Gb,Cb,Fb");
+
+    ks = new KeySignature(Key.fromString("A"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 0);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "");
+
+    ks = new KeySignature(Key.fromString("E"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 1);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "F#");
+
+    ks = new KeySignature(Key.fromString("F#"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 3);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "F#,C#,G#");
+
+    ks = new KeySignature(Key.fromString("A#"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 7);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "F#,C#,G#,D#,A#,E#,B#");
+
+    ks = new KeySignature(Key.fromString("D"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 1);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Bb");
+
+    ks = new KeySignature(Key.fromString("C"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 3);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Bb,Eb,Ab");
+
+    ks = new KeySignature(Key.fromString("Ab"), Mode.NATURAL_MINOR);
+    assertEquals(ks.getAccidentalCount(), 7);
+    keys = Arrays
+      .stream(ks.getKeysWithAccidentals())
+      .map(Key::toString)
+      .collect(Collectors.joining(","));
+    assertEquals(keys, "Bb,Eb,Ab,Db,Gb,Cb,Fb");
   }
 }
