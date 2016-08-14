@@ -58,6 +58,58 @@ public final class KeySignature{
       .count());
   }
 
+  public static KeySignature fromAccidentals(Accidental accidental, int count, Mode mode){
+    if(count < 0 || count > 7){
+      throw new RuntimeException("Invalid accidental count: " + count);
+    }
+
+    Key key;
+    Letter letter;
+    // determine the key assuming mode is MAJOR
+    switch(accidental){
+      case FLAT:
+        letter = ORDER_OF_FLATS[Math.floorMod(count - 2, Letter.values().length)];
+        key = new Key(
+          letter,
+          // accidental; if flats for key signature contain the letter, make the key flat
+          Arrays.stream(ORDER_OF_FLATS).limit(count).filter(l -> l == letter).findFirst().isPresent()
+            ? Accidental.FLAT
+            : Accidental.NONE
+        );
+        break;
+      case SHARP:
+        letter = ORDER_OF_SHARPS[Math.floorMod(count + 1, Letter.values().length)];
+        key = new Key(
+          letter,
+          // accidental; if sharps for key signature contain the letter, make the key sharp
+          Arrays.stream(ORDER_OF_SHARPS).limit(count).filter(l -> l == letter).findFirst().isPresent()
+            ? Accidental.SHARP
+            : Accidental.NONE
+        );
+        break;
+      default:
+        throw new RuntimeException("Invalid accidental type to create KeySignature from: " + accidental);
+    }
+
+    // lower key by 3 half steps if the mode is NATURAL_MINOR
+    switch(mode){
+      case MAJOR:
+        break;
+      case NATURAL_MINOR:
+        key = Key.fromOffset(
+          Math.floorMod(key.getOffset() - 3, MusicConstants.KEYS_IN_OCTAVE),
+          accidental == Accidental.FLAT
+            ? Accidental.Policy.PRIORITIZE_FLAT
+            : Accidental.Policy.PRIORITIZE_SHARP
+        );
+        break;
+      default:
+        throw new RuntimeException("Invalid mode type to create KeySignature from: " + mode);
+    }
+
+    return new KeySignature(key, mode);
+  }
+
   @Override
   public String toString(){
     StringBuilder builder = new StringBuilder();

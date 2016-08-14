@@ -166,4 +166,137 @@ public class KeySignatureTest{
       .collect(Collectors.joining(","));
     assertEquals(keys, "Bb,Eb,Ab,Db,Gb,Cb,Fb");
   }
+
+  @Test
+  public void testFromAccidentals(){
+    KeySignature ks;
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 0, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("C"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 0, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("A"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 1, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("G"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 1, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("E"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 2, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("D"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 2, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("B"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 3, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("A"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 3, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("F#"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 4, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("E"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 4, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("C#"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 5, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("B"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 5, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("G#"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 6, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("F#"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 6, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("D#"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 7, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("C#"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.SHARP, 7, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("A#"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 0, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("C"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 0, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("A"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 1, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("F"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 1, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("D"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 2, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("Bb"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 2, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("G"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 3, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("Eb"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 3, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("C"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 4, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("Ab"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 4, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("F"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 5, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("Db"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 5, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("Bb"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 6, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("Gb"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 6, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("Eb"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 7, Mode.MAJOR);
+    assertEquals(ks.getKey(), Key.fromString("Cb"));
+    assertEquals(ks.getMode(), Mode.MAJOR);
+
+    ks = KeySignature.fromAccidentals(Accidental.FLAT, 7, Mode.NATURAL_MINOR);
+    assertEquals(ks.getKey(), Key.fromString("Ab"));
+    assertEquals(ks.getMode(), Mode.NATURAL_MINOR);
+  }
 }
