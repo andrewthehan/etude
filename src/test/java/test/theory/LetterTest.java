@@ -1,5 +1,5 @@
 
-package tests;
+package test.theory;
 
 import etude.theory.*;
 
