@@ -1,6 +1,8 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+
 import java.util.Arrays;
 
 public final class Interval{
@@ -22,7 +24,7 @@ public final class Interval{
         case "dd": return DOUBLY_DIMINISHED;
         case "A": return AUGMENTED;
         case "AA": return DOUBLY_AUGMENTED;
-        default: throw new RuntimeException("Invalid quality string: " + qualityString);
+        default: throw new EtudeException("Invalid quality string: " + qualityString);
       }
     }
 
@@ -37,17 +39,17 @@ public final class Interval{
 
   public Interval(Quality quality, int number){
     if(number <= 0){
-      throw new RuntimeException("Invalid interval: " + quality + number + " (number must be a positive integer)");
+      throw new EtudeException("Invalid interval: " + quality + number + " (number must be a positive integer)");
     }
     switch(quality){
       case PERFECT:
         if(!Interval.isPerfect(number)){
-          throw new RuntimeException("Invalid interval: " + quality + number + " (number cannot have a perfect quality)");
+          throw new EtudeException("Invalid interval: " + quality + number + " (number cannot have a perfect quality)");
         }
         break;
       case MAJOR: case MINOR:
         if(Interval.isPerfect(number)){
-          throw new RuntimeException("Invalid interval: " + quality + number + " (number cannot have major or minor quality)");
+          throw new EtudeException("Invalid interval: " + quality + number + " (number cannot have major or minor quality)");
         }
         break;
       case DIMINISHED: case DOUBLY_DIMINISHED: case AUGMENTED: case DOUBLY_AUGMENTED:
@@ -61,10 +63,6 @@ public final class Interval{
     Letter letterA = a.getKey().getLetter();
     Letter letterB = b.getKey().getLetter();
 
-    if(a.isHigherThan(b) && a.getOctave() == b.getOctave() && letterA.getOffset() > letterB.getOffset()){
-      throw new RuntimeException("Cannot create interval with negative number");
-    }
-
     int letterCount = Letter.values().length;
     
     /**
@@ -76,9 +74,13 @@ public final class Interval{
       + (Math.floorMod(letterB.ordinal() - 2, letterCount) - Math.floorMod(letterA.ordinal() - 2, letterCount))
       + (b.getOctave() - a.getOctave()) * letterCount;
 
+    if(number <= 0){
+      throw new EtudeException("Cannot create interval with nonpositive number");
+    }
+
     int offset = (b.getProgramNumber() - a.getProgramNumber()) % MusicConstants.KEYS_IN_OCTAVE;
     offset -= Arrays
-      .stream(Mode.MAJOR.getStepPattern())
+      .stream(Scale.Quality.MAJOR.getStepPattern())
       .limit((number - 1) % letterCount)
       .sum();
 
@@ -86,7 +88,7 @@ public final class Interval{
     switch(offset){
       case -3:
         if(Interval.isPerfect(number)){
-          throw new RuntimeException("Cannot create interval for pitches: " + a + " -> " + b);
+          throw new EtudeException("Cannot create interval for pitches: " + a + " -> " + b);
         }
         quality = Quality.DOUBLY_DIMINISHED;
         break;
@@ -106,7 +108,7 @@ public final class Interval{
         quality = Quality.DOUBLY_AUGMENTED;
         break;
       default:
-        throw new RuntimeException("Cannot create interval for pitches: " + a + " -> " + b);
+        throw new EtudeException("Cannot create interval for pitches: " + a + " -> " + b);
     }
 
     return new Interval(quality, number);
@@ -120,7 +122,7 @@ public final class Interval{
 
     // take into account normalized number (within the range of an octave)
     offset += Arrays
-      .stream(Mode.MAJOR.getStepPattern())
+      .stream(Scale.Quality.MAJOR.getStepPattern())
       .limit((number - 1) % letterCount)
       .sum();
 
@@ -154,10 +156,10 @@ public final class Interval{
 
   public static final Interval fromString(String intervalString){
     if(intervalString == null){
-      throw new RuntimeException("Invalid key string: " + intervalString);
+      throw new EtudeException("Invalid interval string: " + intervalString);
     }
     else if(intervalString.trim().isEmpty()){
-      throw new RuntimeException("Invalid key string: " + intervalString + " (blank)");
+      throw new EtudeException("Invalid interval string: " + intervalString + " (blank)");
     }
 
     /*
@@ -168,11 +170,11 @@ public final class Interval{
      */
     String[] split = intervalString.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
-    if(split.length < 2 || split[0].trim().isEmpty() || split[1].trim().isEmpty()){
-      throw new RuntimeException("Invalid interval string: " + intervalString + " (missing information)");
+    if(split.length < 2){
+      throw new EtudeException("Invalid interval string: " + intervalString + " (missing information)");
     }
     else if(split.length > 2){
-      throw new RuntimeException("Invalid interval string: " + intervalString + " (contains extra information)");
+      throw new EtudeException("Invalid interval string: " + intervalString + " (contains extra information)");
     }
 
     Quality quality = Quality.fromString(split[0]);

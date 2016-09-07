@@ -1,6 +1,8 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+
 /*
  * Pitch with the concept of value
  */
@@ -15,27 +17,27 @@ public final class Note{
 
   public static final Note fromString(String noteString){
     if(noteString == null){
-      throw new RuntimeException("Invalid note string: " + noteString);
+      throw new EtudeException("Invalid note string: " + noteString);
     }
     else if(noteString.trim().isEmpty()){
-      throw new RuntimeException("Invalid note string: " + noteString + " (blank)");
+      throw new EtudeException("Invalid note string: " + noteString + " (blank)");
     }
 
     String[] split = noteString.split("\\[");
     if(split.length < 2 || split[0].trim().isEmpty() || split[1].trim().isEmpty()){
-      throw new RuntimeException("Invalid note string: " + noteString + " (missing information)");
+      throw new EtudeException("Invalid note string: " + noteString + " (missing information)");
     }
     else if(split.length > 2){
-      throw new RuntimeException("Invalid note string: " + noteString + " (contains extra information)");
+      throw new EtudeException("Invalid note string: " + noteString + " (contains extra information)");
     }
 
     Pitch pitch = Pitch.fromString(split[0]);
 
     if(!split[1].contains("]")){
-      throw new RuntimeException("Invalid note string: " + noteString + " (missing closing bracket)");
+      throw new EtudeException("Invalid note string: " + noteString + " (missing closing bracket)");
     }
     else if(!split[1].endsWith("]")){
-      throw new RuntimeException("Invalid note string: " + noteString + " (contains extra information)");
+      throw new EtudeException("Invalid note string: " + noteString + " (contains extra information)");
     }
 
     Value value = Value.fromString(split[1].substring(0, split[1].length() - 1));

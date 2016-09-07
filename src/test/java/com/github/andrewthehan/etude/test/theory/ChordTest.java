@@ -16,49 +16,50 @@ public class ChordTest{
 
     pitches = new Pitch[]{Pitch.fromString("C4"), Pitch.fromString("E4"), Pitch.fromString("G4")};
     chord = new Chord(pitches);
-    assertEquals(chord.toString(), "{C4(48),E4(52),G4(55)}");
+    assertEquals("[C4(48), E4(52), G4(55)]", chord.toString());
+    assertEquals(3, chord.getPitches().length);
 
     Pitch pitch = Pitch.fromString("C4");
 
     chord = new Chord(pitch, Chord.Quality.MAJOR);
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),Gn4(55)}");
+    assertEquals("[C4(48), E4(52), G4(55)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.MINOR);
-    assertEquals(chord.toString(), "{Cn4(48),Eb4(51),Gn4(55)}");
+    assertEquals("[C4(48), Eb4(51), G4(55)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.DIMINISHED);
-    assertEquals(chord.toString(), "{Cn4(48),Eb4(51),Gb4(54)}");
+    assertEquals("[C4(48), Eb4(51), Gb4(54)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.AUGMENTED);
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),G#4(56)}");
+    assertEquals("[C4(48), E4(52), G#4(56)]", chord.toString());
 
     chord = new Chord(pitch, Chord.Quality.MAJOR_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),Gn4(55),Bn4(59)}");
+    assertEquals("[C4(48), E4(52), G4(55), B4(59)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.MINOR_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),Eb4(51),Gn4(55),Bb4(58)}");
+    assertEquals("[C4(48), Eb4(51), G4(55), Bb4(58)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.DOMINANT_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),Gn4(55),Bb4(58)}");
+    assertEquals("[C4(48), E4(52), G4(55), Bb4(58)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.DIMINISHED_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),Eb4(51),Gb4(54),Bbb4(57)}");
+    assertEquals("[C4(48), Eb4(51), Gb4(54), Bbb4(57)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.HALF_DIMINISHED_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),Eb4(51),Gb4(54),Bb4(58)}");
+    assertEquals("[C4(48), Eb4(51), Gb4(54), Bb4(58)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.MINOR_MAJOR_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),Eb4(51),Gn4(55),Bn4(59)}");
+    assertEquals("[C4(48), Eb4(51), G4(55), B4(59)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.AUGMENTED_MAJOR_SEVENTH);
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),G#4(56),Bn4(59)}");
+    assertEquals("[C4(48), E4(52), G#4(56), B4(59)]", chord.toString());
 
     chord = new Chord(pitch, Chord.Quality.MAJOR_SEVENTH, Inversion.ROOT);
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),Gn4(55),Bn4(59)}");
+    assertEquals("[C4(48), E4(52), G4(55), B4(59)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.MAJOR_SEVENTH, Inversion.FIRST);
-    assertEquals(chord.toString(), "{En4(52),Gn4(55),Bn4(59),Cn5(60)}");
+    assertEquals("[E4(52), G4(55), B4(59), C5(60)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.MAJOR_SEVENTH, Inversion.SECOND);
-    assertEquals(chord.toString(), "{Gn4(55),Bn4(59),Cn5(60),En5(64)}");
+    assertEquals("[G4(55), B4(59), C5(60), E5(64)]", chord.toString());
     chord = new Chord(pitch, Chord.Quality.MAJOR_SEVENTH, Inversion.THIRD);
-    assertEquals(chord.toString(), "{Bn4(59),Cn5(60),En5(64),Gn5(67)}");
+    assertEquals("[B4(59), C5(60), E5(64), G5(67)]", chord.toString());
 
     try{
       new Chord(pitch, Chord.Quality.MAJOR, Inversion.THIRD);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Unable to invert chord: missing LEADING_TONE pitch");
+      assertEquals("Unable to invert chord: missing LEADING_TONE pitch", e.getMessage());
     }
   }
 
@@ -66,66 +67,82 @@ public class ChordTest{
   public void testString(){
     Chord chord;
 
-    chord = Chord.fromString("{C4}");
-    assertEquals(chord.toString(), "{C4(48)}");
+    chord = Chord.fromString("[C4]");
+    assertEquals("[C4(48)]", chord.toString());
 
-    chord = Chord.fromString("{C4,E4,G4}");
-    assertEquals(chord.toString(), "{C4(48),E4(52),G4(55)}");
+    chord = Chord.fromString("[C4,E4,G4]");
+    assertEquals("[C4(48), E4(52), G4(55)]", chord.toString());
+
+    try{
+      Chord.fromString(null);
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid chord string: null", e.getMessage());
+    }
+
+    try{
+      Chord.fromString(" ");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid chord string:   (blank)", e.getMessage());
+    }
 
     try{
       Chord.fromString("C4");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: C4 (missing curly braces that enclose pitches)");
+      assertEquals("Invalid chord string: C4 (missing brackets that enclose pitches)", e.getMessage());
     }
 
     try{
-      Chord.fromString("{C4");
+      Chord.fromString("[C4");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: {C4 (missing curly braces that enclose pitches)");
+      assertEquals("Invalid chord string: [C4 (missing brackets that enclose pitches)", e.getMessage());
     }
 
     try{
-      Chord.fromString("C4}");
+      Chord.fromString("C4]");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: C4} (missing curly braces that enclose pitches)");
+      assertEquals("Invalid chord string: C4] (missing brackets that enclose pitches)", e.getMessage());
     }
 
     try{
-      Chord.fromString("{a{C4}");
+      Chord.fromString("[a[C4]");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: {a{C4} (contains extra curly braces)");
+      assertEquals("Invalid chord string: [a[C4] (contains extra brackets)", e.getMessage());
     }
 
     try{
-      Chord.fromString("{C4}a}");
+      Chord.fromString("[C4]a]");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: {C4}a} (contains extra curly braces)");
+      assertEquals("Invalid chord string: [C4]a] (contains extra brackets)", e.getMessage());
     }
 
     try{
-      Chord.fromString("a{C4}");
+      Chord.fromString("a[C4]");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: a{C4} (contains extra information)");
+      assertEquals("Invalid chord string: a[C4] (contains extra information)", e.getMessage());
     }
 
     try{
-      Chord.fromString("{C4}a");
+      Chord.fromString("[C4]a");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid chord string: {C4}a (contains extra information)");
+      assertEquals("Invalid chord string: [C4]a (contains extra information)", e.getMessage());
     }
   }
 
@@ -138,7 +155,7 @@ public class ChordTest{
       .setRoot(Pitch.fromString("C4"))
       .add(Chord.Quality.MAJOR)
       .build();
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),Gn4(55)}");
+    assertEquals("[C4(48), E4(52), G4(55)]", chord.toString());
 
     chord = Chord
       .builder()
@@ -146,14 +163,14 @@ public class ChordTest{
       .add(Chord.Quality.MINOR)
       .add(Interval.fromString("M6"))
       .build();
-    assertEquals(chord.toString(), "{Ab4(56),Cb5(59),Eb5(63),Fn5(65)}");
+    assertEquals("[Ab4(56), Cb5(59), Eb5(63), F5(65)]", chord.toString());
 
     chord = Chord
       .builder()
       .setRoot(Pitch.fromString("C4"))
       .add(Chord.Quality.MAJOR)
       .build();
-    assertEquals(chord.toString(), "{Cn4(48),En4(52),Gn4(55)}");
+    assertEquals("[C4(48), E4(52), G4(55)]", chord.toString());
 
     chord = Chord
       .builder()
@@ -161,7 +178,7 @@ public class ChordTest{
       .add(Chord.Quality.MAJOR)
       .setInversion(Inversion.SECOND)
       .build();
-    assertEquals(chord.toString(), "{Gn4(55),Cn5(60),En5(64)}");
+    assertEquals("[G4(55), C5(60), E5(64)]", chord.toString());
 
     chord = Chord
       .builder()
@@ -169,7 +186,7 @@ public class ChordTest{
       .add(Chord.Quality.DOMINANT_SEVENTH)
       .setBottomDegree(Degree.MEDIANT)
       .build();
-    assertEquals(chord.toString(), "{En4(52),Gn4(55),Bb4(58),Cn5(60)}");
+    assertEquals("[E4(52), G4(55), Bb4(58), C5(60)]", chord.toString());
 
     chord = Chord
       .builder()
@@ -177,7 +194,7 @@ public class ChordTest{
       .add(Chord.Quality.DIMINISHED_SEVENTH)
       .setBottomDegree(Degree.MEDIANT)
       .build();
-    assertEquals(chord.toString(), "{Eb4(51),Gb4(54),Bbb4(57),Cn5(60)}");
+    assertEquals("[Eb4(51), Gb4(54), Bbb4(57), C5(60)]", chord.toString());
 
     chord = Chord
       .builder()
@@ -186,7 +203,7 @@ public class ChordTest{
       .add(Interval.fromString("P4"))
       .setBottomDegree(Degree.SUBDOMINANT)
       .build();
-    assertEquals(chord.toString(), "{Fn4(53),Gn4(55),Cn5(60),En5(64)}");
+    assertEquals("[F4(53), G4(55), C5(60), E5(64)]", chord.toString());
 
     try{
       Chord
@@ -200,7 +217,7 @@ public class ChordTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Unable to invert chord: missing MEDIANT pitch");
+      assertEquals("Unable to invert chord: missing MEDIANT pitch", e.getMessage());
     }
 
     try{
@@ -213,7 +230,7 @@ public class ChordTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Unable to invert chord: missing LEADING_TONE pitch");
+      assertEquals("Unable to invert chord: missing LEADING_TONE pitch", e.getMessage());
     }
 
     try{
@@ -226,7 +243,7 @@ public class ChordTest{
       fail("Expected an expection.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Unable to invert chord: missing SUBDOMINANT pitch");
+      assertEquals("Unable to invert chord: missing SUBDOMINANT pitch", e.getMessage());
     }
   }
 }

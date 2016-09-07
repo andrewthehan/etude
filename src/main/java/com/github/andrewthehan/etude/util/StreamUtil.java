@@ -7,7 +7,11 @@ import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-public final class Streams {
+public final class StreamUtil {
+  private StreamUtil(){
+    throw new AssertionError();
+  }
+  
   public static final <T> Stream<T> fromIterator(Iterator<T> iterator){
     return StreamSupport.stream(
       Spliterators.spliteratorUnknownSize(

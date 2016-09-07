@@ -10,35 +10,35 @@ public class DegreeTest{
 
   @Test
   public void testValue(){
-    assertEquals(Degree.fromValue(1), Degree.TONIC);
-    assertEquals(Degree.fromValue(2), Degree.SUPERTONIC);
-    assertEquals(Degree.fromValue(3), Degree.MEDIANT);
-    assertEquals(Degree.fromValue(4), Degree.SUBDOMINANT);
-    assertEquals(Degree.fromValue(5), Degree.DOMINANT);
-    assertEquals(Degree.fromValue(6), Degree.SUBMEDIANT);
-    assertEquals(Degree.fromValue(7), Degree.LEADING_TONE);
+    assertEquals(Degree.TONIC, Degree.fromValue(1));
+    assertEquals(Degree.SUPERTONIC, Degree.fromValue(2));
+    assertEquals(Degree.MEDIANT, Degree.fromValue(3));
+    assertEquals(Degree.SUBDOMINANT, Degree.fromValue(4));
+    assertEquals(Degree.DOMINANT, Degree.fromValue(5));
+    assertEquals(Degree.SUBMEDIANT, Degree.fromValue(6));
+    assertEquals(Degree.LEADING_TONE, Degree.fromValue(7));
 
     try{
       Degree.fromValue(0);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value: 0");
+      assertEquals("Invalid value: 0", e.getMessage());
     }
     try{
       Degree.fromValue(8);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value: 8");
+      assertEquals("Invalid value: 8", e.getMessage());
     }
 
-    assertEquals(Degree.TONIC.getValue(), 1);
-    assertEquals(Degree.SUPERTONIC.getValue(), 2);
-    assertEquals(Degree.MEDIANT.getValue(), 3);
-    assertEquals(Degree.SUBDOMINANT.getValue(), 4);
-    assertEquals(Degree.DOMINANT.getValue(), 5);
-    assertEquals(Degree.SUBMEDIANT.getValue(), 6);
-    assertEquals(Degree.LEADING_TONE.getValue(), 7);
+    assertEquals(1, Degree.TONIC.getValue());
+    assertEquals(2, Degree.SUPERTONIC.getValue());
+    assertEquals(3, Degree.MEDIANT.getValue());
+    assertEquals(4, Degree.SUBDOMINANT.getValue());
+    assertEquals(5, Degree.DOMINANT.getValue());
+    assertEquals(6, Degree.SUBMEDIANT.getValue());
+    assertEquals(7, Degree.LEADING_TONE.getValue());
   }
 }

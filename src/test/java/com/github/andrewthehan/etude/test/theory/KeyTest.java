@@ -15,23 +15,23 @@ public class KeyTest{
     Key key;
 
     key = new Key(Letter.C);
-    assertEquals(key.toString(), "C");
+    assertEquals("C", key.toString());
     key = new Key(Letter.G, Accidental.NONE);
-    assertEquals(key.toString(), "G");
+    assertEquals("G", key.toString());
     key = new Key(Letter.D, Accidental.NATURAL);
-    assertEquals(key.toString(), "Dn");
+    assertEquals("Dn", key.toString());
     key = new Key(Letter.A, Accidental.SHARP);
-    assertEquals(key.toString(), "A#");
+    assertEquals("A#", key.toString());
     key = new Key(Letter.E, Accidental.DOUBLE_SHARP);
-    assertEquals(key.toString(), "Ex");
+    assertEquals("Ex", key.toString());
     key = new Key(Letter.B, Accidental.TRIPLE_SHARP);
-    assertEquals(key.toString(), "B#x");
+    assertEquals("B#x", key.toString());
     key = new Key(Letter.F, Accidental.FLAT);
-    assertEquals(key.toString(), "Fb");
+    assertEquals("Fb", key.toString());
     key = new Key(Letter.C, Accidental.DOUBLE_FLAT);
-    assertEquals(key.toString(), "Cbb");
+    assertEquals("Cbb", key.toString());
     key = new Key(Letter.G, Accidental.TRIPLE_FLAT);
-    assertEquals(key.toString(), "Gbbb");
+    assertEquals("Gbbb", key.toString());
   }
 
   @Test
@@ -39,27 +39,27 @@ public class KeyTest{
     KeySignature ks;
     Iterator<Letter> letters;
 
-    ks = new KeySignature(Key.fromString("C"), Mode.MAJOR);
+    ks = new KeySignature(Key.fromString("C"), KeySignature.Quality.MAJOR);
     letters = Letter.iterator(ks.getKey().getLetter());
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Cn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Dn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "En");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Gn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "An");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "C");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "D");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "E");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "F");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "G");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "A");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "B");
 
-    ks = new KeySignature(Key.fromString("E"), Mode.MAJOR);
+    ks = new KeySignature(Key.fromString("E"), KeySignature.Quality.MAJOR);
     letters = Letter.iterator(ks.getKey().getLetter());
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "En");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "E");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "F#");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "G#");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "An");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "A");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "B");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "C#");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "D#");
 
-    ks = new KeySignature(Key.fromString("Gb"), Mode.MAJOR);
+    ks = new KeySignature(Key.fromString("Gb"), KeySignature.Quality.MAJOR);
     letters = Letter.iterator(ks.getKey().getLetter());
     assertEquals(new Key(letters.next()).apply(ks).toString(), "Gb");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "Ab");
@@ -67,27 +67,17 @@ public class KeyTest{
     assertEquals(new Key(letters.next()).apply(ks).toString(), "Cb");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "Db");
     assertEquals(new Key(letters.next()).apply(ks).toString(), "Eb");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "F");
 
-    ks = new KeySignature(Key.fromString("A"), Mode.NATURAL_MINOR);
+    ks = new KeySignature(Key.fromString("A"), KeySignature.Quality.MINOR);
     letters = Letter.iterator(ks.getKey().getLetter());
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "An");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Cn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Dn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "En");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Gn");
-
-    ks = new KeySignature(Key.fromString("C"), Mode.HARMONIC_MINOR);
-    letters = Letter.iterator(ks.getKey().getLetter());
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Cn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Dn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Eb");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Fn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Gn");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Ab");
-    assertEquals(new Key(letters.next()).apply(ks).toString(), "Bn");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "A");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "B");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "C");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "D");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "E");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "F");
+    assertEquals(new Key(letters.next()).apply(ks).toString(), "G");
   }
 
   @Test
@@ -97,41 +87,41 @@ public class KeyTest{
     key = new Key(Letter.C);
 
     key = key.none();
-    assertEquals(key.toString(), "C");
-    assert(key.isNone());
+    assertEquals("C", key.toString());
+    assertTrue(key.isNone());
     key = key.natural();
-    assertEquals(key.toString(), "Cn");
-    assert(key.isNatural());
+    assertEquals("Cn", key.toString());
+    assertTrue(key.isNatural());
     key = key.sharp();
-    assertEquals(key.toString(), "C#");
-    assert(key.isSharp());
+    assertEquals("C#", key.toString());
+    assertTrue(key.isSharp());
     key = key.doubleSharp();
-    assertEquals(key.toString(), "Cx");
-    assert(key.isDoubleSharp());
+    assertEquals("Cx", key.toString());
+    assertTrue(key.isDoubleSharp());
     key = key.tripleSharp();
-    assertEquals(key.toString(), "C#x");
-    assert(key.isTripleSharp());
+    assertEquals("C#x", key.toString());
+    assertTrue(key.isTripleSharp());
     key = key.flat();
-    assertEquals(key.toString(), "Cb");
-    assert(key.isFlat());
+    assertEquals("Cb", key.toString());
+    assertTrue(key.isFlat());
     key = key.doubleFlat();
-    assertEquals(key.toString(), "Cbb");
-    assert(key.isDoubleFlat());
+    assertEquals("Cbb", key.toString());
+    assertTrue(key.isDoubleFlat());
     key = key.tripleFlat();
-    assertEquals(key.toString(), "Cbbb");
-    assert(key.isTripleFlat());
+    assertEquals("Cbbb", key.toString());
+    assertTrue(key.isTripleFlat());
   }
 
   @Test
   public void testEnharmonic(){
     Key a, b;
 
-    String[] keysA = {"Cn", "C#", "Dn", "D#", "En", "Fn", "F#", "Gn", "G#", "An", "A#", "Bn"};
+    String[] keysA = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     String[] keysB = {"Dbb", "Db", "Ebb", "Eb", "Fb", "Gbb", "Gb", "Abb", "Ab", "Bbb", "Bb", "Cb"};
     for(int i = 0; i < keysA.length; ++i){
       a = Key.fromString(keysA[i]);
       b = Key.fromString(keysB[i]);
-      assert(Key.isEnharmonic(a, b));
+      assertTrue(Key.isEnharmonic(a, b));
     }
   }
 
@@ -141,15 +131,23 @@ public class KeyTest{
 
     String[] keysSharp = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     for(int i = 0; i < keysSharp.length; ++i){
-      key = Key.fromOffset(i, Accidental.Policy.PRIORITIZE_SHARP);
-      assertEquals(key.getOffset(), i);
-      assertEquals(key.toString(), keysSharp[i]);
+      key = Key.fromOffset(i, Policy.prioritize(Policy.NONE_OR_NATURAL, Policy.SHARP));
+      assertEquals(i, key.getOffset());
+      assertEquals(keysSharp[i], key.toString());
     }
     String[] keysFlat = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
     for(int i = 0; i < keysFlat.length; ++i){
-      key = Key.fromOffset(i, Accidental.Policy.PRIORITIZE_FLAT);
-      assertEquals(key.getOffset(), i);
-      assertEquals(key.toString(), keysFlat[i]);
+      key = Key.fromOffset(i, Policy.prioritize(Policy.NONE_OR_NATURAL, Policy.FLAT));
+      assertEquals(i, key.getOffset());
+      assertEquals(keysFlat[i], key.toString());
+    }
+
+    try{
+      Key.fromOffset(0, Policy.prioritize());
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Policies should not be empty", e.getMessage());
     }
   }
 
@@ -157,16 +155,16 @@ public class KeyTest{
   public void testString(){
     Key key;
 
-    String[] keysUppercase = {"C", "Dn", "E#", "Fx", "G#x", "Ab", "Bbb", "Cbbb"};
+    String[] keysUppercase = {"C", "D", "E#", "Fx", "G#x", "Ab", "Bbb", "Cbbb"};
     for(int i = 0; i < keysUppercase.length; ++i){
       key = Key.fromString(keysUppercase[i]);
-      assertEquals(key.toString(), keysUppercase[i]);
+      assertEquals(keysUppercase[i], key.toString());
     }
 
-    String[] keysLowercase = {"c", "dn", "e#", "fx", "g#x", "ab", "bbb", "cbbb"};
+    String[] keysLowercase = {"c", "d", "e#", "fx", "g#x", "ab", "bbb", "cbbb"};
     for(int i = 0; i < keysLowercase.length; ++i){
       key = Key.fromString(keysLowercase[i]);
-      assertEquals(key.toString(), keysUppercase[i]);
+      assertEquals(keysUppercase[i], key.toString());
     }
 
     try{
@@ -174,21 +172,23 @@ public class KeyTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid key string: null");
+      assertEquals("Invalid key string: null", e.getMessage());
     }
+
     try{
       Key.fromString("");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid key string:  (blank)");
+      assertEquals("Invalid key string:  (blank)", e.getMessage());
     }
+    
     try{
       Key.fromString("  ");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid key string:    (blank)");
+      assertEquals("Invalid key string:    (blank)", e.getMessage());
     }
   }
 
@@ -198,37 +198,58 @@ public class KeyTest{
     
     a = Key.fromString("C");
     b = Key.fromString("C");
-    assert(a.equals(b));
-    assert(a.hashCode() == b.hashCode());
+    assertTrue(a.equals(b));
+    assertTrue(a.hashCode() == b.hashCode());
 
     a = Key.fromString("C");
     b = Key.fromString("C#");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
 
     a = Key.fromString("C#");
     b = Key.fromString("Db");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
 
     a = Key.fromString("C");
     b = Key.fromString("Dbb");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
 
     a = Key.fromString("C");
     b = a.none();
-    assert(a.equals(b));
-    assert(a.hashCode() == b.hashCode());
+    assertTrue(a.equals(b));
+    assertTrue(a.hashCode() == b.hashCode());
 
     a = Key.fromString("Cx");
     b = a.doubleSharp();
-    assert(a.equals(b));
-    assert(a.hashCode() == b.hashCode());
+    assertTrue(a.equals(b));
+    assertTrue(a.hashCode() == b.hashCode());
 
     a = Key.fromString("C");
     b = a.flat();
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
+
+    a = Key.fromString("C");
+    b = Key.fromString("B#");
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
+
+    a = Key.fromString("Cb");
+    b = Key.fromString("B");
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
+
+    a = Key.fromString("C");
+    b = Key.fromString("B#").getEnharmonicEquivalent(Letter.C);
+    assertTrue(a.equals(b));
+    assertTrue(a.hashCode() == b.hashCode());
+
+    a = Key.fromString("C");
+    assertFalse(a.equals("C"));
+
+    a = Key.fromString("C");
+    assertTrue(a.equals(a));
   }
 }

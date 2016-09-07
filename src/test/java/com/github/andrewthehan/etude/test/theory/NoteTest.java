@@ -13,20 +13,63 @@ public class NoteTest{
     Note note;
 
     note = Note.fromString("C4[1]");
-    assertEquals(note.toString(), "C4(48)[1.0]");
+    assertEquals("C4(48)[WHOLE]", note.toString());
 
     note = Note.fromString("C4(48)[1]");
-    assertEquals(note.toString(), "C4(48)[1.0]");
+    assertEquals("C4(48)[WHOLE]", note.toString());
 
     note = Note.fromString("C4[1.0]");
-    assertEquals(note.toString(), "C4(48)[1.0]");
+    assertEquals("C4(48)[WHOLE]", note.toString());
+
+    note = Note.fromString("C4[WHOLE]");
+    assertEquals("C4(48)[WHOLE]", note.toString());
+
+    try{
+      Note.fromString(null);
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid note string: null", e.getMessage());
+    }
+
+    try{
+      Note.fromString("");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid note string:  (blank)", e.getMessage());
+    }
+
+    try{
+      Note.fromString("  ");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid note string:    (blank)", e.getMessage());
+    }
+
+    try{
+      Note.fromString("C4[ ");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid note string: C4[  (missing information)", e.getMessage());
+    }
+
+    try{
+      Note.fromString(" [1]");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid note string:  [1] (missing information)", e.getMessage());
+    }
 
     try{
       Note.fromString("C4");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: C4 (missing information)");
+      assertEquals("Invalid note string: C4 (missing information)", e.getMessage());
     }
 
     try{
@@ -34,7 +77,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: C4[ (missing information)");
+      assertEquals("Invalid note string: C4[ (missing information)", e.getMessage());
     }
 
     try{
@@ -42,7 +85,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: C4] (missing information)");
+      assertEquals("Invalid note string: C4] (missing information)", e.getMessage());
     }
 
     try{
@@ -50,7 +93,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: [C4 (missing information)");
+      assertEquals("Invalid note string: [C4 (missing information)", e.getMessage());
     }
 
     try{
@@ -58,7 +101,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: ]C4 (missing information)");
+      assertEquals("Invalid note string: ]C4 (missing information)", e.getMessage());
     }
 
     try{
@@ -66,7 +109,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: C4[1][1] (contains extra information)");
+      assertEquals("Invalid note string: C4[1][1] (contains extra information)", e.getMessage());
     }
 
     try{
@@ -74,7 +117,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: C4[1 (missing closing bracket)");
+      assertEquals("Invalid note string: C4[1 (missing closing bracket)", e.getMessage());
     }
 
     try{
@@ -82,7 +125,7 @@ public class NoteTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid note string: C4[1]1 (contains extra information)");
+      assertEquals("Invalid note string: C4[1]1 (contains extra information)", e.getMessage());
     }
   }
 
@@ -92,32 +135,38 @@ public class NoteTest{
 
     a = Note.fromString("C4[1]");
     b = Note.fromString("C4[1]");
-    assert(a.equals(b));
-    assert(a.hashCode() == b.hashCode());
+    assertTrue(a.equals(b));
+    assertTrue(a.hashCode() == b.hashCode());
 
     a = Note.fromString("C4[1]");
     b = Note.fromString("C4[1.0]");
-    assert(a.equals(b));
-    assert(a.hashCode() == b.hashCode());
+    assertTrue(a.equals(b));
+    assertTrue(a.hashCode() == b.hashCode());
 
     a = Note.fromString("C#4[1]");
     b = Note.fromString("Db4[1]");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
 
     a = Note.fromString("C4[1]");
     b = Note.fromString("C4[0.5]");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
 
     a = Note.fromString("C4[1]");
     b = Note.fromString("D4[1]");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
 
     a = Note.fromString("C4[1]");
     b = Note.fromString("C5[1]");
-    assert(!a.equals(b));
-    assert(a.hashCode() != b.hashCode());
+    assertFalse(a.equals(b));
+    assertTrue(a.hashCode() != b.hashCode());
+
+    a = Note.fromString("C4[1]");
+    assertFalse(a.equals("C4[1]"));
+
+    a = Note.fromString("C4[1]");
+    assertTrue(a.equals(a));
   }
 }

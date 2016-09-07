@@ -16,7 +16,7 @@ public class ValueTest{
     double currentDuration = 2.0;
     for(int i = 0; i < values.length; ++i){
       value = Value.fromDuration(currentDuration);
-      assertEquals(value, values[i]);
+      assertEquals(values[i], value);
       currentDuration /= 2.0;
     }
 
@@ -25,14 +25,14 @@ public class ValueTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid duration: 0.0 (cannot be zero)");
+      assertEquals("Invalid duration: 0.0 (cannot be zero)", e.getMessage());
     }
     try{
       Value.fromDuration(1.5);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid duration: 1.5 (cannot be represented as a value)");
+      assertEquals("Invalid duration: 1.5 (cannot be represented as a value)", e.getMessage());
     }
   }
 
@@ -41,38 +41,44 @@ public class ValueTest{
     Value value;
 
     value = Value.fromString("2");
-    assertEquals(value, Value.DOUBLE_WHOLE);
+    assertEquals(Value.DOUBLE_WHOLE, value);
 
     value = Value.fromString("2.");
-    assertEquals(value, Value.DOUBLE_WHOLE);
+    assertEquals(Value.DOUBLE_WHOLE, value);
 
     value = Value.fromString("2.0");
-    assertEquals(value, Value.DOUBLE_WHOLE);
+    assertEquals(Value.DOUBLE_WHOLE, value);
+
+    value = Value.fromString("DOUBLE_WHOLE");
+    assertEquals(Value.DOUBLE_WHOLE, value);
 
     value = Value.fromString("0.5");
-    assertEquals(value, Value.HALF);
+    assertEquals(Value.HALF, value);
 
     value = Value.fromString(".5");
-    assertEquals(value, Value.HALF);
+    assertEquals(Value.HALF, value);
+
+    value = Value.fromString("HALF");
+    assertEquals(Value.HALF, value);
 
     value = Value.fromString("2/1");
-    assertEquals(value, Value.DOUBLE_WHOLE);
+    assertEquals(Value.DOUBLE_WHOLE, value);
 
     value = Value.fromString("4/2");
-    assertEquals(value, Value.DOUBLE_WHOLE);
+    assertEquals(Value.DOUBLE_WHOLE, value);
 
     value = Value.fromString("1/2");
-    assertEquals(value, Value.HALF);
+    assertEquals(Value.HALF, value);
 
     value = Value.fromString("2/4");
-    assertEquals(value, Value.HALF);
+    assertEquals(Value.HALF, value);
 
     try{
       Value.fromString("a2");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value string: a2 (does not match a valid form)");
+      assertEquals("Invalid value string: a2", e.getMessage());
     }
 
     try{
@@ -80,7 +86,7 @@ public class ValueTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value string: 2a (does not match a valid form)");
+      assertEquals("Invalid value string: 2a", e.getMessage());
     }
 
     try{
@@ -88,7 +94,7 @@ public class ValueTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value string: 2.2.2 (does not match a valid form)");
+      assertEquals("Invalid value string: 2.2.2", e.getMessage());
     }
 
     try{
@@ -96,7 +102,7 @@ public class ValueTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value string: 1.0/2 (does not match a valid form)");
+      assertEquals("Invalid value string: 1.0/2", e.getMessage());
     }
 
     try{
@@ -104,7 +110,7 @@ public class ValueTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid value string: 1/2.0 (does not match a valid form)");
+      assertEquals("Invalid value string: 1/2.0", e.getMessage());
     }
 
     try{
@@ -112,7 +118,15 @@ public class ValueTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid duration: 0.0 (cannot be zero)");
+      assertEquals("Invalid duration: 0.0 (cannot be zero)", e.getMessage());
+    }
+
+    try{
+      Value.fromString("HAL");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid value string: HAL", e.getMessage());
     }
   }
 }

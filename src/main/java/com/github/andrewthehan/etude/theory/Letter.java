@@ -1,8 +1,9 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
 import com.github.andrewthehan.etude.util.CircularIterator;
-import com.github.andrewthehan.etude.util.Streams;
+import com.github.andrewthehan.etude.util.StreamUtil;
 
 import java.util.stream.Stream;
 import java.util.Arrays;
@@ -18,9 +19,9 @@ public enum Letter{
    * (https://en.wikipedia.org/wiki/Scientific_pitch_notation)
    * Ex. The E (E4) above middle C (C4):
    *   - new octaves start on C
-   *   - the program number for the C in octave 4 is 48
-   *   - increment that value by Key.E's offset value (4)
-   *   - E4: 48 + 4 = 52
+   *   - C4's program number is 48
+   *   - increment that value by Letter.E's offset value (4)
+   *   - E4: 48 + 4 == 52 == E4's program number
    */
   A(9), B(11), C(0), D(2), E(4), F(5), G(7);
 
@@ -31,29 +32,72 @@ public enum Letter{
   public final int getOffset(){ return offset; }
 
   public static final Stream<Letter> stream(){
-    return Letter.stream(Letter.A);
+    return Letter.stream(Direction.DEFAULT, Letter.A);
+  }
+
+  public static final Stream<Letter> stream(Direction direction){
+    return Letter.stream(direction, Letter.A);
   }
 
   public static final Stream<Letter> stream(Letter startingLetter){
-    return Streams.fromIterator(Letter.iterator(startingLetter));
+    return Letter.stream(Direction.DEFAULT, startingLetter);
+  }
+
+  public static final Stream<Letter> stream(Direction direction, Letter startingLetter){
+    return StreamUtil.fromIterator(Letter.iterator(direction, startingLetter));
   }
 
   public static final Iterator<Letter> iterator(){
-    return Letter.iterator(Letter.A);
+    return Letter.iterator(Direction.DEFAULT, Letter.A);
+  }
+
+  public static final Iterator<Letter> iterator(Direction direction){
+    return Letter.iterator(direction, Letter.A);
   }
 
   public static final Iterator<Letter> iterator(Letter startingLetter){
-    return new CircularIterator<Letter>(Letter.values(), startingLetter);
+    return Letter.iterator(Direction.DEFAULT, startingLetter);
+  }
+
+  public static final Iterator<Letter> iterator(Direction direction, Letter startingLetter){
+    return CircularIterator.of(Letter.getLetters(direction, startingLetter));
   }
 
   public static final List<Letter> asList(){
-    return Letter.asList(Letter.A);
+    return Letter.asList(Direction.DEFAULT, Letter.A);
+  }
+
+  public static final List<Letter> asList(Direction direction){
+    return Letter.asList(direction, Letter.A);
   }
 
   public static final List<Letter> asList(Letter startingLetter){
+    return Letter.asList(Direction.DEFAULT, startingLetter);
+  }
+
+  public static final List<Letter> asList(Direction direction, Letter startingLetter){
+    return Arrays.asList(Letter.getLetters(direction, startingLetter));
+  }
+
+  public static final Letter[] getLetters(){
+    return getLetters(Direction.DEFAULT, Letter.A);
+  }
+
+  public static final Letter[] getLetters(Direction direction){
+    return getLetters(direction, Letter.A);
+  }
+
+  public static final Letter[] getLetters(Letter startingLetter){
+    return getLetters(Direction.DEFAULT, startingLetter);
+  }
+
+  public static final Letter[] getLetters(Direction direction, Letter startingLetter){
     List<Letter> list = Arrays.asList(Letter.values());
-    Collections.rotate(list, -startingLetter.ordinal());
-    return list;
+    if(direction == Direction.DESCENDING){
+      Collections.reverse(list);
+    }
+    Collections.rotate(list, -list.indexOf(startingLetter));
+    return list.toArray(new Letter[0]);
   }
 
   public static final boolean isValid(char letterChar){
@@ -62,7 +106,7 @@ public enum Letter{
 
   public static final Letter fromChar(char letterChar){
     if(!Letter.isValid(letterChar)){
-      throw new RuntimeException("Invalid letter character: " + letterChar);
+      throw new EtudeException("Invalid letter character: " + letterChar);
     }
     return Letter.values()[Character.toUpperCase(letterChar) - 'A'];
   }

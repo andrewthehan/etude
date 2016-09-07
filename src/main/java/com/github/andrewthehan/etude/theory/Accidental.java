@@ -1,6 +1,8 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+
 public enum Accidental{
   TRIPLE_FLAT(-3, "bbb"),
   DOUBLE_FLAT(-2, "bb"),
@@ -10,10 +12,6 @@ public enum Accidental{
   SHARP(1, "#"),
   DOUBLE_SHARP(2, "x"),
   TRIPLE_SHARP(3, "#x");
-
-  public static enum Policy{
-    MAINTAIN_LETTER, PRIORITIZE_NATURAL, PRIORITIZE_SHARP, PRIORITIZE_FLAT
-  }
 
   private final int offset;
   private final String symbol;
@@ -28,11 +26,11 @@ public enum Accidental{
       case -3: return TRIPLE_FLAT;
       case -2: return DOUBLE_FLAT;
       case -1: return FLAT;
-      case 0: return NATURAL;
+      case 0: return NONE;
       case 1: return SHARP;
       case 2: return DOUBLE_SHARP;
       case 3: return TRIPLE_SHARP;
-      default: throw new RuntimeException("Invalid accidental offset: " + offset);
+      default: throw new EtudeException("Invalid accidental offset: " + offset);
     }
   }
 
@@ -50,7 +48,7 @@ public enum Accidental{
       case "#": return SHARP;
       case "x": return DOUBLE_SHARP;
       case "#x": return TRIPLE_SHARP;
-      default: throw new RuntimeException("Invalid accidental string: " + accidentalString);
+      default: throw new EtudeException("Invalid accidental string: " + accidentalString);
     }
   }
 

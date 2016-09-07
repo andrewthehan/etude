@@ -1,6 +1,8 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+
 public enum Dynamic{
   PIANISSISSIMO("ppp"),
   PIANISSIMO("pp"),
@@ -20,7 +22,7 @@ public enum Dynamic{
   public Dynamic crescendo(){
     int index = ordinal() + 1;
     if(index >= Dynamic.values().length){
-      throw new RuntimeException("Unable to apply crescendo on " + this);
+      throw new EtudeException("Unable to apply crescendo on " + this);
     }
     return Dynamic.values()[index];
   }
@@ -28,9 +30,23 @@ public enum Dynamic{
   public Dynamic diminuendo(){
     int index = ordinal() - 1;
     if(index < 0){
-      throw new RuntimeException("Unable to apply diminuendo on " + this);
+      throw new EtudeException("Unable to apply diminuendo on " + this);
     }
     return Dynamic.values()[index];
+  }
+
+  public static Dynamic fromString(String dynamicString){
+    switch(dynamicString){
+      case "ppp": return PIANISSISSIMO;
+      case "pp": return PIANISSIMO;
+      case "p": return PIANO;
+      case "mp": return MEZZO_PIANO;
+      case "mf": return MEZZO_FORTE;
+      case "f": return FORTE;
+      case "ff": return FORTISSIMO;
+      case "fff": return FORTISSISSIMO;
+      default: throw new EtudeException("Invalid dynamic string: " + dynamicString);
+    }
   }
 
   @Override

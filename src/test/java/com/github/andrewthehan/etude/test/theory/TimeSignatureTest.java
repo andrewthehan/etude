@@ -13,31 +13,31 @@ public class TimeSignatureTest{
     TimeSignature timeSignature;
 
     timeSignature = new TimeSignature(4, 1);
-    assertEquals(timeSignature.getOneBeat(), Value.WHOLE);
+    assertEquals(Value.WHOLE, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 2);
-    assertEquals(timeSignature.getOneBeat(), Value.HALF);
+    assertEquals(Value.HALF, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 4);
-    assertEquals(timeSignature.getOneBeat(), Value.QUARTER);
+    assertEquals(Value.QUARTER, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 8);
-    assertEquals(timeSignature.getOneBeat(), Value.EIGHTH);
+    assertEquals(Value.EIGHTH, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 16);
-    assertEquals(timeSignature.getOneBeat(), Value.SIXTEENTH);
+    assertEquals(Value.SIXTEENTH, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 32);
-    assertEquals(timeSignature.getOneBeat(), Value.THIRTY_SECOND);
+    assertEquals(Value.THIRTY_SECOND, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 64);
-    assertEquals(timeSignature.getOneBeat(), Value.SIXTY_FOURTH);
+    assertEquals(Value.SIXTY_FOURTH, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 128);
-    assertEquals(timeSignature.getOneBeat(), Value.HUNDRED_TWENTY_EIGHTH);
+    assertEquals(Value.HUNDRED_TWENTY_EIGHTH, timeSignature.getOneBeat());
 
     timeSignature = new TimeSignature(4, 256);
-    assertEquals(timeSignature.getOneBeat(), Value.TWO_HUNDRED_FIFTY_SIXTH);
+    assertEquals(Value.TWO_HUNDRED_FIFTY_SIXTH, timeSignature.getOneBeat());
   }
 
   @Test

@@ -1,6 +1,8 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+
 import java.util.stream.Collectors;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -16,80 +18,73 @@ public final class Chord{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
       new Interval(Interval.Quality.PERFECT, 5)
-    }, "maj"),
+    }),
     MINOR(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.PERFECT, 5)
-    }, "min"),
+    }),
     DIMINISHED(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.DIMINISHED, 5)
-    }, "dim"),
+    }),
     AUGMENTED(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
       new Interval(Interval.Quality.AUGMENTED, 5)
-    }, "aug"),
+    }),
     MAJOR_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
       new Interval(Interval.Quality.PERFECT, 5),
       new Interval(Interval.Quality.MAJOR, 7)
-    }, "maj7"),
+    }),
     MINOR_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.PERFECT, 5),
       new Interval(Interval.Quality.MINOR, 7)
-    }, "min7"),
+    }),
     DOMINANT_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
       new Interval(Interval.Quality.PERFECT, 5),
       new Interval(Interval.Quality.MINOR, 7)
-    }, "7"),
+    }),
     DIMINISHED_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.DIMINISHED, 5),
       new Interval(Interval.Quality.DIMINISHED, 7)
-    }, "dim7"),
+    }),
     HALF_DIMINISHED_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.DIMINISHED, 5),
       new Interval(Interval.Quality.MINOR, 7)
-    }, "m7(b5)"),
+    }),
     MINOR_MAJOR_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MINOR, 3),
       new Interval(Interval.Quality.PERFECT, 5),
       new Interval(Interval.Quality.MAJOR, 7)
-    }, "mMaj7"),
+    }),
     AUGMENTED_MAJOR_SEVENTH(new Interval[]{
       new Interval(Interval.Quality.PERFECT, 1),
       new Interval(Interval.Quality.MAJOR, 3),
       new Interval(Interval.Quality.AUGMENTED, 5),
       new Interval(Interval.Quality.MAJOR, 7)
-    }, "maj7(#5)");
+    });
 
     private final Interval[] intervalPattern;
-    private final String symbol;
 
-    private Quality(Interval[] intervalPattern, String symbol){
+    private Quality(Interval[] intervalPattern){
       this.intervalPattern = intervalPattern;
-      this.symbol = symbol;
     }
 
     public final Interval[] getIntervalPattern(){
       return intervalPattern;
-    }
-
-    @Override
-    public String toString(){
-      return symbol;
     }
   }
 
@@ -116,28 +111,29 @@ public final class Chord{
 
   public static final Chord fromString(String chordString){
     if(chordString == null){
-      throw new RuntimeException("Invalid chord string: " + chordString);
+      throw new EtudeException("Invalid chord string: " + chordString);
     }
     else if(chordString.trim().isEmpty()){
-      throw new RuntimeException("Invalid chord string: " + chordString + " (blank)");
+      throw new EtudeException("Invalid chord string: " + chordString + " (blank)");
     }
 
-    if(!chordString.contains("{") || !chordString.contains("}")){
-      throw new RuntimeException("Invalid chord string: " + chordString + " (missing curly braces that enclose pitches)");
+    if(!chordString.contains("[") || !chordString.contains("]")){
+      throw new EtudeException("Invalid chord string: " + chordString + " (missing brackets that enclose pitches)");
     }
 
-    if(!chordString.startsWith("{") || !chordString.endsWith("}")){
-      throw new RuntimeException("Invalid chord string: " + chordString + " (contains extra information)");
+    if(!chordString.startsWith("[") || !chordString.endsWith("]")){
+      throw new EtudeException("Invalid chord string: " + chordString + " (contains extra information)");
     }
 
     String pitchesString = chordString.substring(1, chordString.length() - 1);
 
-    if(pitchesString.contains("{") || pitchesString.contains("}")){
-      throw new RuntimeException("Invalid chord string: " + chordString + " (contains extra curly braces)");
+    if(pitchesString.contains("[") || pitchesString.contains("]")){
+      throw new EtudeException("Invalid chord string: " + chordString + " (contains extra brackets)");
     }
 
     Pitch[] pitches = Arrays
       .stream(pitchesString.split(","))
+      .map(s -> s.trim())
       .map(Pitch::fromString)
       .toArray(Pitch[]::new);
 
@@ -146,18 +142,13 @@ public final class Chord{
 
   @Override
   public String toString(){
-    StringBuilder builder = new StringBuilder();
-    builder.append("{");
-    builder.append(Arrays.stream(pitches).map(Pitch::toString).collect(Collectors.joining(",")));
-    builder.append("}");
-    return builder.toString();
+    return Arrays.toString(pitches);
   }
 
   public final Pitch[] getPitches(){
     return pitches;
   }
   
-
   public static RequiresRoot builder(){
     return new Builder();
   }
@@ -231,7 +222,7 @@ public final class Chord{
     public Chord build(){
       Deque<Pitch> deque = new ArrayDeque<Pitch>(pitches);
 
-      KeySignature keySignature = new KeySignature(root.getKey(), Mode.MAJOR);
+      KeySignature keySignature = new KeySignature(root.getKey(), KeySignature.Quality.MAJOR);
       Letter letter = keySignature.keyOf(bottomDegree).getLetter();
       Optional<Pitch> optional = deque
         .stream()
@@ -239,7 +230,7 @@ public final class Chord{
         .findFirst();
 
       if(!optional.isPresent()){
-        throw new RuntimeException("Unable to invert chord: missing " + bottomDegree + " pitch");
+        throw new EtudeException("Unable to invert chord: missing " + bottomDegree + " pitch");
       } 
 
       Pitch lowestPitch = optional.get();

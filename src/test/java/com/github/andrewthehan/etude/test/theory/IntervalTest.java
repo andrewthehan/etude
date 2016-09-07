@@ -13,55 +13,55 @@ public class IntervalTest{
     Interval interval;
 
     interval = new Interval(Interval.Quality.PERFECT, 1);
-    assertEquals(interval.toString(), "P1");
+    assertEquals("P1", interval.toString());
     interval = new Interval(Interval.Quality.PERFECT, 5);
-    assertEquals(interval.toString(), "P5");
+    assertEquals("P5", interval.toString());
     interval = new Interval(Interval.Quality.PERFECT, 8);
-    assertEquals(interval.toString(), "P8");
+    assertEquals("P8", interval.toString());
     interval = new Interval(Interval.Quality.MAJOR, 3);
-    assertEquals(interval.toString(), "M3");
+    assertEquals("M3", interval.toString());
     interval = new Interval(Interval.Quality.MINOR, 3);
-    assertEquals(interval.toString(), "m3");
+    assertEquals("m3", interval.toString());
     interval = new Interval(Interval.Quality.DIMINISHED, 3);
-    assertEquals(interval.toString(), "d3");
+    assertEquals("d3", interval.toString());
     interval = new Interval(Interval.Quality.DIMINISHED, 5);
-    assertEquals(interval.toString(), "d5");
+    assertEquals("d5", interval.toString());
     interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 3);
-    assertEquals(interval.toString(), "dd3");
+    assertEquals("dd3", interval.toString());
     interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 5);
-    assertEquals(interval.toString(), "dd5");
+    assertEquals("dd5", interval.toString());
     interval = new Interval(Interval.Quality.AUGMENTED, 4);
-    assertEquals(interval.toString(), "A4");
+    assertEquals("A4", interval.toString());
     interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 4);
-    assertEquals(interval.toString(), "AA4");
+    assertEquals("AA4", interval.toString());
 
     try{
       new Interval(Interval.Quality.PERFECT, -5);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval: P-5 (number must be a positive integer)");
+      assertEquals("Invalid interval: P-5 (number must be a positive integer)", e.getMessage());
     }
     try{
       new Interval(Interval.Quality.PERFECT, 2);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval: P2 (number cannot have a perfect quality)");
+      assertEquals("Invalid interval: P2 (number cannot have a perfect quality)", e.getMessage());
     }
     try{
       new Interval(Interval.Quality.MAJOR, 5);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval: M5 (number cannot have major or minor quality)");
+      assertEquals("Invalid interval: M5 (number cannot have major or minor quality)", e.getMessage());
     }
     try{
       new Interval(Interval.Quality.MINOR, 5);
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval: m5 (number cannot have major or minor quality)");
+      assertEquals("Invalid interval: m5 (number cannot have major or minor quality)", e.getMessage());
     }
   }
 
@@ -74,128 +74,128 @@ public class IntervalTest{
     a = Pitch.fromString("G4");
     b = Pitch.fromString("A4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "M2");
-    assertEquals(a.step(interval).toString(), "An4(57)");
+    assertEquals("M2", interval.toString());
+    assertEquals("A4(57)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("C4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P1");
-    assertEquals(a.step(interval).toString(), "Cn4(48)");
+    assertEquals("P1", interval.toString());
+    assertEquals("C4(48)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Cb4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "d1");
-    assertEquals(a.step(interval).toString(), "Cb4(47)");
+    assertEquals("d1", interval.toString());
+    assertEquals("Cb4(47)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Cbb4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "dd1");
-    assertEquals(a.step(interval).toString(), "Cbb4(46)");
+    assertEquals("dd1", interval.toString());
+    assertEquals("Cbb4(46)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("C#4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "A1");
-    assertEquals(a.step(interval).toString(), "C#4(49)");
+    assertEquals("A1", interval.toString());
+    assertEquals("C#4(49)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Cx4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "AA1");
-    assertEquals(a.step(interval).toString(), "Cx4(50)");
+    assertEquals("AA1", interval.toString());
+    assertEquals("Cx4(50)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("E4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "M3");
-    assertEquals(a.step(interval).toString(), "En4(52)");
+    assertEquals("M3", interval.toString());
+    assertEquals("E4(52)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Eb4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "m3");
-    assertEquals(a.step(interval).toString(), "Eb4(51)");
+    assertEquals("m3", interval.toString());
+    assertEquals("Eb4(51)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Ebb4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "d3");
-    assertEquals(a.step(interval).toString(), "Ebb4(50)");
+    assertEquals("d3", interval.toString());
+    assertEquals("Ebb4(50)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Ebbb4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "dd3");
-    assertEquals(a.step(interval).toString(), "Ebbb4(49)");
+    assertEquals("dd3", interval.toString());
+    assertEquals("Ebbb4(49)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("E#4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "A3");
-    assertEquals(a.step(interval).toString(), "E#4(53)");
+    assertEquals("A3", interval.toString());
+    assertEquals("E#4(53)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("Ex4");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "AA3");
-    assertEquals(a.step(interval).toString(), "Ex4(54)");
+    assertEquals("AA3", interval.toString());
+    assertEquals("Ex4(54)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("C5");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P8");
-    assertEquals(a.step(interval).toString(), "Cn5(60)");
+    assertEquals("P8", interval.toString());
+    assertEquals("C5(60)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("G5");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P12");
-    assertEquals(a.step(interval).toString(), "Gn5(67)");
+    assertEquals("P12", interval.toString());
+    assertEquals("G5(67)", a.step(interval).toString());
 
     a = Pitch.fromString("C4");
     b = Pitch.fromString("G6");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P19");
-    assertEquals(a.step(interval).toString(), "Gn6(79)");
+    assertEquals("P19", interval.toString());
+    assertEquals("G6(79)", a.step(interval).toString());
 
     a = Pitch.fromString("A4");
     b = Pitch.fromString("A5");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P8");
-    assertEquals(a.step(interval).toString(), "An5(69)");
+    assertEquals("P8", interval.toString());
+    assertEquals("A5(69)", a.step(interval).toString());
 
     a = Pitch.fromString("A4");
     b = Pitch.fromString("C5");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "m3");
-    assertEquals(a.step(interval).toString(), "Cn5(60)");
+    assertEquals("m3", interval.toString());
+    assertEquals("C5(60)", a.step(interval).toString());
 
     a = Pitch.fromString("A4");
     b = Pitch.fromString("C6");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "m10");
-    assertEquals(a.step(interval).toString(), "Cn6(72)");
+    assertEquals("m10", interval.toString());
+    assertEquals("C6(72)", a.step(interval).toString());
 
     a = Pitch.fromString("G4");
     b = Pitch.fromString("G5");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P8");
-    assertEquals(a.step(interval).toString(), "Gn5(67)");
+    assertEquals("P8", interval.toString());
+    assertEquals("G5(67)", a.step(interval).toString());
 
     a = Pitch.fromString("G4");
     b = Pitch.fromString("C5");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P4");
-    assertEquals(a.step(interval).toString(), "Cn5(60)");
+    assertEquals("P4", interval.toString());
+    assertEquals("C5(60)", a.step(interval).toString());
 
     a = Pitch.fromString("G4");
     b = Pitch.fromString("C6");
     interval = Interval.between(a, b);
-    assertEquals(interval.toString(), "P11");
-    assertEquals(a.step(interval).toString(), "Cn6(72)");
+    assertEquals("P11", interval.toString());
+    assertEquals("C6(72)", a.step(interval).toString());
 
     try{
       a = Pitch.fromString("C4");
@@ -204,7 +204,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Cannot create interval for pitches: C4(48) -> Cbbb4(45)");
+      assertEquals("Cannot create interval for pitches: C4(48) -> Cbbb4(45)", e.getMessage());
     }
 
     try{
@@ -214,7 +214,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Cannot create interval for pitches: C4(48) -> C#x4(51)");
+      assertEquals("Cannot create interval for pitches: C4(48) -> C#x4(51)", e.getMessage());
     }
 
     try{
@@ -224,7 +224,17 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Cannot create interval for pitches: C4(48) -> E#x4(55)");
+      assertEquals("Cannot create interval for pitches: C4(48) -> E#x4(55)", e.getMessage());
+    }
+
+    try{
+      a = Pitch.fromString("C4");
+      b = Pitch.fromString("B3");
+      Interval.between(a, b);
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Cannot create interval with nonpositive number", e.getMessage());
     }
   }
 
@@ -233,45 +243,45 @@ public class IntervalTest{
     Interval interval;
 
     interval = new Interval(Interval.Quality.PERFECT, 1);
-    assertEquals(interval.getOffset(), 0);
+    assertEquals(0, interval.getOffset());
     interval = new Interval(Interval.Quality.PERFECT, 5);
-    assertEquals(interval.getOffset(), 7);
+    assertEquals(7, interval.getOffset());
     interval = new Interval(Interval.Quality.PERFECT, 8);
-    assertEquals(interval.getOffset(), 12);
+    assertEquals(12, interval.getOffset());
     interval = new Interval(Interval.Quality.MAJOR, 3);
-    assertEquals(interval.getOffset(), 4);
+    assertEquals(4, interval.getOffset());
     interval = new Interval(Interval.Quality.MINOR, 3);
-    assertEquals(interval.getOffset(), 3);
+    assertEquals(3, interval.getOffset());
     interval = new Interval(Interval.Quality.DIMINISHED, 3);
-    assertEquals(interval.getOffset(), 2);
+    assertEquals(2, interval.getOffset());
     interval = new Interval(Interval.Quality.DIMINISHED, 5);
-    assertEquals(interval.getOffset(), 6);
+    assertEquals(6, interval.getOffset());
     interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 3);
-    assertEquals(interval.getOffset(), 1);
+    assertEquals(1, interval.getOffset());
     interval = new Interval(Interval.Quality.DOUBLY_DIMINISHED, 5);
-    assertEquals(interval.getOffset(), 5);
+    assertEquals(5, interval.getOffset());
     interval = new Interval(Interval.Quality.AUGMENTED, 4);
-    assertEquals(interval.getOffset(), 6);
+    assertEquals(6, interval.getOffset());
     interval = new Interval(Interval.Quality.DOUBLY_AUGMENTED, 4);
-    assertEquals(interval.getOffset(), 7);
+    assertEquals(7, interval.getOffset());
 
     interval = new Interval(Interval.Quality.MAJOR, 10);
-    assertEquals(interval.getOffset(), 16);
+    assertEquals(16, interval.getOffset());
     interval = new Interval(Interval.Quality.PERFECT, 12);
-    assertEquals(interval.getOffset(), 19);
+    assertEquals(19, interval.getOffset());
   }
 
   @Test
   public void testPerfect(){
-    assert(Interval.isPerfect(1));
-    assert(!Interval.isPerfect(2));
-    assert(!Interval.isPerfect(3));
-    assert(Interval.isPerfect(4));
-    assert(Interval.isPerfect(5));
-    assert(!Interval.isPerfect(6));
-    assert(!Interval.isPerfect(7));
-    assert(Interval.isPerfect(8));
-    assert(!Interval.isPerfect(9));
+    assertTrue(Interval.isPerfect(1));
+    assertFalse(Interval.isPerfect(2));
+    assertFalse(Interval.isPerfect(3));
+    assertTrue(Interval.isPerfect(4));
+    assertTrue(Interval.isPerfect(5));
+    assertFalse(Interval.isPerfect(6));
+    assertFalse(Interval.isPerfect(7));
+    assertTrue(Interval.isPerfect(8));
+    assertFalse(Interval.isPerfect(9));
   }
 
   @Test
@@ -279,35 +289,57 @@ public class IntervalTest{
     Interval interval;
 
     interval = Interval.fromString("P1");
-    assertEquals(interval.toString(), "P1");
+    assertEquals("P1", interval.toString());
 
     interval = Interval.fromString("M3");
-    assertEquals(interval.toString(), "M3");
+    assertEquals("M3", interval.toString());
 
     interval = Interval.fromString("m3");
-    assertEquals(interval.toString(), "m3");
+    assertEquals("m3", interval.toString());
+
+    interval = Interval.fromString("d3");
+    assertEquals("d3", interval.toString());
 
     interval = Interval.fromString("dd4");
-    assertEquals(interval.toString(), "dd4");
+    assertEquals("dd4", interval.toString());
+
+    interval = Interval.fromString("A5");
+    assertEquals("A5", interval.toString());
 
     interval = Interval.fromString("AA6");
-    assertEquals(interval.toString(), "AA6");
+    assertEquals("AA6", interval.toString());
 
     interval = Interval.fromString("P8");
-    assertEquals(interval.toString(), "P8");
+    assertEquals("P8", interval.toString());
 
     interval = Interval.fromString("M9");
-    assertEquals(interval.toString(), "M9");
+    assertEquals("M9", interval.toString());
 
     interval = Interval.fromString("M13");
-    assertEquals(interval.toString(), "M13");
+    assertEquals("M13", interval.toString());
+
+    try{
+      Interval.fromString(null);
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid interval string: null", e.getMessage());
+    }
+
+    try{
+      Interval.fromString(" ");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid interval string:   (blank)", e.getMessage());
+    }
 
     try{
       Interval.fromString("B4");
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid quality string: B");
+      assertEquals("Invalid quality string: B", e.getMessage());
     }
 
     try{
@@ -315,7 +347,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid quality string: p");
+      assertEquals("Invalid quality string: p", e.getMessage());
     }
 
     try{
@@ -323,7 +355,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid quality string: MM");
+      assertEquals("Invalid quality string: MM", e.getMessage());
     }
 
     try{
@@ -331,7 +363,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval string: 1 (missing information)");
+      assertEquals("Invalid interval string: 1 (missing information)", e.getMessage());
     }
 
     try{
@@ -339,7 +371,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval string: M (missing information)");
+      assertEquals("Invalid interval string: M (missing information)", e.getMessage());
     }
 
     try{
@@ -347,7 +379,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid quality string: 3");
+      assertEquals("Invalid quality string: 3", e.getMessage());
     }
 
     try{
@@ -355,7 +387,7 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval string: M3M (contains extra information)");
+      assertEquals("Invalid interval string: M3M (contains extra information)", e.getMessage());
     }
 
     try{
@@ -363,7 +395,26 @@ public class IntervalTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid interval string: 3M3 (contains extra information)");
+      assertEquals("Invalid interval string: 3M3 (contains extra information)", e.getMessage());
     }
+
+    try{
+      Interval.fromString("3 M 3");
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid interval string: 3 M 3 (contains extra information)", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testValueOf(){
+    assertEquals(Interval.Quality.PERFECT, Interval.Quality.valueOf("PERFECT"));
+    assertEquals(Interval.Quality.MAJOR, Interval.Quality.valueOf("MAJOR"));
+    assertEquals(Interval.Quality.MINOR, Interval.Quality.valueOf("MINOR"));
+    assertEquals(Interval.Quality.DIMINISHED, Interval.Quality.valueOf("DIMINISHED"));
+    assertEquals(Interval.Quality.DOUBLY_DIMINISHED, Interval.Quality.valueOf("DOUBLY_DIMINISHED"));
+    assertEquals(Interval.Quality.AUGMENTED, Interval.Quality.valueOf("AUGMENTED"));
+    assertEquals(Interval.Quality.DOUBLY_AUGMENTED, Interval.Quality.valueOf("DOUBLY_AUGMENTED"));
   }
 }

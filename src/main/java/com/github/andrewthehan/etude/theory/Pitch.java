@@ -1,6 +1,8 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+import com.github.andrewthehan.etude.util.ImmutablePrioritySet;
 import com.github.andrewthehan.etude.util.RegEx;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class Pitch implements Comparable<Pitch>{
 
     int programNumber = getProgramNumber();
     if(programNumber < MusicConstants.SMALLEST_PROGRAM_NUMBER || programNumber > MusicConstants.LARGEST_PROGRAM_NUMBER){
-      throw new RuntimeException("Invalid program number: " + programNumber);
+      throw new EtudeException("Invalid program number: " + programNumber);
     }
   }
 
@@ -27,18 +29,11 @@ public class Pitch implements Comparable<Pitch>{
   }
 
   public Pitch step(int amount){
-    return step(amount, Accidental.Policy.PRIORITIZE_NATURAL);
+    return step(amount, Policy.DEFAULT_PRIORITY);
   }
 
-  public final Pitch step(int amount, Accidental.Policy policy){
-    if(Accidental.Policy.MAINTAIN_LETTER == policy){
-      int offset = key.getAccidental().getOffset();
-      if(offset + amount > Accidental.TRIPLE_SHARP.getOffset() || offset + amount < Accidental.TRIPLE_FLAT.getOffset()){
-        throw new RuntimeException("Can't move pitch " + amount + " step(s) up while maintaining letter: " + this);
-      }
-      return new Pitch(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + amount)), octave);
-    }
-    return Pitch.fromProgramNumber(getProgramNumber() + amount, policy);
+  public final Pitch step(int amount, ImmutablePrioritySet<Policy> policies){
+    return Pitch.fromProgramNumber(getProgramNumber() + amount, policies);
   }
 
   public final Pitch step(Interval interval){
@@ -48,7 +43,7 @@ public class Pitch implements Comparable<Pitch>{
     Letter letter = list.get(Math.floorMod(interval.getNumber() - 1, letterCount));
 
     // initialize accidental to be the accidental of the new letter in the key signature of this key
-    Accidental accidental = new Key(letter).apply(new KeySignature(key, Mode.MAJOR)).getAccidental();
+    Accidental accidental = new Key(letter).apply(new KeySignature(key, KeySignature.Quality.MAJOR)).getAccidental();
     // change accidental based on interval's quality
     switch(interval.getQuality()){
       case PERFECT: MAJOR:
@@ -80,31 +75,19 @@ public class Pitch implements Comparable<Pitch>{
   }
 
   public Pitch halfStepUp(){
-    return halfStepUp(Accidental.Policy.PRIORITIZE_SHARP);
+    return halfStepUp(Policy.DEFAULT_PRIORITY);
   }
 
-  public final Pitch halfStepUp(Accidental.Policy policy){
-    if(Accidental.Policy.MAINTAIN_LETTER == policy){
-      if(key.isTripleSharp()){
-        throw new RuntimeException("Can't move pitch half step up while maintaining letter: " + this);
-      }
-      return new Pitch(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() + 1)), octave);
-    }
-    return Pitch.fromProgramNumber(getProgramNumber() + 1, policy);
+  public final Pitch halfStepUp(ImmutablePrioritySet<Policy> policies){
+    return Pitch.fromProgramNumber(getProgramNumber() + 1, policies);
   }
 
   public Pitch halfStepDown(){
-    return halfStepDown(Accidental.Policy.PRIORITIZE_FLAT);
+    return halfStepDown(Policy.DEFAULT_PRIORITY);
   }
 
-  public final Pitch halfStepDown(Accidental.Policy policy){
-    if(Accidental.Policy.MAINTAIN_LETTER == policy){
-      if(key.isTripleFlat()){
-        throw new RuntimeException("Can't move pitch half step down while maintaining letter: " + this);
-      }
-      return new Pitch(new Key(key.getLetter(), Accidental.fromOffset(key.getAccidental().getOffset() - 1)), octave);
-    }
-    return Pitch.fromProgramNumber(getProgramNumber() - 1, policy);
+  public final Pitch halfStepDown(ImmutablePrioritySet<Policy> policies){
+    return Pitch.fromProgramNumber(getProgramNumber() - 1, policies);
   }
 
   public final Pitch getHigherPitch(Key key){
@@ -141,20 +124,30 @@ public class Pitch implements Comparable<Pitch>{
   }
 
   public static final Pitch fromProgramNumber(int programNumber){
-    return Pitch.fromProgramNumber(programNumber, Accidental.Policy.PRIORITIZE_NATURAL);
+    return Pitch.fromProgramNumber(programNumber, Policy.DEFAULT_PRIORITY);
   }
 
-  public static final Pitch fromProgramNumber(int programNumber, Accidental.Policy policy){
+  public static final Pitch fromProgramNumber(int programNumber, ImmutablePrioritySet<Policy> policies){
     if(programNumber < MusicConstants.SMALLEST_PROGRAM_NUMBER || programNumber > MusicConstants.LARGEST_PROGRAM_NUMBER){
-      throw new RuntimeException("Invalid program number: " + programNumber);
+      throw new EtudeException("Invalid program number: " + programNumber);
     }
-    Key key = Key.fromOffset(Math.floorMod(programNumber, MusicConstants.KEYS_IN_OCTAVE), policy);
+    Key key = Key.fromOffset(Math.floorMod(programNumber, MusicConstants.KEYS_IN_OCTAVE), policies);
+    if(key == null){
+      return null;
+    }
     int octave = programNumber / MusicConstants.KEYS_IN_OCTAVE;
+    /**
+    * Key offsets are bounded by the range [0, MusicConstants.KEYS_IN_OCTAVE) whereas program numbers go across octave boundaries.
+    * If [actual key offset] is equal to [offset after normalizing], then octave is not changed.
+    * If [actual key offset] is lower than [offset after normalizing], then octave is raised by 1.
+    * If [actual key offset] is higher than [offset after normalizing], then octave is lowered by 1.
+    */
+    octave += (key.getOffset() - (key.getLetter().getOffset() + key.getAccidental().getOffset())) / MusicConstants.KEYS_IN_OCTAVE;
     return new Pitch(key, octave);
   }
 
   public final int getProgramNumber(){
-    return octave * MusicConstants.KEYS_IN_OCTAVE + key.getOffset();
+    return octave * MusicConstants.KEYS_IN_OCTAVE + key.getLetter().getOffset() + key.getAccidental().getOffset();
   }
 
   /**
@@ -167,10 +160,10 @@ public class Pitch implements Comparable<Pitch>{
   */
   public static final Pitch fromString(String pitchString){
     if(pitchString == null){
-      throw new RuntimeException("Invalid pitch string: " + pitchString);
+      throw new EtudeException("Invalid pitch string: " + pitchString);
     }
     else if(pitchString.trim().isEmpty()){
-      throw new RuntimeException("Invalid pitch string: " + pitchString + " (blank)");
+      throw new EtudeException("Invalid pitch string: " + pitchString + " (blank)");
     }
     // longest prefix that contains only letters or #
     String keyString = RegEx.extract("^[a-zA-Z#]*", pitchString);
@@ -178,7 +171,7 @@ public class Pitch implements Comparable<Pitch>{
     // first number of length greater than 0 thats followed by an open parentheses (if there is any)
     String octaveString = RegEx.extract("\\d+(?![^(]*\\))", pitchString);
     if(octaveString == null){
-      throw new RuntimeException("Invalid pitch string: " + pitchString + " (missing octave)");
+      throw new EtudeException("Invalid pitch string: " + pitchString + " (missing octave)");
     }
     int octave = Integer.parseInt(octaveString);
     Pitch pitch = new Pitch(key, octave);
@@ -187,7 +180,7 @@ public class Pitch implements Comparable<Pitch>{
     String programNumber = RegEx.extract("(?<=\\()\\d+", pitchString);
     if(programNumber != null){
       if(pitch.getProgramNumber() != Integer.parseInt(programNumber)){
-        throw new RuntimeException("Invalid pitch string: " + pitchString + " (program number doesn't match key and octave)");
+        throw new EtudeException("Invalid pitch string: " + pitchString + " (program number doesn't match key and octave)");
       }
     }
 
@@ -196,20 +189,20 @@ public class Pitch implements Comparable<Pitch>{
       String convertedNoParentheses = converted.substring(0, converted.indexOf("("));
       if(!convertedNoParentheses.equals(pitchString)){
         if(convertedNoParentheses.length() > pitchString.length()){
-          throw new RuntimeException("Invalid pitch string: " + pitchString + " (missing information)");
+          throw new EtudeException("Invalid pitch string: " + pitchString + " (missing information)");
         }
         else{
-          throw new RuntimeException("Invalid pitch string: " + pitchString + " (contains extra information)");
+          throw new EtudeException("Invalid pitch string: " + pitchString + " (contains extra information)");
         }
       }
     }
     else{
       if(!converted.equals(pitchString)){
         if(converted.length() > pitchString.length()){
-          throw new RuntimeException("Invalid pitch string: " + pitchString + " (missing information)");
+          throw new EtudeException("Invalid pitch string: " + pitchString + " (missing information)");
         }
         else{
-          throw new RuntimeException("Invalid pitch string: " + pitchString + " (contains extra information)");
+          throw new EtudeException("Invalid pitch string: " + pitchString + " (contains extra information)");
         }
       }
     }

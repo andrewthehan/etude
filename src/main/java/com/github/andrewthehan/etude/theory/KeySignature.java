@@ -1,19 +1,34 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
+import com.github.andrewthehan.etude.util.ImmutablePrioritySet;
+
 import java.util.stream.Stream;
 import java.util.Arrays;
 import java.util.List;
 
 public final class KeySignature{
+  public enum Quality{
+    MAJOR, MINOR;
+  }
+
   public static final Letter[] ORDER_OF_FLATS = "BEADGCF".chars().mapToObj(i -> Letter.fromChar((char) i)).toArray(Letter[]::new);
   public static final Letter[] ORDER_OF_SHARPS = "FCGDAEB".chars().mapToObj(i -> Letter.fromChar((char) i)).toArray(Letter[]::new);
   private final Key key;
-  private final Mode mode;
+  private final Quality quality;
 
-  public KeySignature(Key key, Mode mode){
+  public KeySignature(Key key, Quality quality){
     this.key = key;
-    this.mode = mode;
+    this.quality = quality;
+  }
+
+  public boolean isMajor(){
+    return quality == Quality.MAJOR;
+  }
+
+  public boolean isMinor(){
+    return quality == Quality.MINOR;
   }
 
   public final Degree degreeOf(Key key){
@@ -28,7 +43,7 @@ public final class KeySignature{
   }
 
   public Key[] getKeysWithAccidentals(){
-    Key[] keys = new Scale(this)
+    Key[] keys = new Scale(key, isMajor() ? Scale.Quality.MAJOR : Scale.Quality.NATURAL_MINOR)
       .stream()
       .limit(7)
       .filter(k -> !k.isNone() && !k.isNatural())
@@ -51,21 +66,25 @@ public final class KeySignature{
   }
 
   public int getAccidentalCount(){
-    return (int) (new Scale(this)
+    return (int) (new Scale(key, isMajor() ? Scale.Quality.MAJOR : Scale.Quality.NATURAL_MINOR)
       .stream()
       .limit(7)
       .filter(k -> !k.isNone() && !k.isNatural())
       .count());
   }
 
-  public static KeySignature fromAccidentals(Accidental accidental, int count, Mode mode){
+  public static KeySignature fromAccidentals(Accidental accidental, int count, Quality quality){
     if(count < 0 || count > 7){
-      throw new RuntimeException("Invalid accidental count: " + count);
+      throw new EtudeException("Invalid accidental count: " + count);
+    }
+
+    if(count == 0 && (accidental != Accidental.NONE && accidental != Accidental.NATURAL)){
+      throw new EtudeException("Invalid count for accidental type: " + count + " " + accidental);
     }
 
     Key key;
     Letter letter;
-    // determine the key assuming mode is MAJOR
+    // determine the key assuming quality is MAJOR
     switch(accidental){
       case FLAT:
         letter = ORDER_OF_FLATS[Math.floorMod(count - 2, Letter.values().length)];
@@ -87,34 +106,65 @@ public final class KeySignature{
             : Accidental.NONE
         );
         break;
+      case NONE: case NATURAL:
+        if(count != 0){
+          throw new EtudeException("Invalid count for accidental type: " + count + " " + accidental);
+        }
+        letter = Letter.C;
+        key = new Key(letter);
+        break;
       default:
-        throw new RuntimeException("Invalid accidental type to create KeySignature from: " + accidental);
+        throw new EtudeException("Invalid accidental type to create KeySignature from: " + accidental);
     }
 
-    // lower key by 3 half steps if the mode is NATURAL_MINOR
-    switch(mode){
-      case MAJOR:
-        break;
-      case NATURAL_MINOR:
-        key = Key.fromOffset(
-          Math.floorMod(key.getOffset() - 3, MusicConstants.KEYS_IN_OCTAVE),
-          accidental == Accidental.FLAT
-            ? Accidental.Policy.PRIORITIZE_FLAT
-            : Accidental.Policy.PRIORITIZE_SHARP
+    KeySignature keySignature = new KeySignature(key, Quality.MAJOR);
+
+    if(quality == Quality.MINOR){
+      keySignature = keySignature.getRelative();
+    }
+
+    return keySignature;
+  }
+
+  public final KeySignature getParallel(){
+    return new KeySignature(key, isMajor() ? Quality.MINOR : Quality.MAJOR);
+  }
+
+  public final KeySignature getRelative(){
+    Key[] keys = getKeysWithAccidentals();
+    
+    /**
+    * 0 flats/sharps = NONE_OR_NATURAL
+    * flats = NONE_OR_NATURAL + FLAT
+    * sharps = NONE_OR_NATURAL + SHARP
+    */
+    ImmutablePrioritySet<Policy> policies = keys.length == 0
+      ? Policy.prioritize(Policy.NONE_OR_NATURAL)
+      : Policy.prioritize(
+          Policy.NONE_OR_NATURAL,
+          keys[0].getAccidental() == Accidental.FLAT
+            ? Policy.FLAT
+            : Policy.SHARP
         );
-        break;
-      default:
-        throw new RuntimeException("Invalid mode type to create KeySignature from: " + mode);
-    }
 
-    return new KeySignature(key, mode);
+    /**
+    * major -> minor = -3
+    * minor -> major = 3
+    */
+    return new KeySignature(
+      Key.fromOffset(
+        Math.floorMod(key.getOffset() + (isMajor() ? -3 : 3), MusicConstants.KEYS_IN_OCTAVE),
+        policies
+      ),
+      isMajor() ? Quality.MINOR : Quality.MAJOR
+    );
   }
 
   @Override
   public String toString(){
     StringBuilder builder = new StringBuilder();
     builder.append(key);
-    builder.append(mode);
+    builder.append(quality);
     return builder.toString();
   }
 
@@ -122,7 +172,7 @@ public final class KeySignature{
     return key;
   }
 
-  public final Mode getMode(){
-    return mode;
+  public final Quality getQuality(){
+    return quality;
   }
 }

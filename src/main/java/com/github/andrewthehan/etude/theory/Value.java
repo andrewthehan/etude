@@ -1,6 +1,7 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import com.github.andrewthehan.etude.exception.EtudeException;
 import com.github.andrewthehan.etude.util.RegEx;
 
 public enum Value{
@@ -23,12 +24,12 @@ public enum Value{
 
   public static final Value fromDuration(double duration){
     if(duration == 0){
-      throw new RuntimeException("Invalid duration: " + duration + " (cannot be zero)");
+      throw new EtudeException("Invalid duration: " + duration + " (cannot be zero)");
     }
     double index = Math.log(duration) / Math.log(2);
     // if index is not an integer value
     if(index % 1 != 0){
-      throw new RuntimeException("Invalid duration: " + duration + " (cannot be represented as a value)");
+      throw new EtudeException("Invalid duration: " + duration + " (cannot be represented as a value)");
     }
 
     // 1 - index due to the order of enums
@@ -37,32 +38,44 @@ public enum Value{
 
   public static final Value fromString(String valueString){
     if(valueString == null){
-      throw new RuntimeException("Invalid value string: " + valueString);
+      throw new EtudeException("Invalid value string: " + valueString);
     }
     else if(valueString.trim().isEmpty()){
-      throw new RuntimeException("Invalid value string: " + valueString + " (blank)");
+      throw new EtudeException("Invalid value string: " + valueString + " (blank)");
     }
+
+    Value value;
 
     double duration = 0;
     if(valueString.matches("\\d+\\/\\d+")){
       String[] durationStrings = RegEx.extract("\\d+\\/\\d+", valueString).split("/");
       duration = Double.parseDouble(durationStrings[0]) / Double.parseDouble(durationStrings[1]);
+      value = Value.fromDuration(duration);
     }
     else{
       try{
-        duration = Double.parseDouble(valueString);
+        value = Value.valueOf(valueString);
       }
       catch(Exception e){
-        throw new RuntimeException("Invalid value string: " + valueString + " (does not match a valid form)");
+        try{
+          duration = Double.parseDouble(valueString);
+          value = Value.fromDuration(duration);
+        }
+        catch(EtudeException ee){
+          throw ee;
+        }
+        catch(Exception ee){
+          throw new EtudeException("Invalid value string: " + valueString);
+        }
       }
     }
 
-    return Value.fromDuration(duration);
+    return value;
   }
 
   @Override
   public String toString(){
-    return String.valueOf(duration);
+    return name();
   }
 
   public final double getDuration(){

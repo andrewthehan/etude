@@ -16,19 +16,19 @@ public class LetterTest{
     Letter letter;
 
     letter = Letter.A;
-    assertEquals(letter.getOffset(), 9);
+    assertEquals(9, letter.getOffset());
     letter = Letter.B;
-    assertEquals(letter.getOffset(), 11);
+    assertEquals(11, letter.getOffset());
     letter = Letter.C;
-    assertEquals(letter.getOffset(), 0);
+    assertEquals(0, letter.getOffset());
     letter = Letter.D;
-    assertEquals(letter.getOffset(), 2);
+    assertEquals(2, letter.getOffset());
     letter = Letter.E;
-    assertEquals(letter.getOffset(), 4);
+    assertEquals(4, letter.getOffset());
     letter = Letter.F;
-    assertEquals(letter.getOffset(), 5);
+    assertEquals(5, letter.getOffset());
     letter = Letter.G;
-    assertEquals(letter.getOffset(), 7);
+    assertEquals(7, letter.getOffset());
   }
 
   @Test
@@ -40,28 +40,56 @@ public class LetterTest{
       .limit(8)
       .map(Letter::toString)
       .collect(Collectors.joining(""));
-    assertEquals(letters, "ABCDEFGA");
+    assertEquals("ABCDEFGA", letters);
+
+    letters = Letter
+      .stream(Direction.DESCENDING)
+      .limit(8)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals("AGFEDCBA", letters);
 
     letters = Letter
       .stream()
       .limit(5)
       .map(Letter::toString)
       .collect(Collectors.joining(""));
-    assertEquals(letters, "ABCDE");
+    assertEquals("ABCDE", letters);
+
+    letters = Letter
+      .stream(Direction.DESCENDING)
+      .limit(5)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals("AGFED", letters);
 
     letters = Letter
       .stream()
       .limit(16)
       .map(Letter::toString)
       .collect(Collectors.joining(""));
-    assertEquals(letters, "ABCDEFGABCDEFGAB");
+    assertEquals("ABCDEFGABCDEFGAB", letters);
+
+    letters = Letter
+      .stream(Direction.DESCENDING)
+      .limit(16)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals("AGFEDCBAGFEDCBAG", letters);
 
     letters = Letter
       .stream(Letter.C)
       .limit(10)
       .map(Letter::toString)
       .collect(Collectors.joining(""));
-    assertEquals(letters, "CDEFGABCDE");
+    assertEquals("CDEFGABCDE", letters);
+
+    letters = Letter
+      .stream(Direction.DESCENDING, Letter.C)
+      .limit(10)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals("CBAGFEDCBA", letters);
 
     letters = Letter
       .stream()
@@ -69,7 +97,15 @@ public class LetterTest{
       .limit(10)
       .map(Letter::toString)
       .collect(Collectors.joining(""));
-    assertEquals(letters, "AAAAAAAAAA");
+    assertEquals("AAAAAAAAAA", letters);
+
+    letters = Letter
+      .stream(Direction.DESCENDING)
+      .filter(l -> l == Letter.A)
+      .limit(10)
+      .map(Letter::toString)
+      .collect(Collectors.joining(""));
+    assertEquals("AAAAAAAAAA", letters);
   }
 
   @Test
@@ -80,22 +116,44 @@ public class LetterTest{
 
     it = Letter.iterator();
     for(int i = 0; i < letters.length * 2 ; ++i){
-      assertEquals(it.next(), letters[i % letters.length]);
+      assertEquals(letters[i % letters.length], it.next());
     }
 
     it = Letter.iterator(Letter.A);
     for(int i = 0; i < letters.length * 2; ++i){
-      assertEquals(it.next(), letters[i % letters.length]);
+      assertEquals(letters[i % letters.length], it.next());
     }
 
     it = Letter.iterator(Letter.C);
     for(int i = 0; i < letters.length * 2; ++i){
-      assertEquals(it.next(), letters[(i + 2) % letters.length]);
+      assertEquals(letters[(i + 2) % letters.length], it.next());
     }
 
     it = Letter.iterator(Letter.G);
     for(int i = 0; i < letters.length * 2; ++i){
-      assertEquals(it.next(), letters[(i + 6) % letters.length]);
+      assertEquals(letters[(i + 6) % letters.length], it.next());
+    }
+
+    letters = Letter.getLetters(Direction.DESCENDING);
+
+    it = Letter.iterator(Direction.DESCENDING);
+    for(int i = 0; i < letters.length * 2 ; ++i){
+      assertEquals(letters[i % letters.length], it.next());
+    }
+
+    it = Letter.iterator(Direction.DESCENDING, Letter.A);
+    for(int i = 0; i < letters.length * 2; ++i){
+      assertEquals(letters[i % letters.length], it.next());
+    }
+
+    it = Letter.iterator(Direction.DESCENDING, Letter.C);
+    for(int i = 0; i < letters.length * 2; ++i){
+      assertEquals(letters[(i + 5) % letters.length], it.next());
+    }
+
+    it = Letter.iterator(Direction.DESCENDING, Letter.G);
+    for(int i = 0; i < letters.length * 2; ++i){
+      assertEquals(letters[(i + 1) % letters.length], it.next());
     }
   }
 
@@ -104,60 +162,68 @@ public class LetterTest{
     Letter letter;
 
     letter = Letter.fromChar('A');
-    assertEquals(letter, Letter.A);
-    assertEquals(letter.toString(), "A");
+    assertEquals(Letter.A, letter);
+    assertEquals("A", letter.toString());
     letter = Letter.fromChar('a');
-    assertEquals(letter, Letter.A);
-    assertEquals(letter.toString(), "A");
+    assertEquals(Letter.A, letter);
+    assertEquals("A", letter.toString());
 
     letter = Letter.fromChar('B');
-    assertEquals(letter, Letter.B);
-    assertEquals(letter.toString(), "B");
+    assertEquals(Letter.B, letter);
+    assertEquals("B", letter.toString());
     letter = Letter.fromChar('b');
-    assertEquals(letter, Letter.B);
-    assertEquals(letter.toString(), "B");
+    assertEquals(Letter.B, letter);
+    assertEquals("B", letter.toString());
 
     letter = Letter.fromChar('C');
-    assertEquals(letter, Letter.C);
-    assertEquals(letter.toString(), "C");
+    assertEquals(Letter.C, letter);
+    assertEquals("C", letter.toString());
     letter = Letter.fromChar('c');
-    assertEquals(letter, Letter.C);
-    assertEquals(letter.toString(), "C");
+    assertEquals(Letter.C, letter);
+    assertEquals("C", letter.toString());
 
     letter = Letter.fromChar('D');
-    assertEquals(letter, Letter.D);
-    assertEquals(letter.toString(), "D");
+    assertEquals(Letter.D, letter);
+    assertEquals("D", letter.toString());
     letter = Letter.fromChar('d');
-    assertEquals(letter, Letter.D);
-    assertEquals(letter.toString(), "D");
+    assertEquals(Letter.D, letter);
+    assertEquals("D", letter.toString());
 
     letter = Letter.fromChar('E');
-    assertEquals(letter, Letter.E);
-    assertEquals(letter.toString(), "E");
+    assertEquals(Letter.E, letter);
+    assertEquals("E", letter.toString());
     letter = Letter.fromChar('e');
-    assertEquals(letter, Letter.E);
-    assertEquals(letter.toString(), "E");
+    assertEquals(Letter.E, letter);
+    assertEquals("E", letter.toString());
 
     letter = Letter.fromChar('F');
-    assertEquals(letter, Letter.F);
-    assertEquals(letter.toString(), "F");
+    assertEquals(Letter.F, letter);
+    assertEquals("F", letter.toString());
     letter = Letter.fromChar('f');
-    assertEquals(letter, Letter.F);
-    assertEquals(letter.toString(), "F");
+    assertEquals(Letter.F, letter);
+    assertEquals("F", letter.toString());
 
     letter = Letter.fromChar('G');
-    assertEquals(letter, Letter.G);
-    assertEquals(letter.toString(), "G");
+    assertEquals(Letter.G, letter);
+    assertEquals("G", letter.toString());
     letter = Letter.fromChar('g');
-    assertEquals(letter, Letter.G);
-    assertEquals(letter.toString(), "G");
+    assertEquals(Letter.G, letter);
+    assertEquals("G", letter.toString());
 
     try{
       Letter.fromChar('H');
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid letter character: H");
+      assertEquals("Invalid letter character: H", e.getMessage());
+    }
+
+    try{
+      Letter.fromChar('h');
+      fail("Expected an exception.");
+    }
+    catch(Exception e){
+      assertEquals("Invalid letter character: h", e.getMessage());
     }
 
     try{
@@ -165,7 +231,18 @@ public class LetterTest{
       fail("Expected an exception.");
     }
     catch(Exception e){
-      assertEquals(e.getMessage(), "Invalid letter character: 1");
+      assertEquals("Invalid letter character: 1", e.getMessage());
     }
+  }
+
+  @Test
+  public void testValueOf(){
+    assertEquals(Letter.A, Letter.valueOf("A"));
+    assertEquals(Letter.B, Letter.valueOf("B"));
+    assertEquals(Letter.C, Letter.valueOf("C"));
+    assertEquals(Letter.D, Letter.valueOf("D"));
+    assertEquals(Letter.E, Letter.valueOf("E"));
+    assertEquals(Letter.F, Letter.valueOf("F"));
+    assertEquals(Letter.G, Letter.valueOf("G"));
   }
 }
