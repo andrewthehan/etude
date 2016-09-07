@@ -29,6 +29,9 @@ artifacts {
 }
 
 signing {
+  required {
+    boolean signed = gradle.taskGraph.hasTask("uploadArchives")
+  }
   sign configurations.archives
 }
 
