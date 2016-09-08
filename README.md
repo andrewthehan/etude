@@ -330,8 +330,8 @@ keys = scale
  */
 System.out.print(Arrays.toString(keys)); // [G, Cbbb, Cbb, Dbb, Fbbb, Fbb, Abbb, Abb]
 
-// start the scale using A as the initial key
-scale = new Scale(Key.fromString("G").getEnharmonicEquivalent(Letter.A), Scale.Quality.HARMONIC_MINOR);
+// apply the policy on the initial key
+scale = new Scale(Key.fromString("G").getEnharmonicEquivalent(Policy.prioritize(Policy.TRIPLE_FLAT, Policy.DOUBLE_FLAT)), Scale.Quality.HARMONIC_MINOR);
 keys = scale
   .stream(Policy.prioritize(Policy.TRIPLE_FLAT, Policy.DOUBLE_FLAT))
   .limit(8)
