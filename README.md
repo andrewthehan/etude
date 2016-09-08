@@ -7,6 +7,13 @@
 
 **Requires Java 1.8.**
 
+## Links
+ - [Documentation](http://andrewthehan.github.io/etude/docs/javadoc/index.html)
+ - [Test reports](http://andrewthehan.github.io/etude/reports/tests/test/index.html)
+ - [jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0.jar)
+ - [javadoc jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0-javadoc.jar)
+ - [sources jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0-sources.jar)
+
 ## Ports
 ### Official
 **JavaScript (TypeScript)**: [etude.js](https://github.com/andrewthehan/etude.js).
@@ -30,7 +37,7 @@ dependencies {
 ```
 
 ### Local Jar
-Download the [jar](http://repo1.maven.org/maven2/com/github/andrewthehan/etude/2.0.0/).
+Download the [jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0.jar).
 
 ##### Gradle
 ```
