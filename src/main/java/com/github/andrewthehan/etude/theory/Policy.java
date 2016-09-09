@@ -10,25 +10,25 @@ import java.util.List;
 
 @FunctionalInterface
 public interface Policy extends Predicate<Key>{
-	public static final Policy NONE_OR_NATURAL = k -> k.getAccidental().getOffset() == Accidental.NONE.getOffset();
+  public static final Policy NONE_OR_NATURAL = k -> k.getAccidental().getOffset() == Accidental.NONE.getOffset();
   public static final Policy SHARP = matchAccidental(Accidental.SHARP);
   public static final Policy DOUBLE_SHARP = matchAccidental(Accidental.DOUBLE_SHARP);
   public static final Policy TRIPLE_SHARP = matchAccidental(Accidental.TRIPLE_SHARP);
-	public static final Policy SHARPS = k -> k.getAccidental().getOffset() > Accidental.NONE.getOffset();
+  public static final Policy SHARPS = k -> k.getAccidental().getOffset() > Accidental.NONE.getOffset();
   public static final Policy FLAT = matchAccidental(Accidental.FLAT);
   public static final Policy DOUBLE_FLAT = matchAccidental(Accidental.DOUBLE_FLAT);
   public static final Policy TRIPLE_FLAT = matchAccidental(Accidental.TRIPLE_FLAT);
-	public static final Policy FLATS = k -> k.getAccidental().getOffset() < Accidental.NONE.getOffset();
+  public static final Policy FLATS = k -> k.getAccidental().getOffset() < Accidental.NONE.getOffset();
 
-	public static ImmutablePrioritySet<Policy> DEFAULT_PRIORITY = Policy.prioritize(
+  public static ImmutablePrioritySet<Policy> DEFAULT_PRIORITY = Policy.prioritize(
     NONE_OR_NATURAL,
     SHARP,
     FLAT
   );
 
-	public static ImmutablePrioritySet<Policy> prioritize(Policy... policies){
-	  return ImmutablePrioritySet.of(policies);
-	}
+  public static ImmutablePrioritySet<Policy> prioritize(Policy... policies){
+    return ImmutablePrioritySet.of(policies);
+  }
 
   public static Policy matchLetter(Letter letter){
     return k -> k.getLetter() == letter;
