@@ -16,7 +16,7 @@ public enum Dynamic{
   private final String symbol;
 
   private Dynamic(String symbol){
-  	this.symbol = symbol;
+    this.symbol = symbol;
   }
 
   public Dynamic crescendo(){
@@ -51,6 +51,6 @@ public enum Dynamic{
 
   @Override
   public String toString(){
-  	return symbol;
+    return symbol;
   }
 }

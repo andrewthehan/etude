@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class RegExTest{
-	@Test
+  @Test
   public void testConstructor(){
     try{
       Constructor<RegEx> constructor = RegEx.class.getDeclaredConstructor();

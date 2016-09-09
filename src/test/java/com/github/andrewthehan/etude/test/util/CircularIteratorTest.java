@@ -54,7 +54,7 @@ public class CircularIteratorTest{
     assertTrue(doubleIt.hasNext());
   }
 
-	@Test
+  @Test
   public void testLongConstructorAndNextAndHasNext(){
     long[] longValues = new long[]{0, 1, 2};
     CircularIterator<Long> longIt = CircularIterator.of(longValues);

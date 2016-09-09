@@ -47,12 +47,12 @@ public class DynamicTest{
 
   @Test
   public void testCrescendoAndDimunuendo(){
-  	Dynamic dynamic;
+    Dynamic dynamic;
 
-  	dynamic = Dynamic.PIANISSISSIMO;
+    dynamic = Dynamic.PIANISSISSIMO;
 
     dynamic = dynamic.crescendo();
-    	assertEquals(Dynamic.PIANISSIMO, dynamic);
+    assertEquals(Dynamic.PIANISSIMO, dynamic);
 
     dynamic = dynamic.crescendo();
     assertEquals(Dynamic.PIANO, dynamic);

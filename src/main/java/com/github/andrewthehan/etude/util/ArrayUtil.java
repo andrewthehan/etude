@@ -12,20 +12,20 @@ public final class ArrayUtil {
   }
 
   public static final int[] reverse(int[] array){
-  	return IntStream.range(0, array.length).map(i -> array[(array.length - 1) - i]).toArray();
+    return IntStream.range(0, array.length).map(i -> array[(array.length - 1) - i]).toArray();
   }
 
   public static final double[] reverse(double[] array){
-  	return IntStream.range(0, array.length).mapToDouble(i -> array[(array.length - 1) - i]).toArray();
+    return IntStream.range(0, array.length).mapToDouble(i -> array[(array.length - 1) - i]).toArray();
   }
 
   public static final long[] reverse(long[] array){
-  	return IntStream.range(0, array.length).mapToLong(i -> array[(array.length - 1) - i]).toArray();
+    return IntStream.range(0, array.length).mapToLong(i -> array[(array.length - 1) - i]).toArray();
   }
 
   @SuppressWarnings("unchecked")
   public static final <T> T[] reverse(T[] array){
-  	return IntStream.range(0, array.length).mapToObj(i -> array[(array.length - 1) - i]).toArray(
+    return IntStream.range(0, array.length).mapToObj(i -> array[(array.length - 1) - i]).toArray(
       size -> (T[]) Array.newInstance(array.getClass().getComponentType(), size)
     );
   }

@@ -33,21 +33,21 @@ public class StreamUtilTest{
 
   @Test
   public void testFromIterator(){
-  	Iterator<String> it;
+    Iterator<String> it;
 
-  	it = Stream.<String>empty().iterator();
-  	assertFalse(it.hasNext());
+    it = Stream.<String>empty().iterator();
+    assertFalse(it.hasNext());
 
-  	it = Stream.of("A", "B", "C").iterator();
-  	assertEquals("A", it.next());
-  	assertEquals("B", it.next());
-  	assertEquals("C", it.next());
-  	assertFalse(it.hasNext());
-  	
-  	it = Stream.of("A", "A", "A").iterator();
-  	assertEquals("A", it.next());
-  	assertEquals("A", it.next());
-  	assertEquals("A", it.next());
-  	assertFalse(it.hasNext());
+    it = Stream.of("A", "B", "C").iterator();
+    assertEquals("A", it.next());
+    assertEquals("B", it.next());
+    assertEquals("C", it.next());
+    assertFalse(it.hasNext());
+
+    it = Stream.of("A", "A", "A").iterator();
+    assertEquals("A", it.next());
+    assertEquals("A", it.next());
+    assertEquals("A", it.next());
+    assertFalse(it.hasNext());
   }
 }
