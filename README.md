@@ -8,13 +8,15 @@
 **Requires Java 1.8.**
 
 ## Links
- - [Documentation](http://andrewthehan.github.io/etude/docs/javadoc/index.html)
- - [Test reports](http://andrewthehan.github.io/etude/reports/tests/test/index.html)
+ - [Documentation](http://andrewthehan.github.io/etude/docs/javadoc/)
+ - [Test reports](http://andrewthehan.github.io/etude/reports/tests/test/)
  - [jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0.jar)
  - [javadoc jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0-javadoc.jar)
  - [sources jar](http://andrewthehan.github.io/etude/libs/etude-2.0.0-sources.jar)
 
 ## Ports
+All official ports will follow the same major and minor version increments.
+
 ### Official
 **JavaScript (TypeScript)**: [etude.js](https://github.com/andrewthehan/etude.js).
 
