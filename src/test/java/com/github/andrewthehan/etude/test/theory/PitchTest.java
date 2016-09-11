@@ -283,6 +283,15 @@ public class PitchTest{
     assertEquals("C5(60)", pitch.getHigherPitch(Key.fromString("C")).toString());
     assertEquals("C3(36)", pitch.getLowerPitch(Key.fromString("C")).toString());
 
+    assertEquals("Dbb5(60)", pitch.getHigherPitch(Key.fromString("Dbb")).toString());
+    assertEquals("Dbb3(36)", pitch.getLowerPitch(Key.fromString("Dbb")).toString());
+    assertEquals("Cbb5(58)", pitch.getHigherPitch(Key.fromString("Cbb")).toString());
+    assertEquals("Cbb4(46)", pitch.getLowerPitch(Key.fromString("Cbb")).toString());
+    assertEquals("Cx4(50)", pitch.getHigherPitch(Key.fromString("Cx")).toString());
+    assertEquals("Cx3(38)", pitch.getLowerPitch(Key.fromString("Cx")).toString());
+    assertEquals("B#4(60)", pitch.getHigherPitch(Key.fromString("B#")).toString());
+    assertEquals("B#2(36)", pitch.getLowerPitch(Key.fromString("B#")).toString());
+
     String sorted = Stream
       .of("C4", "G4", "D4", "A4", "E4", "B4", "F4")
       .map(Pitch::fromString)

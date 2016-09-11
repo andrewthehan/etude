@@ -92,16 +92,18 @@ public class Pitch implements Comparable<Pitch>{
 
   public final Pitch getHigherPitch(Key key){
     Pitch pitch = new Pitch(key, octave);
-    if(!isLowerThan(pitch)){
-      pitch = new Pitch(key, octave + 1);
+    // should never loop more than twice
+    while(!isLowerThan(pitch)){
+      pitch = new Pitch(key, pitch.getOctave() + 1);
     }
     return pitch;
   }
 
   public final Pitch getLowerPitch(Key key){
     Pitch pitch = new Pitch(key, octave);
-    if(!isHigherThan(pitch)){
-      pitch = new Pitch(key, octave - 1);
+    // should never loop more than twice
+    while(!isHigherThan(pitch)){
+      pitch = new Pitch(key, pitch.getOctave() - 1);
     }
     return pitch;
   }
