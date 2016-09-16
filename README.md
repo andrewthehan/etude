@@ -10,9 +10,9 @@
 ## Links
  - [Documentation](http://andrewthehan.github.io/etude/docs/javadoc/)
  - [Test reports](http://andrewthehan.github.io/etude/reports/tests/test/)
- - [jar](http://andrewthehan.github.io/etude/libs/etude-2.0.1.jar)
- - [javadoc jar](http://andrewthehan.github.io/etude/libs/etude-2.0.1-javadoc.jar)
- - [sources jar](http://andrewthehan.github.io/etude/libs/etude-2.0.1-sources.jar)
+ - [jar](http://andrewthehan.github.io/etude/libs/etude-2.1.0.jar)
+ - [javadoc jar](http://andrewthehan.github.io/etude/libs/etude-2.1.0-javadoc.jar)
+ - [sources jar](http://andrewthehan.github.io/etude/libs/etude-2.1.0-sources.jar)
 
 ## Ports
 All official ports will follow the same major and minor version increments.
@@ -25,7 +25,7 @@ All official ports will follow the same major and minor version increments.
 ##### Gradle
 ```
 dependencies {
-  compile 'com.github.andrewthehan:etude:2.0.1'
+  compile 'com.github.andrewthehan:etude:2.1.0'
 }
 ```
 
@@ -34,17 +34,17 @@ dependencies {
 <dependency>
   <groupId>com.github.andrewthehan</groupId>
   <artifactId>etude</artifactId>
-  <version>2.0.1</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 
 ### Local Jar
-Download the [jar](http://andrewthehan.github.io/etude/libs/etude-2.0.1.jar).
+Download the [jar](http://andrewthehan.github.io/etude/libs/etude-2.1.0.jar).
 
 ##### Gradle
 ```
 dependencies {
-  compile files('path/to/file/etude-2.0.1.jar')
+  compile files('path/to/file/etude-2.1.0.jar')
 }
 ```
 
@@ -53,9 +53,9 @@ dependencies {
 <dependency>
   <groupId>com.github.andrewthehan</groupId>
   <artifactId>etude</artifactId>
-  <version>2.0.1</version>
+  <version>2.1.0</version>
   <scope>system</scope>
-  <systemPath>path/to/file/etude-2.0.1.jar</systemPath>
+  <systemPath>path/to/file/etude-2.1.0.jar</systemPath>
 </dependency>
 ```
 

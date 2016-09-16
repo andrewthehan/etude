@@ -132,13 +132,29 @@ public final class Scale{
     return InfiniteIterator.of(key, previous -> previous.step(it.next(), policies));
   }
 
+  public final Key[] getKeys(){
+    return getKeys(Direction.DEFAULT, getDefaultPolicy(Direction.DEFAULT));
+  }
+
+  public final Key[] getKeys(Direction direction){
+    return getKeys(direction, getDefaultPolicy(direction));
+  }
+
+  public final Key[] getKeys(ImmutablePrioritySet<Policy> policies){
+    return getKeys(Direction.DEFAULT, policies);
+  }
+
+  public final Key[] getKeys(Direction direction, ImmutablePrioritySet<Policy> policies){
+    return stream(direction, policies).limit(quality.getStepPattern(direction).length).toArray(Key[]::new);
+  }
+
   @Override
   public String toString(){
     return toString(Direction.DEFAULT);
   }
 
   public String toString(Direction direction){
-    return Arrays.toString(stream(direction).limit(quality.getStepPattern(direction).length).toArray(Key[]::new));
+    return Arrays.toString(getKeys(direction));
   }
 
   public final Key getKey(){
