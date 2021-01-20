@@ -4,14 +4,17 @@ package com.github.andrewthehan.etude.util;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CircularIterator<E> implements Iterator<E>{
+  private static final int DEFAULT_INCREMENT_AMOUNT = 1;
+
   private final E[] values;
   private int i;
 
   private CircularIterator(E[] values, int startingIndex){
     this.values = values;
-    i = startingIndex;
+    i = startingIndex - getIncrementAmount();
   }
 
   public static final CircularIterator<Integer> of(int[] values){
@@ -19,14 +22,7 @@ public class CircularIterator<E> implements Iterator<E>{
   }
 
   public static final CircularIterator<Integer> of(int[] values, int startingIndex){
-    return new CircularIterator<Integer>(null, startingIndex){
-      private final Integer[] innerValues = ArrayUtil.boxed(values);
-
-      @Override
-      public Integer[] getValues(){
-        return innerValues;
-      }
-    };
+    return CircularIterator.of(ArrayUtil.boxed(values), startingIndex);
   }
 
   public static final CircularIterator<Double> of(double[] values){
@@ -34,14 +30,7 @@ public class CircularIterator<E> implements Iterator<E>{
   }
 
   public static final CircularIterator<Double> of(double[] values, int startingIndex){
-    return new CircularIterator<Double>(null, startingIndex){
-      private final Double[] innerValues = ArrayUtil.boxed(values);
-
-      @Override
-      public Double[] getValues(){
-        return innerValues;
-      }
-    };
+    return CircularIterator.of(ArrayUtil.boxed(values), startingIndex);
   }
 
   public static final CircularIterator<Long> of(long[] values){
@@ -49,14 +38,7 @@ public class CircularIterator<E> implements Iterator<E>{
   }
 
   public static final CircularIterator<Long> of(long[] values, int startingIndex){
-    return new CircularIterator<Long>(null, startingIndex){
-      private final Long[] innerValues = ArrayUtil.boxed(values);
-
-      @Override
-      public Long[] getValues(){
-        return innerValues;
-      }
-    };
+    return CircularIterator.of(ArrayUtil.boxed(values), startingIndex);
   }
 
   public static final <E> CircularIterator<E> of(E[] values){
@@ -67,7 +49,7 @@ public class CircularIterator<E> implements Iterator<E>{
     List<E> list = Arrays.asList(values);
     // contains uses .equals(), not ==
     if(!list.contains(startingElement)){
-      throw new RuntimeException("Values doesn't contain starting element: " + startingElement);
+      throw new NoSuchElementException();
     }
     return new CircularIterator<E>(values, list.indexOf(startingElement));
   }
@@ -76,20 +58,30 @@ public class CircularIterator<E> implements Iterator<E>{
     return new CircularIterator<E>(values, startingIndex);
   }
 
+  public final CircularIterator<E> reverse(){
+    int amount = getIncrementAmount();
+    return new CircularIterator<E>(values, i + getIncrementAmount()){
+      @Override
+      protected int getIncrementAmount(){
+        return -amount;
+      }
+    };
+  }
+
   public E[] getValues(){
     return values;
   }
 
-  protected E getCurrentValue(){
-    return getValues()[i];
+  public int getCycleLength(){
+    return getValues().length;
+  }
+
+  protected int getIncrementAmount(){
+    return DEFAULT_INCREMENT_AMOUNT;
   }
 
   protected void increment(){
-    i = (i + 1) % getCycleLength();
-  }
-
-  public int getCycleLength(){
-    return getValues().length;
+    i = Math.floorMod(i + getIncrementAmount(), getCycleLength());
   }
 
   @Override
@@ -98,10 +90,9 @@ public class CircularIterator<E> implements Iterator<E>{
   }
 
   @Override
-  public E next(){
-    E e = getCurrentValue();
+  public final E next(){
     increment();
-    return e;
+    return getValues()[i];
   }
 
   @Override

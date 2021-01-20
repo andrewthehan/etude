@@ -1,0 +1,24 @@
+- make things that return arrays, return clone to prevent accidental mutations
+- dynamics
+- interval.isEnharmonic
+- interval simple vs compound
+- interval.inverse
+- keysignature member fields is array of keys instead of key and quality
+- modify a lot of methods in keysignature
+- mode has ascending and descending
+- add has apply(keysignature) method
+- change policy to match changes to accidental
+- optional<accidental>, remove accidental.none
+- enum.size to optimize calls to enum.values().length
+- move inversions into chords class
+- chord streams
+- make scale use pitch instead of key
+- tempo string change
+- value changes to allow for dotted types and tuplets
+- change a lot of methods to return Exceptional<> instead of returning null or throwing
+- change all fromString to use EtudeParser
+- optimize infiniteiterator hasNext and next
+
+
+TODO
+- chord with triple flat problems Chord.Builder#add and Pitch#step

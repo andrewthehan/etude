@@ -1,7 +1,9 @@
 
 package com.github.andrewthehan.etude.theory;
 
-public class Tempo{
+import java.util.Objects;
+
+public final class Tempo{
   /*
    * Values based on the mean of the values given in
    * https://en.wikipedia.org/wiki/Tempo
@@ -37,7 +39,7 @@ public class Tempo{
   }
 
   public Tempo(int bpm, Value beatValue){
-    this(bpm, beatValue, beatValue + " = " + bpm);
+    this(bpm, beatValue, "[" + beatValue + "] = " + bpm);
   }
 
   public Tempo(int bpm, String tempoMarking){
@@ -48,6 +50,32 @@ public class Tempo{
     this.bpm = bpm;
     this.beatValue = beatValue;
     this.tempoMarking = tempoMarking;
+  }
+
+  @Override
+  public final int hashCode(){
+    return Objects.hash(bpm, beatValue, tempoMarking);
+  }
+
+  @Override
+  public final boolean equals(Object other){
+    if(!(other instanceof Tempo)){
+      return false;
+    }
+    if(other == this){
+      return true;
+    }
+
+    Tempo otherTempo = (Tempo) other;
+
+    return Objects.deepEquals(
+      new Object[]{
+        bpm, beatValue, tempoMarking
+      },
+      new Object[]{
+        otherTempo.getBPM(), otherTempo.getBeatValue(), otherTempo.getTempoMarking()
+      }
+    );
   }
 
   public final int getBPM(){

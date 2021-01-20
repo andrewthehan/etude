@@ -1,178 +1,196 @@
 
 package com.github.andrewthehan.etude.theory;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+
 import com.github.andrewthehan.etude.exception.EtudeException;
+import com.github.andrewthehan.etude.util.Exceptional;
 import com.github.andrewthehan.etude.util.ImmutablePrioritySet;
 
-import java.util.stream.Stream;
-import java.util.Arrays;
-import java.util.List;
-
-public final class KeySignature{
-  public enum Quality{
+public final class KeySignature {
+  public enum Quality {
     MAJOR, MINOR;
+
+    public static final int SIZE = Quality.values().length;
   }
 
-  public static final Letter[] ORDER_OF_FLATS = "BEADGCF".chars().mapToObj(i -> Letter.fromChar((char) i)).toArray(Letter[]::new);
-  public static final Letter[] ORDER_OF_SHARPS = "FCGDAEB".chars().mapToObj(i -> Letter.fromChar((char) i)).toArray(Letter[]::new);
-  private final Key key;
-  private final Quality quality;
+  private static final int RELATIVE_MAJOR_TO_MINOR_DISTANCE = -3;
 
-  public KeySignature(Key key, Quality quality){
-    this.key = key;
-    this.quality = quality;
-  }
+  private static final Letter[] ORDER_OF_FLATS = { Letter.B, Letter.E, Letter.A, Letter.D, Letter.G, Letter.C,
+      Letter.F };
+  private static final Letter[] ORDER_OF_SHARPS = { Letter.F, Letter.C, Letter.G, Letter.D, Letter.A, Letter.E,
+      Letter.B };
 
-  public boolean isMajor(){
-    return quality == Quality.MAJOR;
-  }
+  /**
+   * Represents the accidentals in the order that they appear in notation. Each
+   * key must have an accidental that is not null.
+   *
+   * Ex. [F#, C#] First accidental is a sharp on F. Second accidental is a sharp
+   * on C.
+   */
+  private final Key[] accidentals;
 
-  public boolean isMinor(){
-    return quality == Quality.MINOR;
-  }
-
-  public final Degree degreeOf(Key key){
-    int difference = Math.floorMod(key.getLetter().ordinal() - this.key.getLetter().ordinal(), Letter.values().length);
-    return Degree.fromValue(difference + 1);
-  }
-
-  public final Key keyOf(Degree degree){
-    List<Letter> list = Letter.asList(key.getLetter());
-    Key key = new Key(list.get(degree.getValue() - 1));
-    return key.apply(this);
-  }
-
-  public Key[] getKeysWithAccidentals(){
-    Key[] keys = new Scale(key, isMajor() ? Scale.Quality.MAJOR : Scale.Quality.NATURAL_MINOR)
-      .stream()
-      .limit(7)
-      .filter(k -> !k.isNone() && !k.isNatural())
-      .toArray(Key[]::new);
-    if(keys.length != 0){
-      List<Letter> ordered;
-      switch(keys[0].getAccidental()){
-        case FLAT: case DOUBLE_FLAT: case TRIPLE_FLAT:
-          ordered = Arrays.asList(ORDER_OF_FLATS);
-          break;
-        case SHARP: case DOUBLE_SHARP: case TRIPLE_SHARP:
-          ordered = Arrays.asList(ORDER_OF_SHARPS);
-          break;
-        default:
-          throw new AssertionError();
-      }
-      Arrays.sort(keys, (a, b) -> Integer.compare(ordered.indexOf(a.getLetter()), ordered.indexOf(b.getLetter())));
-    }
-    return keys;
-  }
-
-  public int getAccidentalCount(){
-    return (int) (new Scale(key, isMajor() ? Scale.Quality.MAJOR : Scale.Quality.NATURAL_MINOR)
-      .stream()
-      .limit(7)
-      .filter(k -> !k.isNone() && !k.isNatural())
-      .count());
-  }
-
-  public static KeySignature fromAccidentals(Accidental accidental, int count, Quality quality){
-    if(count < 0 || count > 7){
-      throw new EtudeException("Invalid accidental count: " + count);
+  public KeySignature(Key[] accidentals) {
+    if (Arrays.stream(accidentals).map(Key::getAccidental).anyMatch(a -> a.map(Accidental::getOffset).orElse(0) == 0)) {
+      throw EtudeException.forInvalid(KeySignature.class, Arrays.toString(accidentals), "null or Accidental.NATURAL");
+    } else if (accidentals.length != Arrays.stream(accidentals).map(Key::getLetter).distinct().count()) {
+      throw EtudeException.forInvalid(KeySignature.class, Arrays.toString(accidentals),
+          "all letters should be distinct");
     }
 
-    if(count == 0 && (accidental != Accidental.NONE && accidental != Accidental.NATURAL)){
-      throw new EtudeException("Invalid count for accidental type: " + count + " " + accidental);
+    this.accidentals = accidentals;
+  }
+
+  public final int getAccidentalCount() {
+    return accidentals.length;
+  }
+
+  public final Optional<Accidental> getAccidentalFor(Letter letter) {
+    return Arrays.stream(accidentals).filter(k -> k.getLetter() == letter).map(Key::getAccidental).findFirst()
+        .orElseGet(Optional::empty);
+  }
+
+  public static final Letter[] getOrderOfFlats() {
+    return KeySignature.getOrderOfFlats(Letter.SIZE);
+  }
+
+  public static final Letter[] getOrderOfFlats(int count) {
+    return Arrays.copyOfRange(KeySignature.ORDER_OF_FLATS, 0, count);
+  }
+
+  public static final Letter[] getOrderOfSharps() {
+    return KeySignature.getOrderOfSharps(Letter.SIZE);
+  }
+
+  public static final Letter[] getOrderOfSharps(int count) {
+    return Arrays.copyOfRange(KeySignature.ORDER_OF_SHARPS, 0, count);
+  }
+
+  public static final Exceptional<Key> getKeyFor(Accidental accidental, int count, Quality quality) {
+    if (count < 0 || count > Letter.SIZE) {
+      return Exceptional.empty(EtudeException.forInvalid(KeySignature.class, count, "out of range"));
+    } else if (count == 0 ^ (accidental == null || accidental == Accidental.NATURAL)) {
+      return Exceptional.empty(EtudeException.forIllegalArgument(KeySignature.class, accidental,
+          "key signature with 0 accidentals should have null or Accidental.NATURAL"));
     }
 
     Key key;
     Letter letter;
     // determine the key assuming quality is MAJOR
-    switch(accidental){
+    switch (accidental == null ? Accidental.NATURAL : accidental) {
       case FLAT:
-        letter = ORDER_OF_FLATS[Math.floorMod(count - 2, Letter.values().length)];
-        key = new Key(
-          letter,
-          // accidental; if flats for key signature contain the letter, make the key flat
-          Arrays.stream(ORDER_OF_FLATS).limit(count).filter(l -> l == letter).findFirst().isPresent()
-            ? Accidental.FLAT
-            : Accidental.NONE
-        );
+        letter = ORDER_OF_FLATS[Math.floorMod(count - 2, Letter.SIZE)];
+        key = new Key(letter,
+            // accidental; if flats for key signature contain the letter, make the key flat
+            Arrays.stream(ORDER_OF_FLATS).limit(count).anyMatch(l -> l == letter) ? Accidental.FLAT : null);
         break;
       case SHARP:
-        letter = ORDER_OF_SHARPS[Math.floorMod(count + 1, Letter.values().length)];
-        key = new Key(
-          letter,
-          // accidental; if sharps for key signature contain the letter, make the key sharp
-          Arrays.stream(ORDER_OF_SHARPS).limit(count).filter(l -> l == letter).findFirst().isPresent()
-            ? Accidental.SHARP
-            : Accidental.NONE
-        );
+        letter = ORDER_OF_SHARPS[Math.floorMod(count + 1, Letter.SIZE)];
+        key = new Key(letter,
+            // accidental; if sharps for key signature contain the letter, make the key
+            // sharp
+            Arrays.stream(ORDER_OF_SHARPS).limit(count).anyMatch(l -> l == letter) ? Accidental.SHARP : null);
         break;
-      case NONE: case NATURAL:
-        if(count != 0){
-          throw new EtudeException("Invalid count for accidental type: " + count + " " + accidental);
-        }
+      case NATURAL:
         letter = Letter.C;
         key = new Key(letter);
         break;
       default:
-        throw new EtudeException("Invalid accidental type to create KeySignature from: " + accidental);
+        return Exceptional.empty(EtudeException.forIllegalArgument(KeySignature.class, accidental,
+            "should use null, Accidental.NATURAL, Accidental.FLAT, or Accidental.SHARP for key signatures"));
     }
 
-    KeySignature keySignature = new KeySignature(key, Quality.MAJOR);
+    if (quality == Quality.MINOR) {
+      ImmutablePrioritySet<Policy> policies = count == 0 ? Policy.prioritize(Policy.NONE_OR_NATURAL)
+          : Policy.prioritize(Policy.NONE_OR_NATURAL, accidental == Accidental.FLAT ? Policy.FLAT : Policy.SHARP);
 
-    if(quality == Quality.MINOR){
-      keySignature = keySignature.getRelative();
+      Exceptional<Key> optionalKey = key.step(RELATIVE_MAJOR_TO_MINOR_DISTANCE, policies);
+      if (!optionalKey.isPresent()) {
+        throw new AssertionError();
+      }
+      key = optionalKey.get();
     }
 
-    return keySignature;
+    return Exceptional.of(key);
   }
 
-  public final KeySignature getParallel(){
-    return new KeySignature(key, isMajor() ? Quality.MINOR : Quality.MAJOR);
+  public static final Exceptional<KeySignature> fromAccidentals(Accidental accidental, int count) {
+    if (count < 0 || count > Letter.SIZE) {
+      return Exceptional.empty(EtudeException.forInvalid(KeySignature.class, count, "out of range"));
+    } else if (count == 0 ^ (accidental == null || accidental == Accidental.NATURAL)) {
+      return Exceptional.empty(EtudeException.forIllegalArgument(KeySignature.class, accidental,
+          "key signature with 0 accidentals should have null or Accidental.NATURAL"));
+    }
+
+    Letter[] letters;
+    switch (accidental == null ? Accidental.NATURAL : accidental) {
+      case FLAT:
+        letters = KeySignature.getOrderOfFlats(count);
+        break;
+      case SHARP:
+        letters = KeySignature.getOrderOfSharps(count);
+        break;
+      case NATURAL:
+        letters = new Letter[0];
+        break;
+      default:
+        return Exceptional.empty(EtudeException.forIllegalArgument(KeySignature.class, accidental,
+            "should use null, Accidental.NATURAL, Accidental.FLAT, or Accidental.SHARP for key signatures"));
+    }
+
+    Key[] accidentals = Arrays.stream(letters).map(l -> new Key(l, accidental)).toArray(Key[]::new);
+
+    return Exceptional.of(new KeySignature(accidentals));
   }
 
-  public final KeySignature getRelative(){
-    Key[] keys = getKeysWithAccidentals();
-    
-    /**
-    * 0 flats/sharps = NONE_OR_NATURAL
-    * flats = NONE_OR_NATURAL + FLAT
-    * sharps = NONE_OR_NATURAL + SHARP
-    */
-    ImmutablePrioritySet<Policy> policies = keys.length == 0
-      ? Policy.prioritize(Policy.NONE_OR_NATURAL)
-      : Policy.prioritize(
-          Policy.NONE_OR_NATURAL,
-          keys[0].getAccidental() == Accidental.FLAT
-            ? Policy.FLAT
-            : Policy.SHARP
-        );
-
-    /**
-    * major -> minor = -3
-    * minor -> major = 3
-    */
-    return new KeySignature(
-      Key.fromOffset(
-        Math.floorMod(key.getOffset() + (isMajor() ? -3 : 3), MusicConstants.KEYS_IN_OCTAVE),
-        policies
-      ),
-      isMajor() ? Quality.MINOR : Quality.MAJOR
-    );
+  public static final KeySignature fromKey(Key key, Quality quality) {
+    // arbitrary octave
+    Key[] accidentals = new Scale(new Pitch(key, 4),
+        quality == Quality.MAJOR ? Scale.Quality.MAJOR : Scale.Quality.NATURAL_MINOR).stream().limit(Letter.SIZE)
+            .map(Pitch::getKey).filter(k -> k.hasAccidental() && !k.isNatural()).toArray(Key[]::new);
+    if (accidentals.length != 0) {
+      accidentals[0].getAccidental().filter(a -> a == Accidental.FLAT || a == Accidental.SHARP).map(a -> {
+        switch (a) {
+          case FLAT:
+            return Arrays.asList(ORDER_OF_FLATS);
+          case SHARP:
+            return Arrays.asList(ORDER_OF_SHARPS);
+          default:
+            throw new AssertionError();
+        }
+      }).ifPresent(ordered -> Arrays.sort(accidentals,
+          (a, b) -> Integer.compare(ordered.indexOf(a.getLetter()), ordered.indexOf(b.getLetter()))));
+    }
+    return new KeySignature(accidentals);
   }
 
   @Override
-  public String toString(){
-    StringBuilder builder = new StringBuilder();
-    builder.append(key);
-    builder.append(quality);
-    return builder.toString();
+  public final String toString() {
+    return Arrays.toString(accidentals);
   }
 
-  public final Key getKey(){
-    return key;
+  @Override
+  public final int hashCode() {
+    return Objects.hash((Object) accidentals);
   }
 
-  public final Quality getQuality(){
-    return quality;
+  @Override
+  public final boolean equals(Object other) {
+    if (!(other instanceof KeySignature)) {
+      return false;
+    }
+    if (other == this) {
+      return true;
+    }
+
+    KeySignature otherKeySignature = (KeySignature) other;
+
+    return Objects.deepEquals(accidentals, otherKeySignature.getAccidentals());
+  }
+
+  public final Key[] getAccidentals() {
+    return accidentals;
   }
 }

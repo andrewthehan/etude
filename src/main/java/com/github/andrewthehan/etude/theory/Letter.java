@@ -3,6 +3,7 @@ package com.github.andrewthehan.etude.theory;
 
 import com.github.andrewthehan.etude.exception.EtudeException;
 import com.github.andrewthehan.etude.util.CircularIterator;
+import com.github.andrewthehan.etude.util.Exceptional;
 import com.github.andrewthehan.etude.util.StreamUtil;
 
 import java.util.stream.Stream;
@@ -24,6 +25,8 @@ public enum Letter{
    *   - E4: 48 + 4 == 52 == E4's program number
    */
   A(9), B(11), C(0), D(2), E(4), F(5), G(7);
+
+  public static final int SIZE = Letter.values().length;
 
   private final int offset;
 
@@ -101,13 +104,14 @@ public enum Letter{
   }
 
   public static final boolean isValid(char letterChar){
-    return (letterChar >= 'A' && letterChar <= 'G') || (letterChar >= 'a' && letterChar <= 'g'); 
+    char upperCase = Character.toUpperCase(letterChar);
+    return upperCase >= 'A' && upperCase <= 'G'; 
   }
 
-  public static final Letter fromChar(char letterChar){
-    if(!Letter.isValid(letterChar)){
-      throw new EtudeException("Invalid letter character: " + letterChar);
-    }
-    return Letter.values()[Character.toUpperCase(letterChar) - 'A'];
+  public static final Exceptional<Letter> fromChar(char letterChar){
+    return Exceptional
+      .of(letterChar)
+      .filter(Letter::isValid, EtudeException.forInvalid(Letter.class, letterChar))
+      .map(c -> Letter.values()[Character.toUpperCase(letterChar) - 'A']);
   }
 }

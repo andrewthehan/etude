@@ -1,26 +1,50 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
+apply plugin: "java"
+apply plugin: "maven"
+apply plugin: "signing"
 
 group = "com.github.andrewthehan"
 archivesBaseName = "etude"
-version = "2.1.0"
+version = "3.0.0-SNAPSHOT"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+test {
+  testLogging.showStandardStreams = true
+}
 
 repositories {
   mavenCentral()
 }
 
 dependencies {
-  testCompile 'junit:junit:4.12'
+  testCompile "junit:junit:4.12"
 }
 
+tasks.withType(JavaCompile) {
+  options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+task generateJavaDoc(type: Javadoc) {
+  source = sourceSets.main.allJava
+  destinationDir = file("$rootDir/docs/javadoc")
+  options.noTimestamp = true
+}
+
+build.finalizedBy generateJavaDoc
+
+task customClean(type: Delete) {
+  delete "docs"
+}
+
+clean.finalizedBy customClean
+
 task javadocJar(type: Jar) {
-  classifier = 'javadoc'
+  classifier = "javadoc"
   from javadoc
 }
 
 task sourcesJar(type: Jar) {
-  classifier = 'sources'
+  classifier = "sources"
   from sourceSets.main.allSource
 }
 
@@ -49,29 +73,29 @@ uploadArchives {
       }
 
       pom.project {
-        name 'etude'
-        packaging 'jar'
-        description 'Java Music Theory API'
-        url 'https://github.com/andrewthehan/etude'
+        name "etude"
+        packaging "jar"
+        description "Java Music Theory Library"
+        url "https://github.com/andrewthehan/etude"
 
         scm {
-          connection 'scm:git:git://github.com/andrewthehan/etude.git'
-          developerConnection 'scm:git:ssh://github.com:andrewthehan/etude.git'
-          url 'http://github.com/andrewthehan/etude/tree/master'
+          connection "scm:git:git://github.com/andrewthehan/etude.git"
+          developerConnection "scm:git:ssh://github.com:andrewthehan/etude.git"
+          url "http://github.com/andrewthehan/etude/tree/master"
         }
 
         licenses {
           license {
-            name 'MIT License'
-            url 'http://www.opensource.org/licenses/mit-license.php'
+            name "MIT License"
+            url "http://www.opensource.org/licenses/mit-license.php"
           }
         }
 
         developers {
           developer {
-            id 'andrewthehan'
-            name 'Andrew Han'
-            email 'andrewthehan@gmail.com'
+            id "andrewthehan"
+            name "Andrew Han"
+            email "andrewthehan@gmail.com"
           }
         }
       }

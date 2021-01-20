@@ -2,20 +2,23 @@
 package com.github.andrewthehan.etude.theory;
 
 import com.github.andrewthehan.etude.exception.EtudeException;
+import com.github.andrewthehan.etude.util.Exceptional;
 
-import java.util.Arrays;
-
-public enum Degree{
+public enum Degree {
   TONIC, SUPERTONIC, MEDIANT, SUBDOMINANT, DOMINANT, SUBMEDIANT, LEADING_TONE;
 
-  public final static Degree fromValue(int value){
-    if(value < 1 || value > Degree.values().length){
-      throw new EtudeException("Invalid value: " + value);
-    }
-    return Degree.values()[value - 1];
+  public static final int SIZE = Degree.values().length;
+
+  public static final boolean isValid(int value) {
+    return 1 <= value && value <= Degree.SIZE;
   }
 
-  public final int getValue(){
+  public static final Exceptional<Degree> fromValue(int value) {
+    return Exceptional.of(value).filter(Degree::isValid, EtudeException.forInvalid(Degree.class, value, "out of range"))
+        .map(i -> Degree.values()[i - 1]);
+  }
+
+  public final int getValue() {
     return ordinal() + 1;
   }
 }

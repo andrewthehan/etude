@@ -1,51 +1,45 @@
 
 package com.github.andrewthehan.etude.theory;
 
-import com.github.andrewthehan.etude.exception.EtudeException;
+import java.util.Objects;
 
-/*
- * Pitch with the concept of value
- */
-public final class Note{
+import com.github.andrewthehan.etude.exception.EtudeException;
+import com.github.andrewthehan.etude.util.EtudeParser;
+import com.github.andrewthehan.etude.util.Exceptional;
+
+public final class Note {
   private final Pitch pitch;
   private final Value value;
 
-  public Note(Pitch pitch, Value value){
+  public Note(Pitch pitch, Value value) {
     this.pitch = pitch;
     this.value = value;
   }
 
-  public static final Note fromString(String noteString){
-    if(noteString == null){
-      throw new EtudeException("Invalid note string: " + noteString);
+  public final Note apply(KeySignature keySignature) {
+    Pitch pitch = this.pitch.apply(keySignature);
+    if (this.pitch == pitch) {
+      return this;
     }
-    else if(noteString.trim().isEmpty()){
-      throw new EtudeException("Invalid note string: " + noteString + " (blank)");
-    }
-
-    String[] split = noteString.split("\\[");
-    if(split.length < 2 || split[0].trim().isEmpty() || split[1].trim().isEmpty()){
-      throw new EtudeException("Invalid note string: " + noteString + " (missing information)");
-    }
-    else if(split.length > 2){
-      throw new EtudeException("Invalid note string: " + noteString + " (contains extra information)");
-    }
-
-    Pitch pitch = Pitch.fromString(split[0]);
-
-    if(!split[1].contains("]")){
-      throw new EtudeException("Invalid note string: " + noteString + " (missing closing bracket)");
-    }
-    else if(!split[1].endsWith("]")){
-      throw new EtudeException("Invalid note string: " + noteString + " (contains extra information)");
-    }
-
-    Value value = Value.fromString(split[1].substring(0, split[1].length() - 1));
     return new Note(pitch, value);
   }
 
+  public static final Exceptional<Note> fromString(String noteString) {
+    return EtudeParser.of(noteString).filter(Objects::nonNull, EtudeException.forNull(Note.class))
+        .map(s -> s.split("\\["))
+        .filter(s -> s.length >= 2, EtudeException.forInvalid(Note.class, noteString, "missing information"))
+        .filter(s -> s.length <= 2, EtudeException.forInvalid(Note.class, noteString, "contains extra information"))
+        .filter(s -> !s[0].trim().isEmpty() && !s[1].trim().isEmpty(),
+            EtudeException.forInvalid(Note.class, noteString, "missing information"))
+        .filter(s -> s[1].contains("]"), EtudeException.forInvalid(Note.class, noteString, "missing closing bracket"))
+        .filter(s -> s[1].endsWith("]"),
+            EtudeException.forInvalid(Note.class, noteString, "contains extra information"))
+        .parse(s -> Pitch.fromString(s[0])).parse(s -> Value.fromString(s[1].substring(0, s[1].length() - 1)))
+        .get(a -> new Note((Pitch) a[0], (Value) a[1]));
+  }
+
   @Override
-  public String toString(){
+  public final String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append(pitch);
     builder.append("[");
@@ -55,28 +49,30 @@ public final class Note{
   }
 
   @Override
-  public int hashCode(){
-    return pitch.hashCode() ^ value.hashCode();
+  public final int hashCode() {
+    return Objects.hash(pitch, value);
   }
 
   @Override
-  public boolean equals(Object other){
-    if(!(other instanceof Note)){
+  public final boolean equals(Object other) {
+    if (!(other instanceof Note)) {
       return false;
     }
-    if(other == this){
+    if (other == this) {
       return true;
     }
 
     Note otherNote = (Note) other;
-    return pitch.equals(otherNote.getPitch()) && value == otherNote.getValue();
+
+    return Objects.deepEquals(new Object[] { pitch, value },
+        new Object[] { otherNote.getPitch(), otherNote.getValue() });
   }
 
-  public final Pitch getPitch(){
+  public final Pitch getPitch() {
     return pitch;
   }
 
-  public final Value getValue(){
+  public final Value getValue() {
     return value;
   }
 }

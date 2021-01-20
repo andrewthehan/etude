@@ -1,56 +1,98 @@
 
 package com.github.andrewthehan.etude.theory;
 
-import com.github.andrewthehan.etude.exception.EtudeException;
+import java.util.Objects;
 
-public enum Dynamic{
-  PIANISSISSIMO("ppp"),
-  PIANISSIMO("pp"),
-  PIANO("p"),
-  MEZZO_PIANO("mp"),
-  MEZZO_FORTE("mf"),
-  FORTE("f"),
-  FORTISSIMO("ff"),
-  FORTISSISSIMO("fff");
+import com.github.andrewthehan.etude.util.Exceptional;
+import com.github.andrewthehan.etude.util.MathUtil;
 
-  private final String symbol;
+public final class Dynamic {
+  public static final int MINIMUM_VELOCITY = 0;
+  public static final int MAXIMUM_VELOCITY = 127;
 
-  private Dynamic(String symbol){
-    this.symbol = symbol;
+  public static final Dynamic PIANISSISSIMO = new Dynamic(16);
+  public static final Dynamic PIANISSIMO = new Dynamic(32);
+  public static final Dynamic PIANO = new Dynamic(48);
+  public static final Dynamic MEZZO_PIANO = new Dynamic(64);
+  public static final Dynamic MEZZO_FORTE = new Dynamic(80);
+  public static final Dynamic FORTE = new Dynamic(96);
+  public static final Dynamic FORTISSIMO = new Dynamic(112);
+  public static final Dynamic FORTISSISSIMO = new Dynamic(127);
+
+  private final int velocity;
+
+  public Dynamic(int velocity) {
+    this.velocity = MathUtil.clamp(MINIMUM_VELOCITY, MAXIMUM_VELOCITY, velocity);
   }
 
-  public Dynamic crescendo(){
-    int index = ordinal() + 1;
-    if(index >= Dynamic.values().length){
-      throw new EtudeException("Unable to apply crescendo on " + this);
-    }
-    return Dynamic.values()[index];
+  public final Dynamic crescendo(int amount) {
+    return new Dynamic(velocity + amount);
   }
 
-  public Dynamic diminuendo(){
-    int index = ordinal() - 1;
-    if(index < 0){
-      throw new EtudeException("Unable to apply diminuendo on " + this);
-    }
-    return Dynamic.values()[index];
+  public final Dynamic diminuendo(int amount) {
+    return new Dynamic(velocity - amount);
   }
 
-  public static Dynamic fromString(String dynamicString){
-    switch(dynamicString){
-      case "ppp": return PIANISSISSIMO;
-      case "pp": return PIANISSIMO;
-      case "p": return PIANO;
-      case "mp": return MEZZO_PIANO;
-      case "mf": return MEZZO_FORTE;
-      case "f": return FORTE;
-      case "ff": return FORTISSIMO;
-      case "fff": return FORTISSISSIMO;
-      default: throw new EtudeException("Invalid dynamic string: " + dynamicString);
-    }
+  public static final Exceptional<Dynamic> fromString(String dynamicString) {
+    return Exceptional.ofNullable(dynamicString).map(String::trim).filter(s -> !s.isEmpty()).flatMap(s -> {
+      Dynamic dynamic;
+      switch (s) {
+        case "ppp":
+          dynamic = PIANISSISSIMO;
+          break;
+        case "pp":
+          dynamic = PIANISSIMO;
+          break;
+        case "p":
+          dynamic = PIANO;
+          break;
+        case "mp":
+          dynamic = MEZZO_PIANO;
+          break;
+        case "mf":
+          dynamic = MEZZO_FORTE;
+          break;
+        case "f":
+          dynamic = FORTE;
+          break;
+        case "ff":
+          dynamic = FORTISSIMO;
+          break;
+        case "fff":
+          dynamic = FORTISSISSIMO;
+          break;
+        default:
+          dynamic = null;
+      }
+      return Exceptional.ofNullable(dynamic);
+    });
   }
 
   @Override
-  public String toString(){
-    return symbol;
+  public final String toString() {
+    return String.valueOf(velocity);
+  }
+
+  @Override
+  public final int hashCode() {
+    return Objects.hash(velocity);
+  }
+
+  @Override
+  public final boolean equals(Object other) {
+    if (!(other instanceof Dynamic)) {
+      return false;
+    }
+    if (other == this) {
+      return true;
+    }
+
+    Dynamic otherDynamic = (Dynamic) other;
+
+    return Objects.deepEquals(velocity, otherDynamic.getVelocity());
+  }
+
+  public final int getVelocity() {
+    return velocity;
   }
 }
