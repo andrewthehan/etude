@@ -34,6 +34,7 @@ build.finalizedBy generateJavaDoc
 
 task customClean(type: Delete) {
   delete "docs"
+  delete "bin"
 }
 
 clean.finalizedBy customClean
