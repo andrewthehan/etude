@@ -13,7 +13,7 @@ etude is a music theory library focused on the fundamentals of music.
 
 ## Links
 
-- [Documentation](http://andrewthehan.github.io/etude/javadoc/)
+- [Documentation](http://andrewthehan.github.io/etude/javadoc/index.html)
 - [jar](http://repo1.maven.org/maven2/com/github/andrewthehan/etude/3.0.0/etude-3.0.0.jar)
 - [javadoc jar](http://repo1.maven.org/maven2/com/github/andrewthehan/etude/3.0.0/etude-3.0.0-javadoc.jar)
 - [sources jar](http://repo1.maven.org/maven2/com/github/andrewthehan/etude/3.0.0/etude-3.0.0-sources.jar)
