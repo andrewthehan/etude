@@ -1,8 +1,5 @@
 # etude
 
-[![Build Status](https://travis-ci.org/andrewthehan/etude.svg?branch=master)](https://travis-ci.org/andrewthehan/etude)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.andrewthehan/etude/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.andrewthehan/etude)
-
 etude is a music theory library focused on the fundamentals of music.
 
 - **Deterministic**: All concepts covered by etude are outlined by nonrandom rules. This means etude cannot analyze a chord progression or develop a complex melody. However, it can tell you the pitches for a chord or the intervals between the notes of a melody.
